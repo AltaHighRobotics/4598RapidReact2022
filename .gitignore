@@ -2,3 +2,4 @@ bin/
 *.class
 *.xcuserstate
 .DS_Store
+build
