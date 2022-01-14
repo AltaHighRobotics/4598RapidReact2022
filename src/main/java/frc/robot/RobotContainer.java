@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Subsystem m_visionSub = (Subsystem) new ComputerVisionSub();
+  private final ComputerVisionSub m_visionSub = new ComputerVisionSub();
 
   private final VisionTestCommand m_visionCommand = new VisionTestCommand(m_visionSub);
 
