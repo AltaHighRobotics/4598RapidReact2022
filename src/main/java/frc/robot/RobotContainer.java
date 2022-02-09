@@ -7,9 +7,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ClimbingPistonCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.VisionTestCommand;
 import frc.robot.subsystems.ClimbingSub;
 import frc.robot.subsystems.ComputerVisionSub;
+import frc.robot.subsystems.IntakeSub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -24,9 +26,11 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ComputerVisionSub m_visionSub = new ComputerVisionSub();
   private final ClimbingSub m_climbingSub = new ClimbingSub();
+  private final IntakeSub m_intakeSub = new IntakeSub();
 
   private final VisionTestCommand m_visionCommand = new VisionTestCommand(m_visionSub);
   private final ClimbingPistonCommand m_climbingPistonCommand = new ClimbingPistonCommand(m_climbingSub);
+  private final IntakeCommand m_intakeCommand = new IntakeCommand(m_intakeSub);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

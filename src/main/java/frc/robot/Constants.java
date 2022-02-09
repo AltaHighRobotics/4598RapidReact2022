@@ -18,11 +18,15 @@ public final class Constants {
     //PNUMATIC CONTROL MODULE
     public static final int LEFT_SWING_SOLENOID = 0;
     public static final int RIGHT_SWING_SOLENOID = 0;
+    public static final int LEFT_INTAKE_SOLENOID = 0;
+    public static final int RIGHT_INTAKE_SOLENOID = 0;
 
     //CAN ID
     public static final int LEFT_LIFT_MOTOR = 0;
     public static final int RIGHT_LIFT_MOTOR = 0;
+    public static final int LEFT_INTAKE_MOTOR = 0;
 
     //MOTOR SPEEDS
     public static final double LIFT_ARM_SPEED = 0;
+    public static final int INTAKE_SPEED = 0;
 }
