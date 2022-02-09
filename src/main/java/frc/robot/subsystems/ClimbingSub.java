@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -42,13 +41,13 @@ public class ClimbingSub extends SubsystemBase {
   }
   
   public void SwingArms(){
-    rightSwingSolenoid.set(false);
-    leftSwingSolenoid.set(false);
+    rightSwingSolenoid.set(true);
+    leftSwingSolenoid.set(true);
   }
 
   public void ReturnArms(){
-    rightSwingSolenoid.set(true);
-    leftSwingSolenoid.set(true);
+    rightSwingSolenoid.set(false);
+    leftSwingSolenoid.set(false);
   }
 
   @Override
