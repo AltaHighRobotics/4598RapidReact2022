@@ -25,8 +25,18 @@ public final class Constants {
     public static final int LEFT_LIFT_MOTOR = 0;
     public static final int RIGHT_LIFT_MOTOR = 0;
     public static final int LEFT_INTAKE_MOTOR = 0;
+    public static final int RIGHT_MOTOR_FRONT = 0;
+    public static final int RIGHT_MOTOR_BACK = 0;
+    public static final int LEFT_MOTOR_FRONT = 0;
+    public static final int LEFT_MOTOR_BACK = 0;
 
     //MOTOR SPEEDS
     public static final double LIFT_ARM_SPEED = 0;
     public static final int INTAKE_SPEED = 0;
+    public static final double DRIVE_MAX_SPEED = 0;
+    public static final int Y_AXIS = 0;
+    public static final int X_AXIS = 0;
+
+    //DRIVER CONTROLS
+    public static final int DRIVER_ONE = 0;
 }

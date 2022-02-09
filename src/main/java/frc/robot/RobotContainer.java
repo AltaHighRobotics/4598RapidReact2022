@@ -14,6 +14,9 @@ import frc.robot.subsystems.ComputerVisionSub;
 import frc.robot.subsystems.IntakeSub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.DriveCommand;
+import frc.robot.subsystems.DriveTrainSub;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 /**
@@ -24,10 +27,14 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private final XboxController m_driverOne = new XboxController(Constants.DRIVER_ONE);
+
   private final ComputerVisionSub m_visionSub = new ComputerVisionSub();
   private final ClimbingSub m_climbingSub = new ClimbingSub();
   private final IntakeSub m_intakeSub = new IntakeSub();
+  private final DriveTrainSub m_driveTrainSub = new DriveTrainSub();
 
+  private final DriveCommand m_driveCommand =  new DriveCommand(m_driveTrainSub, m_driverOne);
   private final VisionTestCommand m_visionCommand = new VisionTestCommand(m_visionSub);
   private final ClimbingPistonCommand m_climbingPistonCommand = new ClimbingPistonCommand(m_climbingSub);
   private final IntakeCommand m_intakeCommand = new IntakeCommand(m_intakeSub);
@@ -38,6 +45,7 @@ public class RobotContainer {
     configureButtonBindings();
     
     CommandScheduler.getInstance().setDefaultCommand(m_visionSub, m_visionCommand);
+    CommandScheduler.getInstance().setDefaultCommand(m_driveTrainSub, m_driveCommand);
   }
 
   /**
