@@ -32,11 +32,11 @@ public final class Constants {
 
     //MOTOR SPEEDS
     public static final double LIFT_ARM_SPEED = 0;
-    public static final int INTAKE_SPEED = 0;
+    public static final double INTAKE_SPEED = 0;
     public static final double DRIVE_MAX_SPEED = 0;
-    public static final int Y_AXIS = 0;
-    public static final int X_AXIS = 0;
 
     //DRIVER CONTROLS
     public static final int DRIVER_ONE = 0;
+    public static final int Y_AXIS = 0;
+    public static final int X_AXIS = 0;
 }
