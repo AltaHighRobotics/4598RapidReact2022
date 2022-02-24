@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -17,18 +16,18 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 public final class Constants {
     //PNUMATIC CONTROL MODULE
     public static final int LEFT_SWING_SOLENOID = 0;
-    public static final int RIGHT_SWING_SOLENOID = 0;
-    public static final int LEFT_INTAKE_SOLENOID = 0;
-    public static final int RIGHT_INTAKE_SOLENOID = 0;
+    public static final int RIGHT_SWING_SOLENOID = 1;
+    public static final int LEFT_INTAKE_SOLENOID = 2;
+    public static final int RIGHT_INTAKE_SOLENOID = 3;
 
     //CAN ID
     public static final int LEFT_LIFT_MOTOR = 0;
-    public static final int RIGHT_LIFT_MOTOR = 0;
-    public static final int LEFT_INTAKE_MOTOR = 0;
-    public static final int RIGHT_MOTOR_FRONT = 0;
-    public static final int RIGHT_MOTOR_BACK = 0;
-    public static final int LEFT_MOTOR_FRONT = 0;
-    public static final int LEFT_MOTOR_BACK = 0;
+    public static final int RIGHT_LIFT_MOTOR = 1;
+    public static final int LEFT_INTAKE_MOTOR = 2;
+    public static final int RIGHT_MOTOR_FRONT = 3;
+    public static final int RIGHT_MOTOR_BACK = 4;
+    public static final int LEFT_MOTOR_FRONT = 5;
+    public static final int LEFT_MOTOR_BACK = 6;
 
     //MOTOR SPEEDS
     public static final double LIFT_ARM_SPEED = 0;
@@ -37,6 +36,6 @@ public final class Constants {
 
     //DRIVER CONTROLS
     public static final int DRIVER_ONE = 0;
-    public static final int Y_AXIS = 0;
-    public static final int X_AXIS = 0;
+    public static final int Y_AXIS = 1;
+    public static final int X_AXIS = 2;
 }

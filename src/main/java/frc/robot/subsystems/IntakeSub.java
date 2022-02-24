@@ -23,6 +23,11 @@ public class IntakeSub extends SubsystemBase {
     intakeMotor = new TalonFX(Constants.LEFT_INTAKE_MOTOR);
   }
 
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+  }
+
   public void IntakeExtend(){
     leftIntakeSolenoid.set(true);
     rightIntakeSolenoid.set(true);
@@ -39,10 +44,5 @@ public class IntakeSub extends SubsystemBase {
 
   public void IntakeOff(){
     intakeMotor.set(ControlMode.PercentOutput, 0);
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
   }
 }
