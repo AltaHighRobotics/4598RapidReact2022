@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -13,12 +14,12 @@ public class DriveCommand extends CommandBase
 {
   /** Creates a new DriveCommand. */
   private DriveTrainSub driveTrain;
-  private XboxController xboxController;
-  public DriveCommand(DriveTrainSub subsystem, XboxController controller) 
+  private Joystick joystick;
+  public DriveCommand(DriveTrainSub subsystem, Joystick controller) 
   {
     // Use addRequirements() here to declare subsystem dependencies.
     this.driveTrain = subsystem;
-    this.xboxController = controller;
+    this.joystick = controller;
     addRequirements(subsystem);
   }
 
@@ -33,8 +34,8 @@ public class DriveCommand extends CommandBase
   @Override
   public void execute() 
   {
-    double speed = xboxController.getRawAxis(Constants.Y_AXIS);
-    double turn = xboxController.getRawAxis(Constants.X_AXIS);
+    double speed = joystick.getRawAxis(Constants.Y_AXIS);
+    double turn = joystick.getRawAxis(Constants.X_AXIS);
     driveTrain.setArcadeDrive(speed, turn);
   }
 

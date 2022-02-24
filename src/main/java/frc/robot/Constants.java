@@ -14,7 +14,7 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    //PNUMATIC CONTROL MODULE
+    //PNEUMATIC CONTROL MODULE
     public static final int LEFT_SWING_SOLENOID = 0;
     public static final int RIGHT_SWING_SOLENOID = 1;
     public static final int LEFT_INTAKE_SOLENOID = 2;
@@ -37,5 +37,5 @@ public final class Constants {
     //DRIVER CONTROLS
     public static final int DRIVER_ONE = 0;
     public static final int Y_AXIS = 1;
-    public static final int X_AXIS = 2;
+    public static final int X_AXIS = 0;
 }
