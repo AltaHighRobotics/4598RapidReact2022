@@ -22,12 +22,12 @@ public final class Constants {
 
     //CAN ID
     public static final int LEFT_LIFT_MOTOR = 0;
-    public static final int RIGHT_LIFT_MOTOR = 1;
+    public static final int RIGHT_LIFT_MOTOR = 9;
     public static final int LEFT_INTAKE_MOTOR = 2;
-    public static final int RIGHT_MOTOR_FRONT = 3;
-    public static final int RIGHT_MOTOR_BACK = 4;
-    public static final int LEFT_MOTOR_FRONT = 5;
-    public static final int LEFT_MOTOR_BACK = 6;
+    public static final int RIGHT_MOTOR_FRONT = 4;
+    public static final int RIGHT_MOTOR_BACK = 6;
+    public static final int LEFT_MOTOR_FRONT = 1;
+    public static final int LEFT_MOTOR_BACK = 3;
 
     //MOTOR SPEEDS
     public static final double LIFT_ARM_SPEED = 0;

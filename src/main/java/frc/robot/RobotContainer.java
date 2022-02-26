@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -36,7 +37,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     
-    // CommandScheduler.getInstance().setDefaultCommand(m_driveTrainSub, m_driveCommand);
+     CommandScheduler.getInstance().setDefaultCommand(m_driveTrainSub, m_driveCommand);
   //   CommandScheduler.getInstance().setDefaultCommand(m_computerVisionSub, m_intakeVisionCommand);
   }
 
