@@ -5,20 +5,32 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ClimbingSub;
 
 public class ClimingAutoCommand extends CommandBase {
   /** Creates a new ClimingAutoCommand. */
-  public ClimingAutoCommand() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  private ClimbingSub m_climbingSub;
+  private int stage = 0;
+
+  public ClimingAutoCommand(ClimbingSub climbingSub) {
+    m_climbingSub = climbingSub;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if (stage == 0)
+    {
+      m_climbingSub.ExtendArms();
+    }
+    
+  }
 
   // Called once the command ends or is interrupted.
   @Override

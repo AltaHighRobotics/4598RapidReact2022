@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import com.ctre.phoenix.motorcontrol.*;
+import com.ctre.phoenix.sensors.*;
 
 public class ClimbingSub extends SubsystemBase {
   /** Creates a new ClimbingPistonSub. */
@@ -17,12 +19,24 @@ public class ClimbingSub extends SubsystemBase {
   private Solenoid rightSwingSolenoid;
   private TalonFX leftLiftMotor;
   private TalonFX rightLiftMotor;
+  private double rightLiftMotorVelocity;
+  private double leftLiftMotorVelocity;
 
   public ClimbingSub() {
+      rightLiftMotorVelocity = rightLiftMotor.getSelectedSensorVelocity();
+      leftLiftMotorVelocity = leftLiftMotor.getSelectedSensorVelocity();
       leftSwingSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.LEFT_SWING_SOLENOID);
       rightSwingSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.RIGHT_SWING_SOLENOID);
       leftLiftMotor = new TalonFX(Constants.LEFT_LIFT_MOTOR);
       rightLiftMotor = new TalonFX(Constants.RIGHT_LIFT_MOTOR);
+      leftLiftMotor.setNeutralMode(NeutralMode.Brake);
+      rightLiftMotor.setNeutralMode(NeutralMode.Brake);
+      leftLiftMotor.configFactoryDefault();
+      rightLiftMotor.configFactoryDefault();
+      leftLiftMotor.setInverted(false);
+      rightLiftMotor.setInverted(false);
+      leftLiftMotor.setSensorPhase(false);
+      rightLiftMotor.setSensorPhase(false);
     }
 
   public void ExtendArms(){
@@ -48,6 +62,26 @@ public class ClimbingSub extends SubsystemBase {
   public void ReturnArms(){
     rightSwingSolenoid.set(false);
     leftSwingSolenoid.set(false);
+  }
+
+  public void ExtendArmsWithClamp(double targetPosition)
+  {
+
+  }
+
+  public void RetractArmsWithClamp(double targetPosition)
+  {
+    
+  }
+
+  public double getLeftCoderAngle()
+  {
+    return leftLiftMotor.getSelectedSensorPosition();
+  }
+
+  public double getRightCoderAngle()
+  {
+    return rightLiftMotor.getSelectedSensorPosition();
   }
 
   @Override
