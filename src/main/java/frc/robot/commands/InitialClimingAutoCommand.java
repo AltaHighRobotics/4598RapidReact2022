@@ -26,11 +26,6 @@ public class InitialClimingAutoCommand extends CommandBase {
   @Override
   public void execute() {
       boolean hasReachedFirstPosition = m_climbingSub.SetArmsWithClamp(Constants.FIRST_HOOK_POSITION);
-      if (hasReachedFirstPosition)
-      {
-        m_climbingSub.ArmsStationary();
-      }
-    
   }
 
   // Called once the command ends or is interrupted.
