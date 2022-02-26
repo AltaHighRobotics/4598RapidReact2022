@@ -72,7 +72,7 @@ public class ClimbingSub extends SubsystemBase {
     leftSwingSolenoid.set(false);
   }
 
-  public void SetArmsWithClamp(double targetPosition)
+  public boolean SetArmsWithClamp(double targetPosition)
   {
     double averageArmPosition = (leftLiftMotorPosition + rightLiftMotorPosition)/2;
     double armMin = Math.min(targetPosition, averageArmPosition + Constants.MAX_ARM_ERROR);
@@ -89,6 +89,12 @@ public class ClimbingSub extends SubsystemBase {
 
     leftLiftMotor.set(ControlMode.PercentOutput, leftArmPower);
     rightLiftMotor.set(ControlMode.PercentOutput, rightArmPower);
+
+    if (leftArmError + rightArmError < Constants.MAX_ARM_ERROR)
+    {
+      return true;
+    }
+    return false;
   }
 
   public double getLeftCoderAngle()
