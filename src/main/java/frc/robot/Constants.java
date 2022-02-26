@@ -38,4 +38,6 @@ public final class Constants {
     public static final int DRIVER_ONE = 0;
     public static final int Y_AXIS = 1;
     public static final int X_AXIS = 0;
+    public static final double MAX_ARM_ERROR = 0;
+    public static final double ARM_PROPORTIONAL_GAIN = 0;
 }

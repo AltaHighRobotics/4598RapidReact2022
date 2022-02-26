@@ -13,6 +13,10 @@ import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.sensors.*;
 
+import org.opencv.core.Mat;
+
+import java.lang.Math;
+
 public class ClimbingSub extends SubsystemBase {
   /** Creates a new ClimbingPistonSub. */
   private Solenoid leftSwingSolenoid;
@@ -21,8 +25,12 @@ public class ClimbingSub extends SubsystemBase {
   private TalonFX rightLiftMotor;
   private double rightLiftMotorVelocity;
   private double leftLiftMotorVelocity;
+  private double rightLiftMotorPosition;
+  private double leftLiftMotorPosition;
 
   public ClimbingSub() {
+      rightLiftMotorPosition = rightLiftMotor.getSelectedSensorPosition();
+      leftLiftMotorPosition = leftLiftMotor.getSelectedSensorPosition();
       rightLiftMotorVelocity = rightLiftMotor.getSelectedSensorVelocity();
       leftLiftMotorVelocity = leftLiftMotor.getSelectedSensorVelocity();
       leftSwingSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.LEFT_SWING_SOLENOID);
@@ -64,14 +72,23 @@ public class ClimbingSub extends SubsystemBase {
     leftSwingSolenoid.set(false);
   }
 
-  public void ExtendArmsWithClamp(double targetPosition)
+  public void SetArmsWithClamp(double targetPosition)
   {
+    double averageArmPosition = (leftLiftMotorPosition + rightLiftMotorPosition)/2;
+    double armMin = Math.min(targetPosition, averageArmPosition + Constants.MAX_ARM_ERROR);
+    double actualTarget = Math.max(armMin, averageArmPosition - Constants.MAX_ARM_ERROR);
 
-  }
+    double leftArmError = actualTarget - leftLiftMotorPosition;
+    double rightArmError = actualTarget - rightLiftMotorPosition;
 
-  public void RetractArmsWithClamp(double targetPosition)
-  {
-    
+    double leftArmVelocityError = leftArmError - leftLiftMotorVelocity;
+    double rightArmVelocityError = rightArmError - rightLiftMotorVelocity;
+
+    double leftArmPower = leftArmVelocityError * Constants.ARM_PROPORTIONAL_GAIN;
+    double rightArmPower = rightArmVelocityError * Constants.ARM_PROPORTIONAL_GAIN;
+
+    leftLiftMotor.set(ControlMode.PercentOutput, leftArmPower);
+    rightLiftMotor.set(ControlMode.PercentOutput, rightArmPower);
   }
 
   public double getLeftCoderAngle()
