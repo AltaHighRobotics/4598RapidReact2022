@@ -86,6 +86,10 @@ public class SecondaryClimbAutoCommand extends CommandBase {
       {
         stage = 1;
         c++;
+        if (c == 2)
+        {
+          isItFinished = true;
+        }
       }
       
     }
