@@ -22,15 +22,15 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Joystick m_driverOne = new Joystick(Constants.DRIVER_ONE);
 
-  private final ClimbingSub m_climbingSub = new ClimbingSub();
-  private final IntakeSub m_intakeSub = new IntakeSub();
+  // private final ClimbingSub m_climbingSub = new ClimbingSub();
+  // private final IntakeSub m_intakeSub = new IntakeSub();
   private final DriveTrainSub m_driveTrainSub = new DriveTrainSub();
-  private final ColorSub m_colorSub = new ColorSub();
+  // private final ColorSub m_colorSub = new ColorSub();
 
   private final DriveCommand m_driveCommand =  new DriveCommand(m_driveTrainSub, m_driverOne);
-  private final ClimbingPistonCommand m_climbingPistonCommand = new ClimbingPistonCommand(m_climbingSub);
-  private final IntakeCommand m_intakeCommand = new IntakeCommand(m_intakeSub);
-  private final ColorCommand m_colorCommand = new ColorCommand(m_colorSub);
+  // private final ClimbingPistonCommand m_climbingPistonCommand = new ClimbingPistonCommand(m_climbingSub);
+  // private final IntakeCommand m_intakeCommand = new IntakeCommand(m_intakeSub);
+  // private final ColorCommand m_colorCommand = new ColorCommand(m_colorSub);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -56,6 +56,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_colorCommand;
+    // Janky. Done to make robot work in tele-op. Will not actually work for autonomous.
+    return m_driveCommand;
   }
 }
