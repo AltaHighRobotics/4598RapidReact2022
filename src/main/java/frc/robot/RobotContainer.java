@@ -11,6 +11,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -22,7 +23,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Joystick m_driverOne = new Joystick(Constants.DRIVER_ONE);
 
-  // private final ClimbingSub m_climbingSub = new ClimbingSub();
+  private final ClimbingSub m_climbingSub = new ClimbingSub();
   // private final IntakeSub m_intakeSub = new IntakeSub();
   private final DriveTrainSub m_driveTrainSub = new DriveTrainSub();
   // private final ColorSub m_colorSub = new ColorSub();
@@ -31,6 +32,8 @@ public class RobotContainer {
   // private final ClimbingPistonCommand m_climbingPistonCommand = new ClimbingPistonCommand(m_climbingSub);
   // private final IntakeCommand m_intakeCommand = new IntakeCommand(m_intakeSub);
   // private final ColorCommand m_colorCommand = new ColorCommand(m_colorSub);
+  private final InitialClimingAutoCommand m_initialClimingAutoCommand = new InitialClimingAutoCommand(m_climbingSub);
+  private final SecondaryClimbAutoCommand m_secondaryClimbAutoCommand = new SecondaryClimbAutoCommand(m_climbingSub);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -47,7 +50,16 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    final JoystickButton initialLiftButton;
+    final JoystickButton secondaryLiftButton;
+
+    initialLiftButton = new JoystickButton(m_driverOne, 11);
+    secondaryLiftButton = new JoystickButton(m_driverOne, 12);
+
+    secondaryLiftButton.whileHeld(m_secondaryClimbAutoCommand);
+    initialLiftButton.whileHeld(m_initialClimingAutoCommand);
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -57,6 +69,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     // Janky. Done to make robot work in tele-op. Will not actually work for autonomous.
-    return m_driveCommand;
+    return m_initialClimingAutoCommand;
   }
 }
