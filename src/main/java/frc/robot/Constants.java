@@ -21,13 +21,13 @@ public final class Constants {
     public static final int RIGHT_INTAKE_SOLENOID = 3;
 
     //CAN ID
-    public static final int LEFT_LIFT_MOTOR = 0;
-    public static final int RIGHT_LIFT_MOTOR = 9;
-    public static final int LEFT_INTAKE_MOTOR = 2;
-    public static final int RIGHT_MOTOR_FRONT = 4;
-    public static final int RIGHT_MOTOR_BACK = 6;
-    public static final int LEFT_MOTOR_FRONT = 1;
-    public static final int LEFT_MOTOR_BACK = 3;
+    public static final int LEFT_LIFT_MOTOR = 5;
+    public static final int RIGHT_LIFT_MOTOR = 6;
+    public static final int LEFT_INTAKE_MOTOR = 12;
+    public static final int RIGHT_MOTOR_FRONT = 14;
+    public static final int RIGHT_MOTOR_BACK = 16;
+    public static final int LEFT_MOTOR_FRONT = 11;
+    public static final int LEFT_MOTOR_BACK = 13;
 
     //MOTOR SPEEDS
     public static final double LIFT_ARM_SPEED = 0;
