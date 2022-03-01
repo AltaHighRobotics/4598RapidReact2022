@@ -25,7 +25,7 @@ public class InitialClimingAutoCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      boolean hasReachedFirstPosition = m_climbingSub.SetArmsWithClamp(Constants.FIRST_HOOK_POSITION);
+    boolean hasReachedFirstPosition = m_climbingSub.SetArmsWithClamp(Constants.FIRST_HOOK_POSITION);
   }
 
   // Called once the command ends or is interrupted.

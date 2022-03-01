@@ -40,11 +40,11 @@ public final class Constants {
     public static final int X_AXIS = 0;
 
     //ARM CONSTANTS
-    public static final double MAX_ARM_ERROR = 0;
-    public static final double ARM_PROPORTIONAL_GAIN = 0;
-    public static final double FIRST_HOOK_POSITION = 0;
+    public static final double MAX_ARM_ERROR = 3600;
+    public static final double ARM_PROPORTIONAL_GAIN = 10;
+    public static final double FIRST_HOOK_POSITION = 3600;
     public static final double MIN_ARM_POSITION = 0;
-    public static final double ALMOST_MIN_POSITION = 0;
-    public static final double HALF_ARM_POSITION = 0;
-    public static final double MAX_ARM_POSITION = 0;
+    public static final double ALMOST_MIN_POSITION = 360;
+    public static final double HALF_ARM_POSITION = 10000;
+    public static final double MAX_ARM_POSITION = 36000;
 }

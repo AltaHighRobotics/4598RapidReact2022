@@ -37,7 +37,7 @@ public class DriveCommand extends CommandBase
     double speed = joystick.getRawAxis(Constants.Y_AXIS);
     double turn = joystick.getRawAxis(Constants.X_AXIS);
     driveTrain.setArcadeDrive(speed, turn);
-    System.out.println("Moving");
+    //System.out.println("Moving");
   }
 
   // Called once the command ends or is interrupted.
