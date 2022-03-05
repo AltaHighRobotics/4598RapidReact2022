@@ -29,6 +29,7 @@ public class JackFrickedUpCommand extends CommandBase {
   public void end(boolean interrupted) {
     m_climbingSub.setCurrentStage(0);
     m_climbingSub.setCurrentTarget(Constants.MAX_ARM_POSITION);
+    m_climbingSub.setHasRun(false);
       //Sets arm variables to their original state 
     m_climbingSub.ArmsStationary();
   }
