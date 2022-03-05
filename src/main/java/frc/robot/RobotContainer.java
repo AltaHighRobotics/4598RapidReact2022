@@ -27,13 +27,14 @@ public class RobotContainer {
   // private final IntakeSub m_intakeSub = new IntakeSub();
   private final DriveTrainSub m_driveTrainSub = new DriveTrainSub();
   // private final ColorSub m_colorSub = new ColorSub();
+  private final ClimbingSub m_climbingSub = new ClimbingSub();
+  
+  private final JackFrickedUpCommand m_jackFrickedUpCommand = new JackFrickedUpCommand(m_climbingSub);
+  private final ClimbingCommand m_climbingCommand = new ClimbingCommand(m_climbingSub);
 
   private final DriveCommand m_driveCommand =  new DriveCommand(m_driveTrainSub, m_driverOne);
-  // private final ClimbingPistonCommand m_climbingPistonCommand = new ClimbingPistonCommand(m_climbingSub);
   // private final IntakeCommand m_intakeCommand = new IntakeCommand(m_intakeSub);
   // private final ColorCommand m_colorCommand = new ColorCommand(m_colorSub);
-  private final InitialClimingAutoCommand m_initialClimingAutoCommand = new InitialClimingAutoCommand(m_climbingSub);
-  private final SecondaryClimbAutoCommand m_secondaryClimbAutoCommand = new SecondaryClimbAutoCommand(m_climbingSub);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -51,14 +52,14 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    final JoystickButton initialLiftButton;
-    final JoystickButton secondaryLiftButton;
+    final JoystickButton climbButton;
+    final JoystickButton frickButton;
 
-    initialLiftButton = new JoystickButton(m_driverOne, 11);
-    secondaryLiftButton = new JoystickButton(m_driverOne, 12);
+    climbButton = new JoystickButton(m_driverOne, 7);
+    frickButton = new JoystickButton(m_driverOne, 8);
 
-    secondaryLiftButton.whileHeld(m_secondaryClimbAutoCommand);
-    initialLiftButton.whileHeld(m_initialClimingAutoCommand);
+    climbButton.toggleWhenPressed(m_climbingCommand);
+    frickButton.toggleWhenPressed(m_jackFrickedUpCommand);
   }
 
   /**
