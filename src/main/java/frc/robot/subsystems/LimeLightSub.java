@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import limelightvision.limelight.frc.LimeLight;
 
 public class LimeLightSub extends SubsystemBase {
