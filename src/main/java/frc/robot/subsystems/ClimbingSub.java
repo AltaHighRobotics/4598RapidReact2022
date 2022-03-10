@@ -34,14 +34,19 @@ public class ClimbingSub extends SubsystemBase {
       // rightSwingSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.RIGHT_SWING_SOLENOID);
       leftLiftMotor = new TalonFX(Constants.LEFT_LIFT_MOTOR);
       rightLiftMotor = new TalonFX(Constants.RIGHT_LIFT_MOTOR);
+
       leftLiftMotor.setNeutralMode(NeutralMode.Brake);
       rightLiftMotor.setNeutralMode(NeutralMode.Brake);
+
       leftLiftMotor.configFactoryDefault();
       rightLiftMotor.configFactoryDefault();
+
       leftLiftMotor.setInverted(false);
       rightLiftMotor.setInverted(false);
+
       leftLiftMotor.setSensorPhase(false);
       rightLiftMotor.setSensorPhase(false);
+      
       currentArmTarget = Constants.MAX_ARM_POSITION;
       currentStage = 0;
       hasRun = false;
