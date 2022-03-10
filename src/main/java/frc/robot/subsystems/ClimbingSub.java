@@ -19,12 +19,16 @@ public class ClimbingSub extends SubsystemBase {
   // private Solenoid rightSwingSolenoid;
   private TalonFX leftLiftMotor;
   private TalonFX rightLiftMotor;
+
   private double rightLiftMotorVelocity;
   private double leftLiftMotorVelocity;
+
   private double rightLiftMotorPosition;
   private double leftLiftMotorPosition;
+
   private double rightLiftMotorIntegral;
   private double leftLiftMotorIntegral;
+  
   private double currentArmTarget;
   private int currentStage;
   private boolean hasRun;
@@ -46,7 +50,7 @@ public class ClimbingSub extends SubsystemBase {
 
       leftLiftMotor.setSensorPhase(false);
       rightLiftMotor.setSensorPhase(false);
-      
+
       currentArmTarget = Constants.MAX_ARM_POSITION;
       currentStage = 0;
       hasRun = false;
@@ -206,7 +210,5 @@ public class ClimbingSub extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-    
-  } 
+  public void periodic() {} 
 }

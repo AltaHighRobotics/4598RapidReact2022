@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,6 +15,15 @@ public class DriveTrainPIDSub extends SubsystemBase {
   public TalonFX rightMotorBack;
   public TalonFX leftMotorFront;
   public TalonFX leftMotorBack;
+
+  public double rightMotorVelocity;
+  public double leftMotorVelocity;
+
+  public double rightMotorPos;
+  public double leftMotorPos;
+
+  public double rightMotorIntegral;
+  public double leftMotorIntegral;
 
   public DriveTrainPIDSub() {
     rightMotorFront = new TalonFX(Constants.RIGHT_MOTOR_FRONT);
@@ -43,7 +50,15 @@ public class DriveTrainPIDSub extends SubsystemBase {
     rightMotorFront.setSensorPhase(false);
     leftMotorBack.setSensorPhase(false);
     rightMotorBack.setSensorPhase(false);
+  }
 
+  public void DriveTrainPID(double targetPosition)
+  {
+    rightMotorPos = rightMotorFront.getSelectedSensorPosition();
+    leftMotorPos = leftMotorFront.getSelectedSensorPosition();
+
+    rightMotorVelocity = rightMotorFront.getSelectedSensorVelocity();
+    leftMotorVelocity = leftMotorFront.getSelectedSensorVelocity();
   }
 
   @Override
