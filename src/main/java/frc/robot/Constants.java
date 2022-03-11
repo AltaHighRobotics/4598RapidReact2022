@@ -50,26 +50,4 @@ public final class Constants {
     public static final double MAX_ARM_POSITION = 200000;
     public static final double ARM_INTEGRAL_GAIN = 0.00000003;
     public static final double ACCEPTABLE_ERROR = 8000;
-    
-    //LIMELIGHT CONSTANTS
-    public static final double A1 = 3;
-    public static final double H1 = 8;
-    public static final double H2 = 38;
-    public static final double RADIAN_CONVERSION = 3.14159/180.0;
-    public static final double [][] SHOOTER_DATA = new double [][]{
-        {12,20},
-        {36,25},
-        {60,30},
-        {120,40},
-        {180,60},
-        {240,80},
-        {300,95}
-    };
-
-    //Shooter Constants
-    public static final int LEFT_SHOOTER_MOTOR = 7;
-    public static final int RIGHT_SHOOTER_MOTOR = 8;
-    public static final int WINDOW_MOTOR = 9;
-
-
 }
