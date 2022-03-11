@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.lang.Math;
+
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -71,5 +73,8 @@ public final class Constants {
     public static final int RIGHT_SHOOTER_MOTOR = 8;
     public static final int WINDOW_MOTOR = 9;
 
+    //DriveTrain Navigation Constants
 
+    public static final double ENCODER_ROTATION_RATIO = ((14/68) * (24/36))/4000;
+    public static final double ROTATION_DISTANCE_RATIO = ENCODER_ROTATION_RATIO * Math.PI * 3;
 }
