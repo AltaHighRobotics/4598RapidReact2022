@@ -40,6 +40,15 @@ public class DriveTrainNavigationSub extends SubsystemBase {
   public double compHeading;
   public double yaw;
 
+  public double previousRight;
+  public double previousLeft;
+  public double robotX;
+  public double robotY;
+
+  public double targetX;
+  public double targetY;
+  public double previousHeading;
+
   public double robotNavData [];
 
   public DriveTrainNavigationSub() {
@@ -73,8 +82,12 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     robotNavData = new double [4];
   }
 
-  public double[] DriveTrainPosIntegration(double targetX, double targetY, double previousRight, double previousLeft, double robotX, double robotY)
+  public double[] DriveTrainPosIntegration(double [] oldData)
   {
+    oldData[0] = previousRight;
+    oldData[1] = previousLeft;
+    oldData[2] = robotX;
+    oldData[3] = robotY;      
     rightMotorPos = rightMotorFront.getSelectedSensorPosition();
     leftMotorPos = leftMotorFront.getSelectedSensorPosition();
 
@@ -98,8 +111,14 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     return robotNavData;
   }
 
-  public void SetDriveToWaypoint(double targetX, double targetY, double robotX, double robotY, double previousHeading)
+  public void SetDriveToWaypoint(double [] newData)
   {
+    newData[0] = targetX;
+    newData[1] = targetY;
+    newData[2] = robotX;
+    newData[3] = robotY; 
+    newData[4] = previousHeading;  
+
     double targetHeading = Math.atan2(targetY - robotY, targetX - robotX);
 
     compHeading = (double) navX.getCompassHeading();
