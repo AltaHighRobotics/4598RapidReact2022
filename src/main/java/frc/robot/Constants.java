@@ -77,4 +77,7 @@ public final class Constants {
 
     public static final double ENCODER_ROTATION_RATIO = ((14/68) * (24/36))/4000;
     public static final double ROTATION_DISTANCE_RATIO = ENCODER_ROTATION_RATIO * Math.PI * 3;
+    public static final int DRIVING_HEADING_PROPORTIONAL_GAIN = 0;
+    public static final double MAX_DRIVE_HEADING_ERROR = 0;
+    public static final double DRIVE_SPEED_PROPORTIONAL_GAIN = 0;
 }
