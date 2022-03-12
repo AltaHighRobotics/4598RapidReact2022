@@ -82,12 +82,13 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     robotNavData = new double [4];
   }
 
-  public double[] DriveTrainPosIntegration(double [] oldData)
+  public double[] driveTrainPosIntegration(double [] oldData)
   {
     oldData[0] = previousRight;
     oldData[1] = previousLeft;
     oldData[2] = robotX;
     oldData[3] = robotY;      
+
     rightMotorPos = rightMotorFront.getSelectedSensorPosition();
     leftMotorPos = leftMotorFront.getSelectedSensorPosition();
 
@@ -105,13 +106,15 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     robotX = robotX + (Math.cos(compHeading) * distanceTravel);
     robotY = robotY + (Math.sin(compHeading) * distanceTravel);
 
-    robotNavData[0] = robotX;
-    robotNavData[1] = robotY;
+    robotNavData[0] = rightMotorPos;
+    robotNavData[1] = leftMotorPos;
+    robotNavData[2] = robotX;
+    robotNavData[3] = robotY;
 
     return robotNavData;
   }
 
-  public void SetDriveToWaypoint(double [] newData)
+  public double setDriveToWaypoint(double [] newData)
   {
     newData[0] = targetX;
     newData[1] = targetY;
@@ -143,6 +146,18 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     leftMotorBack.set(ControlMode.PercentOutput, leftDrivePower);
     rightMotorFront.set(ControlMode.PercentOutput, rightDrivePower);
     rightMotorBack.set(ControlMode.PercentOutput, rightDrivePower);
+
+    return compHeading;
+  }
+
+  public boolean hasReachedWaypoint(double dist)
+  {
+    if(dist > dist - Constants.MAX_WAYPOINT_ERROR &&
+    dist < dist + Constants.MAX_WAYPOINT_ERROR)
+    {
+      return true;
+    }
+    return false;
   }
 
   @Override
