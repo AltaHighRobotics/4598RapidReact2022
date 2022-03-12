@@ -82,6 +82,7 @@ public final class Constants {
     public static final int DRIVING_HEADING_PROPORTIONAL_GAIN = 0;
     public static final double MAX_DRIVE_HEADING_ERROR = 0;
     public static final double DRIVE_SPEED_PROPORTIONAL_GAIN = 0;
+    public static final double MAX_WAYPOINT_ERROR = 0;
 
     //Storage Constants
     public static final double ELEVATOR_POWER = 0.7;
