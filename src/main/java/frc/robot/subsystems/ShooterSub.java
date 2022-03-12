@@ -17,17 +17,16 @@ public class ShooterSub extends SubsystemBase {
 
   private TalonFX leftShooterMotor;
   private TalonFX rightShooterMotor;
-  private Victor windowMotor;
 
 
   public ShooterSub() {
 
     leftShooterMotor = new TalonFX(Constants.LEFT_SHOOTER_MOTOR);
     rightShooterMotor = new TalonFX(Constants.RIGHT_SHOOTER_MOTOR);
-    windowMotor = new Victor(Constants.WINDOW_MOTOR);
 
-    leftShooterMotor.setNeutralMode(NeutralMode.Coast);
-    rightShooterMotor.setNeutralMode(NeutralMode.Coast);
+    leftShooterMotor.setInverted(true);
+    //leftShooterMotor.setNeutralMode(NeutralMode.Coast);
+    //rightShooterMotor.setNeutralMode(NeutralMode.Coast);
 
     //leftShooterMotor.configOpenloopRamp(0.5); 
     //rightShooterMotor.configOpenloopRamp(0.5);
@@ -38,9 +37,14 @@ public class ShooterSub extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void setShooterMotors(double Speed){
+  public void setShooterMotorsVelocity(double Speed){
     leftShooterMotor.set(ControlMode.Velocity, Speed);
     rightShooterMotor.set(ControlMode.Velocity, Speed);
+  }
+
+  public void setShooterMotorsPower(double Speed){
+    leftShooterMotor.set(ControlMode.PercentOutput, Speed);
+    rightShooterMotor.set(ControlMode.PercentOutput, Speed);
   }
 
 }
