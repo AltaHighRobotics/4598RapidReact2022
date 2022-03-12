@@ -25,11 +25,17 @@ public final class Constants {
     //CAN ID
     public static final int LEFT_LIFT_MOTOR = 5;
     public static final int RIGHT_LIFT_MOTOR = 6;
-    public static final int LEFT_INTAKE_MOTOR = 12;
-    public static final int RIGHT_MOTOR_FRONT = 14;
+    public static final int LEFT_INTAKE_MOTOR = 18;
+    public static final int RIGHT_MOTOR_FRONT = 17;
     public static final int RIGHT_MOTOR_BACK = 16;
-    public static final int LEFT_MOTOR_FRONT = 11;
-    public static final int LEFT_MOTOR_BACK = 13;
+    public static final int LEFT_MOTOR_FRONT = 19;
+    public static final int LEFT_MOTOR_BACK = 18;
+    public static final int LEFT_SHOOTER_MOTOR = 10;
+    public static final int RIGHT_SHOOTER_MOTOR = 11;
+    public static final int WINDOW_MOTOR = 12;
+    public static final int STORAGE_MOTOR = 14;
+    public static final int ELEVATOR_MOTOR = 13;
+    public static final int TURRENT_MOTOR = 19;
 
     //MOTOR SPEEDS
     public static final double LIFT_ARM_SPEED = 0;
@@ -68,10 +74,6 @@ public final class Constants {
         {300,95}
     };
 
-    //Shooter Constants
-    public static final int LEFT_SHOOTER_MOTOR = 7;
-    public static final int RIGHT_SHOOTER_MOTOR = 8;
-    public static final int WINDOW_MOTOR = 9;
 
     //DriveTrain Navigation Constants
 
@@ -80,4 +82,11 @@ public final class Constants {
     public static final int DRIVING_HEADING_PROPORTIONAL_GAIN = 0;
     public static final double MAX_DRIVE_HEADING_ERROR = 0;
     public static final double DRIVE_SPEED_PROPORTIONAL_GAIN = 0;
+
+    //Storage Constants
+    public static final double ELEVATOR_POWER = 0.7;
+
+    //Shooter Constants
+    public static final int SLIDER_AXIS = 3;
+
 }
