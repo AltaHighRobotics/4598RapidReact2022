@@ -26,10 +26,10 @@ public final class Constants {
     public static final int LEFT_LIFT_MOTOR = 5;
     public static final int RIGHT_LIFT_MOTOR = 6;
     public static final int LEFT_INTAKE_MOTOR = 18;
-    public static final int RIGHT_MOTOR_FRONT = 17;
-    public static final int RIGHT_MOTOR_BACK = 16;
-    public static final int LEFT_MOTOR_FRONT = 19;
-    public static final int LEFT_MOTOR_BACK = 18;
+    public static final int RIGHT_DRIVE_MOTOR_FRONT = 17;
+    public static final int RIGHT_DRIVE_MOTOR_BACK = 16;
+    public static final int LEFT_DRIVE_MOTOR_FRONT = 19;
+    public static final int LEFT_DRIVE_MOTOR_BACK = 18;
     public static final int LEFT_SHOOTER_MOTOR = 10;
     public static final int RIGHT_SHOOTER_MOTOR = 11;
     public static final int WINDOW_MOTOR = 12;
