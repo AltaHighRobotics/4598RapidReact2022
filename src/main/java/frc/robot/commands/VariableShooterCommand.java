@@ -75,7 +75,7 @@ public class VariableShooterCommand extends CommandBase {
 
     finalPower = smallerPower + powerModifier;    
 
-    m_ShooterSub.setShooterMotors(finalPower);
+    m_ShooterSub.setShooterMotorsPower(finalPower);
 
   }
 
