@@ -41,11 +41,11 @@ public class ClimbingSub extends SubsystemBase {
       leftLiftMotor = new TalonFX(Constants.LEFT_LIFT_MOTOR);
       rightLiftMotor = new TalonFX(Constants.RIGHT_LIFT_MOTOR);
 
-      leftLiftMotor.setNeutralMode(NeutralMode.Brake);
-      rightLiftMotor.setNeutralMode(NeutralMode.Brake);
-
       leftLiftMotor.configFactoryDefault();
       rightLiftMotor.configFactoryDefault();
+
+      leftLiftMotor.setNeutralMode(NeutralMode.Brake);
+      rightLiftMotor.setNeutralMode(NeutralMode.Brake);
 
       leftLiftMotor.setInverted(false);
       rightLiftMotor.setInverted(false);
