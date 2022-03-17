@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -14,12 +15,12 @@ public class DriveCommand extends CommandBase
 {
   /** Creates a new DriveCommand. */
   private DriveTrainSub driveTrain;
-  private Joystick joystick;
-  public DriveCommand(DriveTrainSub subsystem, Joystick controller) 
+  private PS4Controller controller;
+  public DriveCommand(DriveTrainSub subsystem, PS4Controller ps4Controller) 
   {
     // Use addRequirements() here to declare subsystem dependencies.
     this.driveTrain = subsystem;
-    this.joystick = controller;
+    this.controller = ps4Controller;
     addRequirements(subsystem);
   }
 
@@ -34,8 +35,8 @@ public class DriveCommand extends CommandBase
   @Override
   public void execute() 
   {
-    double speed = joystick.getRawAxis(Constants.Y_AXIS);
-    double turn = joystick.getRawAxis(Constants.X_AXIS);
+    double speed = controller.getRawAxis(Constants.Y_AXIS);
+    double turn = controller.getRawAxis(Constants.X_AXIS);
     driveTrain.setArcadeDrive(speed, turn);
     //System.out.println("Moving");
   }

@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -21,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final PS4Cotroller m_driverOne = new Joystick(Constants.DRIVER_ONE);
+  private final PS4Controller m_driverOne = new PS4Controller(Constants.DRIVER_ONE);
 
   private final ClimbingSub m_climbingSub = new ClimbingSub();
   // private final IntakeSub m_intakeSub = new IntakeSub();
