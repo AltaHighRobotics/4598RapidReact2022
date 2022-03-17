@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.*;
 
 import java.lang.Math;
@@ -25,8 +26,11 @@ public class ClimbingSub extends SubsystemBase {
   private double rightLiftMotorPosition;
   private double leftLiftMotorPosition;
 
-  private double rightLiftMotorIntegral;
-  private double leftLiftMotorIntegral;
+  private double rightArmIntegral;
+  private double leftArmIntegral;
+
+  private double rightArmProportional;
+  private double leftArmProportional;
   
   private double currentArmTarget;
   private int currentStage;
@@ -115,11 +119,22 @@ public class ClimbingSub extends SubsystemBase {
     double leftArmVelocityError = leftArmError - leftLiftMotorVelocity;
     double rightArmVelocityError = rightArmError - rightLiftMotorVelocity;
 
-    leftLiftMotorIntegral = Math.min(Math.max(leftLiftMotorIntegral + leftArmVelocityError, -Constants.MAX_ARM_INTEGRAL), Constants.MAX_ARM_INTEGRAL);
-    rightLiftMotorIntegral = Math.min(Math.max(rightLiftMotorIntegral + rightArmVelocityError, -Constants.MAX_ARM_INTEGRAL), Constants.MAX_ARM_INTEGRAL);
+    double leftArmProportional = leftArmVelocityError * Constants.ARM_PROPORTIONAL_GAIN;
+    double rightArmProportional = rightArmVelocityError * Constants.ARM_PROPORTIONAL_GAIN;
 
-    double leftArmPower = leftArmVelocityError * Constants.ARM_PROPORTIONAL_GAIN + leftLiftMotorIntegral * Constants.ARM_INTEGRAL_GAIN;
-    double rightArmPower = rightArmVelocityError * Constants.ARM_PROPORTIONAL_GAIN + rightLiftMotorIntegral * Constants.ARM_INTEGRAL_GAIN;
+    leftArmIntegral = Math.min(Math.max((leftArmIntegral + leftArmVelocityError) * Constants.ARM_INTEGRAL_GAIN, -Constants.MAX_ARM_INTEGRAL), Constants.MAX_ARM_INTEGRAL);
+    rightArmIntegral = Math.min(Math.max((rightArmIntegral + rightArmVelocityError) * Constants.ARM_INTEGRAL_GAIN, -Constants.MAX_ARM_INTEGRAL), Constants.MAX_ARM_INTEGRAL);
+
+    double leftArmPower = leftArmProportional + leftArmIntegral;
+    double rightArmPower = rightArmProportional + rightArmIntegral;
+
+    SmartDashboard.putNumber("Left Arm Power", leftArmPower);
+    SmartDashboard.putNumber("Left Arm Proportional", leftArmProportional);
+    SmartDashboard.putNumber("Left Arm Integral", leftArmIntegral);
+
+    SmartDashboard.putNumber("Right Arm Power", rightArmPower);
+    SmartDashboard.putNumber("Right Arm Proportional", rightArmProportional);
+    SmartDashboard.putNumber("Right Arm Integral", rightArmIntegral);
 
     leftLiftMotor.set(ControlMode.PercentOutput, leftArmPower);
     rightLiftMotor.set(ControlMode.PercentOutput, rightArmPower);
