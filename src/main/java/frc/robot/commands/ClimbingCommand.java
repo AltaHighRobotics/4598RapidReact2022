@@ -6,6 +6,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.subsystems.ClimbingSub;
 
@@ -30,6 +31,9 @@ public class ClimbingCommand extends CommandBase {
   public void execute() {
     currentTarget = m_climbingSub.getCurrentTarget();
     currentStage = m_climbingSub.getCurrentStage();
+
+    SmartDashboard.putNumber("Climb Stage:", currentStage);
+    SmartDashboard.putNumber("Climb Target:", currentTarget);
 
     m_climbingSub.SetArmsWithClamp(currentTarget);
       //Makes climbing arms go to the current Target

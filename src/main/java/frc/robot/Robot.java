@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -27,6 +28,10 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    SmartDashboard.putString("Climb Stage:", "Climb Stage has not been updated");
+    SmartDashboard.putString("Climb Target:", "Climb Target has not been updated");
+    SmartDashboard.putString("Intake Status:", "Intake Status has not been updated");
+    SmartDashboard.putString("Feeder Status:", "Feeder Status has not been updated");
     m_robotContainer = new RobotContainer();
   }
 

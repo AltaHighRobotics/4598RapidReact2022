@@ -14,6 +14,7 @@ import com.kauailabs.navx.frc.AHRS;
 import org.opencv.core.Mat;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.I2C;
@@ -105,6 +106,10 @@ public class DriveTrainNavigationSub extends SubsystemBase {
 
     robotX = robotX + (Math.cos(compHeading) * distanceTravel);
     robotY = robotY + (Math.sin(compHeading) * distanceTravel);
+
+    SmartDashboard.putNumber("Robot X:", robotX);
+    SmartDashboard.putNumber("Robot Y:", robotY);
+    SmartDashboard.putNumber("Robot Heading:", Math.toDegrees(compHeading));
 
     robotNavData[0] = rightMotorPos;
     robotNavData[1] = leftMotorPos;
