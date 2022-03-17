@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Joystick m_driverOne = new Joystick(Constants.DRIVER_ONE);
+  private final PS4Cotroller m_driverOne = new Joystick(Constants.DRIVER_ONE);
 
   private final ClimbingSub m_climbingSub = new ClimbingSub();
   // private final IntakeSub m_intakeSub = new IntakeSub();
