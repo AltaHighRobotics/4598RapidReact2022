@@ -29,9 +29,6 @@ public class ClimbingSub extends SubsystemBase {
   private double rightArmIntegral;
   private double leftArmIntegral;
 
-  private double rightArmProportional;
-  private double leftArmProportional;
-  
   private double currentArmTarget;
   private int currentStage;
   private boolean hasRun;
