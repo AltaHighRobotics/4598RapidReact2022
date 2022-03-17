@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.motorcontrol.Victor;
@@ -15,27 +16,27 @@ import frc.robot.Constants;
 public class StorageSub extends SubsystemBase {
   /** Creates a new StorageSub. */
 
-  private Victor windowMotor;
-  private Victor storageMotor;
-  private VictorSPX elevatorMotor;
-  private Victor turrentMotor;
+  private TalonSRX elevationMotor;
+  private VictorSPX storageMotor;
+  private VictorSPX feedMotor;
+  private VictorSPX azimuthMotor;
 
   public StorageSub() {
-    windowMotor = new Victor(Constants.WINDOW_MOTOR);
-    storageMotor = new Victor(Constants.STORAGE_MOTOR);
-    elevatorMotor = new VictorSPX(Constants.ELEVATOR_MOTOR);
-    turrentMotor = new Victor(Constants.TURRENT_MOTOR);
+    elevationMotor = new TalonSRX(Constants.ELEVATION_MOTOR);
+    storageMotor = new VictorSPX(Constants.STORAGE_MOTOR);
+    feedMotor = new VictorSPX(Constants.FEED_MOTOR);
+    azimuthMotor = new VictorSPX(Constants.AZIMUTH_MOTOR);
 
-    elevatorMotor.setInverted(true);
+    feedMotor.setInverted(true);
   }
 
   public void elevatorOn(){
-    elevatorMotor.set(ControlMode.PercentOutput, Constants.ELEVATOR_POWER);
-    System.out.println(Constants.ELEVATOR_POWER);
+    feedMotor.set(ControlMode.PercentOutput, Constants.FEED_POWER);
+    System.out.println(Constants.FEED_POWER);
   }
 
   public void elevatorOff(){
-    elevatorMotor.set(ControlMode.PercentOutput,0);
+    feedMotor.set(ControlMode.PercentOutput,0);
   }
 
   @Override

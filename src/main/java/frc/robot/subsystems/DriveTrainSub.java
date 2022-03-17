@@ -23,10 +23,10 @@ public class DriveTrainSub extends SubsystemBase
   /** Creates a new DriveTrainSub. */
   public DriveTrainSub() 
   {
-    rightMotorFront = new TalonFX(Constants.RIGHT_MOTOR_FRONT);
-    rightMotorBack = new TalonFX(Constants.RIGHT_MOTOR_BACK);
-    leftMotorFront = new TalonFX(Constants.LEFT_MOTOR_FRONT);
-    leftMotorBack = new TalonFX(Constants.LEFT_MOTOR_BACK);
+    rightMotorFront = new TalonFX(Constants.RIGHT_DRIVE_MOTOR_FRONT);
+    rightMotorBack = new TalonFX(Constants.RIGHT_DRIVE_MOTOR_BACK);
+    leftMotorFront = new TalonFX(Constants.LEFT_DRIVE_MOTOR_FRONT);
+    leftMotorBack = new TalonFX(Constants.LEFT_DRIVE_MOTOR_BACK);
     rightMotorBack.follow(rightMotorFront);
     leftMotorBack.follow(leftMotorFront);
   }

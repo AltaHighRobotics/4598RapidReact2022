@@ -17,25 +17,23 @@ import java.lang.Math;
  */
 public final class Constants {
     //PNEUMATIC CONTROL MODULE
-    public static final int LEFT_SWING_SOLENOID = 0;
-    public static final int RIGHT_SWING_SOLENOID = 1;
-    public static final int LEFT_INTAKE_SOLENOID = 2;
-    public static final int RIGHT_INTAKE_SOLENOID = 3;
+    public static final int ARM_SWING_SOLENOID = 1;
+    public static final int INTAKE_SOLENOID = 0;
 
     //CAN ID
     public static final int LEFT_LIFT_MOTOR = 5;
     public static final int RIGHT_LIFT_MOTOR = 6;
-    public static final int LEFT_INTAKE_MOTOR = 18;
-    public static final int RIGHT_DRIVE_MOTOR_FRONT = 17;
-    public static final int RIGHT_DRIVE_MOTOR_BACK = 16;
-    public static final int LEFT_DRIVE_MOTOR_FRONT = 19;
-    public static final int LEFT_DRIVE_MOTOR_BACK = 18;
+    public static final int INTAKE_MOTOR = 18;
+    public static final int RIGHT_DRIVE_MOTOR_FRONT = 4;
+    public static final int RIGHT_DRIVE_MOTOR_BACK = 3;
+    public static final int LEFT_DRIVE_MOTOR_FRONT = 2;
+    public static final int LEFT_DRIVE_MOTOR_BACK = 1;
     public static final int LEFT_SHOOTER_MOTOR = 10;
     public static final int RIGHT_SHOOTER_MOTOR = 11;
-    public static final int WINDOW_MOTOR = 12;
+    public static final int ELEVATION_MOTOR = 12;
     public static final int STORAGE_MOTOR = 14;
-    public static final int ELEVATOR_MOTOR = 13;
-    public static final int TURRENT_MOTOR = 19;
+    public static final int FEED_MOTOR = 13;
+    public static final int AZIMUTH_MOTOR = 19;
 
     //MOTOR SPEEDS
     public static final double LIFT_ARM_SPEED = 0;
@@ -50,6 +48,7 @@ public final class Constants {
     //ARM CONSTANTS
     public static final double MAX_ARM_ERROR = 40000;
     public static final double MAX_ARM_SPEED = 3;
+    public static final double MAX_ARM_INTEGRAL = 1;
     public static final double ARM_PROPORTIONAL_GAIN = 0.00001;
     public static final double FIRST_HOOK_POSITION = 150000;
     public static final double MIN_ARM_POSITION = 0;
@@ -85,7 +84,7 @@ public final class Constants {
     public static final double MAX_WAYPOINT_ERROR = 0;
 
     //Storage Constants
-    public static final double ELEVATOR_POWER = 0.7;
+    public static final double FEED_POWER = 0.7;
 
     //Shooter Constants
     public static final int SLIDER_AXIS = 3;

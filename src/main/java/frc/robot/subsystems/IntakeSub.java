@@ -13,14 +13,12 @@ import frc.robot.Constants;
 
 public class IntakeSub extends SubsystemBase {
   /** Creates a new IntakeSub. */
-  private Solenoid leftIntakeSolenoid;
-  private Solenoid rightIntakeSolenoid;
+  private Solenoid intakeSolenoid;
   private TalonFX intakeMotor;
 
   public IntakeSub() {
-    leftIntakeSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.LEFT_INTAKE_SOLENOID);
-    rightIntakeSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.RIGHT_INTAKE_SOLENOID);
-    intakeMotor = new TalonFX(Constants.LEFT_INTAKE_MOTOR);
+    intakeSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_SOLENOID);
+    intakeMotor = new TalonFX(Constants.INTAKE_MOTOR);
   }
 
   @Override
@@ -29,13 +27,11 @@ public class IntakeSub extends SubsystemBase {
   }
 
   public void IntakeExtend(){
-    leftIntakeSolenoid.set(true);
-    rightIntakeSolenoid.set(true);
+    intakeSolenoid.set(true);
   }
 
   public void IntakeRetract(){
-    leftIntakeSolenoid.set(false);
-    rightIntakeSolenoid.set(false);
+    intakeSolenoid.set(false);
   }
 
   public void IntakeOn(){

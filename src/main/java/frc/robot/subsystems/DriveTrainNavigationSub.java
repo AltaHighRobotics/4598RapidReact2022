@@ -52,10 +52,10 @@ public class DriveTrainNavigationSub extends SubsystemBase {
   public double robotNavData [];
 
   public DriveTrainNavigationSub() {
-    rightMotorFront = new TalonFX(Constants.RIGHT_MOTOR_FRONT);
-    rightMotorBack = new TalonFX(Constants.RIGHT_MOTOR_BACK);
-    leftMotorFront = new TalonFX(Constants.LEFT_MOTOR_FRONT);
-    leftMotorBack = new TalonFX(Constants.LEFT_MOTOR_BACK);
+    rightMotorFront = new TalonFX(Constants.RIGHT_DRIVE_MOTOR_FRONT);
+    rightMotorBack = new TalonFX(Constants.RIGHT_DRIVE_MOTOR_BACK);
+    leftMotorFront = new TalonFX(Constants.LEFT_DRIVE_MOTOR_FRONT);
+    leftMotorBack = new TalonFX(Constants.LEFT_DRIVE_MOTOR_BACK);
 
     navX = new AHRS(SPI.Port.kMXP);
 

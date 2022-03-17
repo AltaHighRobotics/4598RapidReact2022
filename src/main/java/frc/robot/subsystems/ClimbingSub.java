@@ -15,8 +15,7 @@ import com.ctre.phoenix.motorcontrol.*;
 import java.lang.Math;
 
 public class ClimbingSub extends SubsystemBase {
-  private Solenoid leftSwingSolenoid;
-  // private Solenoid rightSwingSolenoid;
+  private Solenoid armSwingSolenoid;
   private TalonFX leftLiftMotor;
   private TalonFX rightLiftMotor;
 
@@ -34,8 +33,7 @@ public class ClimbingSub extends SubsystemBase {
   private boolean hasRun;
 
   public ClimbingSub() {
-      leftSwingSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.LEFT_SWING_SOLENOID);
-      // rightSwingSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.RIGHT_SWING_SOLENOID);
+      armSwingSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.ARM_SWING_SOLENOID);
       leftLiftMotor = new TalonFX(Constants.LEFT_LIFT_MOTOR);
       rightLiftMotor = new TalonFX(Constants.RIGHT_LIFT_MOTOR);
 
@@ -86,16 +84,14 @@ public class ClimbingSub extends SubsystemBase {
    * 
    */
   public void SwingArms(){
-    // rightSwingSolenoid.set(true);
-    leftSwingSolenoid.set(true);
+    armSwingSolenoid.set(true);
   }
 
   /** Toggles the solonoids on the arms to off
    * 
    */
   public void ReturnArms(){
-    // rightSwingSolenoid.set(false);
-    leftSwingSolenoid.set(false);
+    armSwingSolenoid.set(false);
   }
 
   /** Proportional Integral Controller used for the arms
@@ -119,8 +115,8 @@ public class ClimbingSub extends SubsystemBase {
     double leftArmVelocityError = leftArmError - leftLiftMotorVelocity;
     double rightArmVelocityError = rightArmError - rightLiftMotorVelocity;
 
-    leftLiftMotorIntegral = Math.min(Math.max(leftLiftMotorIntegral + leftArmVelocityError, -1), 1);
-    rightLiftMotorIntegral = Math.min(Math.max(rightLiftMotorIntegral + rightArmVelocityError, -1), 1);
+    leftLiftMotorIntegral = Math.min(Math.max(leftLiftMotorIntegral + leftArmVelocityError, -Constants.MAX_ARM_INTEGRAL), Constants.MAX_ARM_INTEGRAL);
+    rightLiftMotorIntegral = Math.min(Math.max(rightLiftMotorIntegral + rightArmVelocityError, -Constants.MAX_ARM_INTEGRAL), Constants.MAX_ARM_INTEGRAL);
 
     double leftArmPower = leftArmVelocityError * Constants.ARM_PROPORTIONAL_GAIN + leftLiftMotorIntegral * Constants.ARM_INTEGRAL_GAIN;
     double rightArmPower = rightArmVelocityError * Constants.ARM_PROPORTIONAL_GAIN + rightLiftMotorIntegral * Constants.ARM_INTEGRAL_GAIN;
