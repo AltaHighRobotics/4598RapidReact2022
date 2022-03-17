@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.IntakeSub;
 
 public class IntakeCommand extends CommandBase {
@@ -24,6 +25,7 @@ public class IntakeCommand extends CommandBase {
   public void execute() {
     m_intakeSub.IntakeExtend();
     m_intakeSub.IntakeOn();
+    SmartDashboard.putString("Intake Status:", "Deployed");
   }
 
   // Called once the command ends or is interrupted.
@@ -31,6 +33,7 @@ public class IntakeCommand extends CommandBase {
   public void end(boolean interrupted) {
     m_intakeSub.IntakeRetract();
     m_intakeSub.IntakeOff();
+    SmartDashboard.putString("Intake Status:", "Retracted");
   }
 
   // Returns true when the command should end.
