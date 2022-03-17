@@ -30,7 +30,7 @@ public final class Constants {
     public static final int LEFT_DRIVE_MOTOR_BACK = 1;
     public static final int LEFT_SHOOTER_MOTOR = 10;
     public static final int RIGHT_SHOOTER_MOTOR = 11;
-    public static final int ELEVATION_MOTOR = 12;
+    public static final int ELEVATION_ANGLE_MOTOR = 12;
     public static final int STORAGE_MOTOR = 14;
     public static final int FEED_MOTOR = 13;
     public static final int AZIMUTH_MOTOR = 19;

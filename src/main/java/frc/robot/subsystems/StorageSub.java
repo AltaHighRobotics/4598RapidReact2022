@@ -16,13 +16,13 @@ import frc.robot.Constants;
 public class StorageSub extends SubsystemBase {
   /** Creates a new StorageSub. */
 
-  private TalonSRX elevationMotor;
+  private TalonSRX elevationAngleMotor;
   private VictorSPX storageMotor;
   private VictorSPX feedMotor;
   private VictorSPX azimuthMotor;
 
   public StorageSub() {
-    elevationMotor = new TalonSRX(Constants.ELEVATION_MOTOR);
+    elevationAngleMotor = new TalonSRX(Constants.ELEVATION_ANGLE_MOTOR);
     storageMotor = new VictorSPX(Constants.STORAGE_MOTOR);
     feedMotor = new VictorSPX(Constants.FEED_MOTOR);
     azimuthMotor = new VictorSPX(Constants.AZIMUTH_MOTOR);
