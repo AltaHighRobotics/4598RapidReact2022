@@ -5,12 +5,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.StorageSub;
 
-public class ElevatorCommand extends CommandBase {
+public class FeedCommand extends CommandBase {
   /** Creates a new ElevatorOnCommand. */
   private StorageSub m_StorageSub;
-  public ElevatorCommand(StorageSub storageSub) {
+  public FeedCommand(StorageSub storageSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_StorageSub = storageSub;
     addRequirements(storageSub);
@@ -24,13 +25,14 @@ public class ElevatorCommand extends CommandBase {
   @Override
   public void execute() {
     m_StorageSub.elevatorOn();
-    System.out.println("Elevator ON");
+    SmartDashboard.putString("Feeder Status:", "Feeding");
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_StorageSub.elevatorOff();
+    SmartDashboard.putString("Feeder Status:", "Stopped");
   }
 
   // Returns true when the command should end.
