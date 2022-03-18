@@ -6,14 +6,11 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.ShooterSub;
 
 public class ConstantShootCommand extends CommandBase {
   /** Creates a new ConstantShootCommand. */
   private ShooterSub m_ShooterSub;
-  private double leftShooterIntegral;
-  private double rightShooterIntegral;
 
 
   public ConstantShootCommand(ShooterSub shooterSub) {
@@ -24,17 +21,13 @@ public class ConstantShootCommand extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    leftShooterIntegral = 0;
-    rightShooterIntegral = 0;
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     //Insert Test Velocity here
-    leftShooterIntegral = m_ShooterSub.setShooterMotorVelocity(5000, leftShooterIntegral, Constants.LEFT_SHOOTER_MOTOR);
-    rightShooterIntegral = m_ShooterSub.setShooterMotorVelocity(5000, rightShooterIntegral, Constants.RIGHT_SHOOTER_MOTOR);
+    m_ShooterSub.setShooterMotorsVelocity(5000);
     SmartDashboard.putString("Shooter Status:", "Shooting");
   }
 

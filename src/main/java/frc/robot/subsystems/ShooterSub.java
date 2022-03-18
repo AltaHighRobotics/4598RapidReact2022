@@ -17,6 +17,10 @@ public class ShooterSub extends SubsystemBase {
 
   private TalonFX leftShooterMotor;
   private TalonFX rightShooterMotor;
+  private double shooterPowers [];
+  private double shooterErrors [];
+  private double shooterLeftIntegral;
+  private double shooterRightIntegral;
  
 
   public ShooterSub() {
@@ -42,45 +46,37 @@ public class ShooterSub extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  /** Proportional Integral Controller used to set the shooter motor speed
-   *  Adjusts motor power to match a target velocity
-   *  @param targetShooterVelocity A double representing the target velocity that the specified motor should attempt to reach
-   *  @param integral A double representing the integral of the specified motor
-   *  @param motorID An int representing the ID of the motor to control (Must be either left or right shooter motor)
+  /** Proportional Integral Controller used to set both of the shooter motors speed
+   *  Adjusts both motors power to match a target velocity
+   *  @param targetShooterVelocity A double representing the target velocity that the shooter motors should attempt to reach
    */
-  public double setShooterMotorVelocity(double targetShooterVelocity, double integral, int motorID){
+  public void setShooterMotorsVelocity(double targetShooterVelocity){
 
-    double currentShooterVelocity = 0;
+    double shooterLeftVelocity = leftShooterMotor.getSelectedSensorVelocity();
+    double shooterRightVelocity = rightShooterMotor.getSelectedSensorVelocity();
 
-    if(motorID == Constants.LEFT_SHOOTER_MOTOR) {
-      currentShooterVelocity = leftShooterMotor.getSelectedSensorVelocity();
-    } else if(motorID == Constants.RIGHT_SHOOTER_MOTOR) {
-      currentShooterVelocity = rightShooterMotor.getSelectedSensorVelocity();
-    } else {
-      System.out.println("function setShooterMotorVelocity() was used on a motor other than the shooter motors. This is not supported and will cause issues");
-      return 0;
-    }
+    double shooterLeftVelocityError = targetShooterVelocity - shooterLeftVelocity;
+    double shooterRightVelocityError = targetShooterVelocity - shooterRightVelocity;
 
-    double velocityError = targetShooterVelocity - currentShooterVelocity;
+    shooterLeftIntegral = Math.max(Math.min(shooterLeftIntegral + shooterLeftVelocityError * Constants.SHOOTER_INTERGRAL_GAIN, Constants.MAX_ARM_INTEGRAL), -Constants.MAX_ARM_INTEGRAL);
+    shooterRightIntegral = Math.max(Math.min(shooterRightIntegral + shooterRightVelocityError * Constants.SHOOTER_INTERGRAL_GAIN, Constants.MAX_ARM_INTEGRAL), -Constants.MAX_ARM_INTEGRAL);
 
-    integral = Math.max(Math.min(integral + velocityError * Constants.SHOOTER_INTERGRAL_GAIN, Constants.MAX_ARM_INTEGRAL), -Constants.MAX_ARM_INTEGRAL);
+    double shooterLeftPower = shooterLeftVelocityError*Constants.SHOOTER_PORPORTIONAL_GAIN;
+    double shooterRightPower = shooterRightVelocityError*Constants.SHOOTER_PORPORTIONAL_GAIN;
 
-    double power = velocityError*Constants.SHOOTER_PORPORTIONAL_GAIN;
+    double shooterLeftFinalPower = Math.max(shooterLeftPower + shooterLeftIntegral + Constants.POWER_OFFSET, 0);
+    double shooterRightFinalPower = Math.max(shooterRightPower + shooterRightIntegral + Constants.POWER_OFFSET, 0);
 
-    double finalPower = Math.max(power + integral + Constants.POWER_OFFSET, 0);
+    leftShooterMotor.set(ControlMode.PercentOutput, shooterLeftFinalPower);
+    rightShooterMotor.set(ControlMode.PercentOutput, shooterRightFinalPower);
 
-    if(motorID == Constants.LEFT_SHOOTER_MOTOR) {
-      leftShooterMotor.set(ControlMode.PercentOutput, finalPower);
-    } else {
-      rightShooterMotor.set(ControlMode.PercentOutput, finalPower);
-    }
+    shooterPowers[0] = shooterLeftFinalPower;
+    shooterPowers[1] = shooterRightFinalPower;
+    shooterErrors[0] = shooterLeftVelocityError;
+    shooterErrors[1] = shooterRightVelocityError;
 
-    SmartDashboard.putNumber("Shooter Integral:", integral);
-    SmartDashboard.putNumber("Shooter Final Power:", finalPower);
-    SmartDashboard.putNumber("Shooter Velocity Error:", velocityError);
-
-    return integral;
-
+    SmartDashboard.putNumberArray("Shooter Final Powers:", shooterPowers);
+    SmartDashboard.putNumberArray("Shooter Velocity Errors:", shooterErrors);
   }
 
   public void setShooterMotorsPower(double Speed){
