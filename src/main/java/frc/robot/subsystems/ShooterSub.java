@@ -49,9 +49,9 @@ public class ShooterSub extends SubsystemBase {
     azimuthMotor.setSensorPhase(false);
     elevationAngleMotor.setSensorPhase(false);
 
-    leftShooterMotor.setInverted(TalonFXInvertType.Clockwise);
-    rightShooterMotor.setInverted(TalonFXInvertType.CounterClockwise);
-    azimuthMotor.setInverted(TalonFXInvertType.Clockwise);
+    leftShooterMotor.setInverted(TalonFXInvertType.CounterClockwise);
+    rightShooterMotor.setInverted(TalonFXInvertType.Clockwise);
+    azimuthMotor.setInverted(TalonFXInvertType.CounterClockwise);
     elevationAngleMotor.setInverted(false);
 
     shooterPowers = new double [2];
