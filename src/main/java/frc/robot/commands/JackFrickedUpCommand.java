@@ -5,6 +5,7 @@
  */
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ClimbingSub;
@@ -33,6 +34,7 @@ public class JackFrickedUpCommand extends CommandBase {
     m_climbingSub.setHasRun(false);
       //Sets arm variables to their original state 
     m_climbingSub.ArmsStationary();
+    SmartDashboard.putString("Has Jack goofed up yet?", "Yes");
   }
 
   @Override

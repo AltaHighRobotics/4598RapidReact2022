@@ -41,6 +41,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Robot Heading:", "No Navigation Data");
     SmartDashboard.putString("Heading Error:", "No Navigation Data");
     SmartDashboard.putString("Distance to Waypoint:", "No Navigation Data");
+    SmartDashboard.putString("Has Jack goofed up yet?", "Not yet");
     m_robotContainer = new RobotContainer();
   }
 
