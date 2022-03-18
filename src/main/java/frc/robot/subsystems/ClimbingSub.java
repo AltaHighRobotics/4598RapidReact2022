@@ -17,14 +17,14 @@ import java.lang.Math;
 
 public class ClimbingSub extends SubsystemBase {
   private Solenoid armSwingSolenoid;
-  private TalonFX leftLiftMotor;
-  private TalonFX rightLiftMotor;
+  private TalonFX leftArmMotor;
+  private TalonFX rightArmMotor;
 
-  private double rightLiftMotorVelocity;
-  private double leftLiftMotorVelocity;
+  private double rightArmMotorVelocity;
+  private double leftArmMotorVelocity;
 
-  private double rightLiftMotorPosition;
-  private double leftLiftMotorPosition;
+  private double rightArmMotorPosition;
+  private double leftArmMotorPosition;
 
   private double rightArmIntegral;
   private double leftArmIntegral;
@@ -35,20 +35,20 @@ public class ClimbingSub extends SubsystemBase {
 
   public ClimbingSub() {
       armSwingSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.ARM_SWING_SOLENOID);
-      leftLiftMotor = new TalonFX(Constants.LEFT_LIFT_MOTOR);
-      rightLiftMotor = new TalonFX(Constants.RIGHT_LIFT_MOTOR);
+      leftArmMotor = new TalonFX(Constants.LEFT_ARM_MOTOR);
+      rightArmMotor = new TalonFX(Constants.RIGHT_ARM_MOTOR);
 
-      leftLiftMotor.configFactoryDefault();
-      rightLiftMotor.configFactoryDefault();
+      leftArmMotor.configFactoryDefault();
+      rightArmMotor.configFactoryDefault();
 
-      leftLiftMotor.setNeutralMode(NeutralMode.Brake);
-      rightLiftMotor.setNeutralMode(NeutralMode.Brake);
+      leftArmMotor.setNeutralMode(NeutralMode.Brake);
+      rightArmMotor.setNeutralMode(NeutralMode.Brake);
 
-      leftLiftMotor.setInverted(false);
-      rightLiftMotor.setInverted(false);
+      leftArmMotor.setInverted(false);
+      rightArmMotor.setInverted(false);
 
-      leftLiftMotor.setSensorPhase(false);
-      rightLiftMotor.setSensorPhase(false);
+      leftArmMotor.setSensorPhase(false);
+      rightArmMotor.setSensorPhase(false);
 
       currentArmTarget = Constants.MAX_ARM_POSITION;
       currentStage = 0;
@@ -60,8 +60,8 @@ public class ClimbingSub extends SubsystemBase {
    *  @deprecated
    */
   public void ExtendArms(){
-    leftLiftMotor.set(ControlMode.PercentOutput, -Constants.LIFT_ARM_SPEED);
-    rightLiftMotor.set(ControlMode.PercentOutput, Constants.LIFT_ARM_SPEED);
+    leftArmMotor.set(ControlMode.PercentOutput, -Constants.LIFT_ARM_SPEED);
+    rightArmMotor.set(ControlMode.PercentOutput, Constants.LIFT_ARM_SPEED);
   }
 
   /** Retracts the climbing arms
@@ -69,16 +69,16 @@ public class ClimbingSub extends SubsystemBase {
    *  @deprecated
    */
   public void RetractArms(){
-    leftLiftMotor.set(ControlMode.PercentOutput, Constants.LIFT_ARM_SPEED);
-    rightLiftMotor.set(ControlMode.PercentOutput, -Constants.LIFT_ARM_SPEED);
+    leftArmMotor.set(ControlMode.PercentOutput, Constants.LIFT_ARM_SPEED);
+    rightArmMotor.set(ControlMode.PercentOutput, -Constants.LIFT_ARM_SPEED);
   }
 
   /** Sets the arms to not move
    * 
    */
   public void ArmsStationary(){
-    leftLiftMotor.set(ControlMode.PercentOutput, 0);
-    rightLiftMotor.set(ControlMode.PercentOutput, 0);
+    leftArmMotor.set(ControlMode.PercentOutput, 0);
+    rightArmMotor.set(ControlMode.PercentOutput, 0);
   }
   
   /** Toggles the solonoids on the arms to on
@@ -101,24 +101,34 @@ public class ClimbingSub extends SubsystemBase {
    */
   public void SetArmsWithClamp(double targetPosition)
   {
-    rightLiftMotorPosition = rightLiftMotor.getSelectedSensorPosition();
-    leftLiftMotorPosition = leftLiftMotor.getSelectedSensorPosition();
-    rightLiftMotorVelocity = rightLiftMotor.getSelectedSensorVelocity();
-    leftLiftMotorVelocity = leftLiftMotor.getSelectedSensorVelocity();
+    // Gets the position and velocity of both arm motors
+    rightArmMotorPosition = rightArmMotor.getSelectedSensorPosition();
+    leftArmMotorPosition = leftArmMotor.getSelectedSensorPosition();
+    rightArmMotorVelocity = rightArmMotor.getSelectedSensorVelocity();
+    leftArmMotorVelocity = leftArmMotor.getSelectedSensorVelocity();
     
-    double averageArmPosition = (-leftLiftMotorPosition + rightLiftMotorPosition)/2;
+    /** Gets the average position between the two arms, and then clamps the target for each arm to be within an acceptable range of it. 
+     * This ensures the arms do not get out of sync, as that would tip the robot
+     */
+    double averageArmPosition = (-leftArmMotorPosition + rightArmMotorPosition)/2;
     double armMin = Math.min(targetPosition, averageArmPosition + Constants.MAX_ARM_ERROR);
     double actualTarget = Math.max(armMin, averageArmPosition - Constants.MAX_ARM_ERROR);
 
-    double leftArmError = (-actualTarget - leftLiftMotorPosition) * Constants.MAX_ARM_SPEED;
-    double rightArmError = (actualTarget - rightLiftMotorPosition) * Constants.MAX_ARM_SPEED;
+    // Finds the difference between each arms position and the clamped target, then multiplies it by the max speed
+    double leftArmError = (-actualTarget - leftArmMotorPosition) * Constants.MAX_ARM_SPEED;
+    double rightArmError = (actualTarget - rightArmMotorPosition) * Constants.MAX_ARM_SPEED;
 
-    double leftArmVelocityError = leftArmError - leftLiftMotorVelocity;
-    double rightArmVelocityError = rightArmError - rightLiftMotorVelocity;
+    /** Finds the difference between each arms current velocity, and each arms error. 
+     *  By using velocity and position, the controller is more stable than if we only used position, 
+     *  as it will now slow down to stop directly on the target, rather than coasting past it
+     */
+    double leftArmVelocityError = leftArmError - leftArmMotorVelocity;
+    double rightArmVelocityError = rightArmError - rightArmMotorVelocity;
 
     double leftArmProportional = leftArmVelocityError * Constants.ARM_PROPORTIONAL_GAIN;
     double rightArmProportional = rightArmVelocityError * Constants.ARM_PROPORTIONAL_GAIN;
 
+    // This adds the current error in speed to the sum of all previous errors. This helps when the arms are under load
     leftArmIntegral = Math.min(Math.max((leftArmIntegral + leftArmVelocityError) * Constants.ARM_INTEGRAL_GAIN, -Constants.MAX_ARM_INTEGRAL), Constants.MAX_ARM_INTEGRAL);
     rightArmIntegral = Math.min(Math.max((rightArmIntegral + rightArmVelocityError) * Constants.ARM_INTEGRAL_GAIN, -Constants.MAX_ARM_INTEGRAL), Constants.MAX_ARM_INTEGRAL);
 
@@ -133,8 +143,8 @@ public class ClimbingSub extends SubsystemBase {
     SmartDashboard.putNumber("Right Arm Proportional", rightArmProportional);
     SmartDashboard.putNumber("Right Arm Integral", rightArmIntegral);
 
-    leftLiftMotor.set(ControlMode.PercentOutput, leftArmPower);
-    rightLiftMotor.set(ControlMode.PercentOutput, rightArmPower);
+    leftArmMotor.set(ControlMode.PercentOutput, leftArmPower);
+    rightArmMotor.set(ControlMode.PercentOutput, rightArmPower);
   }
 
   /** Gets the current target for use in SetArmsWithClamp() later in the code
@@ -190,7 +200,7 @@ public class ClimbingSub extends SubsystemBase {
    */
   public double getLeftCoderPos()
   {
-    return leftLiftMotor.getSelectedSensorPosition();
+    return leftArmMotor.getSelectedSensorPosition();
   }
 
   /** Gets the encoder position for the right motor
@@ -198,7 +208,7 @@ public class ClimbingSub extends SubsystemBase {
    */
   public double getRightCoderPos()
   {
-    return rightLiftMotor.getSelectedSensorPosition();
+    return rightArmMotor.getSelectedSensorPosition();
   }
 
   /** Checks if the arms are at the target position
@@ -207,7 +217,7 @@ public class ClimbingSub extends SubsystemBase {
    */
   public boolean hasReachedPosition(double target)
   {
-    double pos = rightLiftMotor.getSelectedSensorPosition();
+    double pos = rightArmMotor.getSelectedSensorPosition();
     if(target > pos - Constants.ACCEPTABLE_ERROR &&
        target < pos + Constants.ACCEPTABLE_ERROR)
     {

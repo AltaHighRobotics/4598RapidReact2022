@@ -54,31 +54,37 @@ public class ShooterSub extends SubsystemBase {
    *  @param targetShooterVelocity A double representing the target velocity that the shooter motors should attempt to reach
    */
   public void setShooterMotorsVelocity(double targetShooterVelocity){
-
+    // Gets the velocity of each of the two shooter motors
     double shooterLeftVelocity = leftShooterMotor.getSelectedSensorVelocity();
     double shooterRightVelocity = rightShooterMotor.getSelectedSensorVelocity();
 
+    // Finds the difference between the target velocity and the current velocity for each motor
     double shooterLeftVelocityError = targetShooterVelocity - shooterLeftVelocity;
     double shooterRightVelocityError = targetShooterVelocity - shooterRightVelocity;
 
+    // Adds the current error to the sum of all past errors, which allows the controller to find the exact power level needed
     shooterLeftIntegral = Math.max(Math.min(shooterLeftIntegral + shooterLeftVelocityError * Constants.SHOOTER_INTERGRAL_GAIN, Constants.MAX_ARM_INTEGRAL), -Constants.MAX_ARM_INTEGRAL);
     shooterRightIntegral = Math.max(Math.min(shooterRightIntegral + shooterRightVelocityError * Constants.SHOOTER_INTERGRAL_GAIN, Constants.MAX_ARM_INTEGRAL), -Constants.MAX_ARM_INTEGRAL);
 
-    double shooterLeftPower = shooterLeftVelocityError*Constants.SHOOTER_PORPORTIONAL_GAIN;
-    double shooterRightPower = shooterRightVelocityError*Constants.SHOOTER_PORPORTIONAL_GAIN;
+    // Adds the current error * a constant gain to the output power, which improves response time for changes in target velocity
+    double shooterLeftPower = shooterLeftIntegral + shooterLeftVelocityError * Constants.SHOOTER_PORPORTIONAL_GAIN;
+    double shooterRightPower = shooterRightIntegral + shooterRightVelocityError * Constants.SHOOTER_PORPORTIONAL_GAIN;
 
-    double shooterLeftFinalPower = Math.max(shooterLeftPower + shooterLeftIntegral, Constants.SHOOTER_POWER_OFFSET);
-    double shooterRightFinalPower = Math.max(shooterRightPower + shooterRightIntegral, Constants.SHOOTER_POWER_OFFSET);
+    // Clamps the power output above the power offset value, which ensures the motors don't apply brakes, as that would cause instability and vibrations
+    shooterLeftPower = Math.max(shooterLeftPower, Constants.SHOOTER_POWER_OFFSET);
+    shooterRightPower = Math.max(shooterRightPower, Constants.SHOOTER_POWER_OFFSET);
 
-    leftShooterMotor.set(ControlMode.PercentOutput, shooterLeftFinalPower);
-    rightShooterMotor.set(ControlMode.PercentOutput, shooterRightFinalPower);
+    // Sets the motors to the computed power levels
+    leftShooterMotor.set(ControlMode.PercentOutput, shooterLeftPower);
+    rightShooterMotor.set(ControlMode.PercentOutput, shooterRightPower);
 
-    shooterPowers[0] = shooterLeftFinalPower;
-    shooterPowers[1] = shooterRightFinalPower;
+    // Displays useful values in Smart Dashboard
+    shooterPowers[0] = shooterLeftPower;
+    shooterPowers[1] = shooterRightPower;
     shooterErrors[0] = shooterLeftVelocityError;
     shooterErrors[1] = shooterRightVelocityError;
 
-    SmartDashboard.putNumberArray("Shooter Final Powers:", shooterPowers);
+    SmartDashboard.putNumberArray("Shooter Power:", shooterPowers);
     SmartDashboard.putNumberArray("Shooter Velocity Errors:", shooterErrors);
   }
 
