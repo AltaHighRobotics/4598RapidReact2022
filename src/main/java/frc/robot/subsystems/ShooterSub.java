@@ -39,6 +39,9 @@ public class ShooterSub extends SubsystemBase {
 
     rightShooterMotor.setSensorPhase(false);
     leftShooterMotor.setSensorPhase(false);
+
+    shooterPowers = new double [2];
+    shooterErrors = new double [2];
   }
 
   @Override
@@ -64,8 +67,8 @@ public class ShooterSub extends SubsystemBase {
     double shooterLeftPower = shooterLeftVelocityError*Constants.SHOOTER_PORPORTIONAL_GAIN;
     double shooterRightPower = shooterRightVelocityError*Constants.SHOOTER_PORPORTIONAL_GAIN;
 
-    double shooterLeftFinalPower = Math.max(shooterLeftPower + shooterLeftIntegral + Constants.POWER_OFFSET, 0);
-    double shooterRightFinalPower = Math.max(shooterRightPower + shooterRightIntegral + Constants.POWER_OFFSET, 0);
+    double shooterLeftFinalPower = Math.max(shooterLeftPower + shooterLeftIntegral, Constants.SHOOTER_POWER_OFFSET);
+    double shooterRightFinalPower = Math.max(shooterRightPower + shooterRightIntegral, Constants.SHOOTER_POWER_OFFSET);
 
     leftShooterMotor.set(ControlMode.PercentOutput, shooterLeftFinalPower);
     rightShooterMotor.set(ControlMode.PercentOutput, shooterRightFinalPower);
