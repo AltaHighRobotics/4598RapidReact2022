@@ -8,7 +8,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.wpilibj.motorcontrol.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -44,29 +43,35 @@ public class ShooterSub extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public double setShooterMotorsVelocity(double TargetShooterVelocity, double Integral){
+  public double setShooterMotorVelocity(double targetShooterVelocity, double integral, int motorID){
 
-    leftShooterMotor.follow(rightShooterMotor);
+    double currentShooterVelocity = 0;
 
-    double currentShooterVelocity = rightShooterMotor.getSelectedSensorVelocity();
+    if(motorID == Constants.LEFT_SHOOTER_MOTOR) {
+      currentShooterVelocity = leftShooterMotor.getSelectedSensorVelocity();
+    } else {
+      currentShooterVelocity = rightShooterMotor.getSelectedSensorVelocity();
+    }
 
-    double VelocityError = TargetShooterVelocity - currentShooterVelocity;
+    double velocityError = targetShooterVelocity - currentShooterVelocity;
 
-    Integral = Math.max(Math.min(Integral+VelocityError*Constants.SHOOTER_INTERGRAL_GAIN,Constants.MAX_ARM_INTEGRAL),-Constants.MAX_ARM_INTEGRAL);
+    integral = Math.max(Math.min(integral + velocityError * Constants.SHOOTER_INTERGRAL_GAIN, Constants.MAX_ARM_INTEGRAL), -Constants.MAX_ARM_INTEGRAL);
 
-    double power = VelocityError*Constants.SHOOTER_PORPORTIONAL_GAIN;
+    double power = velocityError*Constants.SHOOTER_PORPORTIONAL_GAIN;
 
-    double finalPower = Math.max(power + Constants.POWER_OFFSET+Integral,0);
-    
-    System.out.println(VelocityError);
+    double finalPower = Math.max(power + integral + Constants.POWER_OFFSET, 0);
 
-    rightShooterMotor.set(ControlMode.PercentOutput, finalPower);
+    if(motorID == Constants.LEFT_SHOOTER_MOTOR) {
+      leftShooterMotor.set(ControlMode.PercentOutput, finalPower);
+    } else {
+      rightShooterMotor.set(ControlMode.PercentOutput, finalPower);
+    }
 
-    SmartDashboard.putNumber("Shooter Integral", Integral);
+    SmartDashboard.putNumber("Shooter Integral", integral);
     SmartDashboard.putNumber("Final Power", finalPower);
-    SmartDashboard.putNumber("Velocity Error", VelocityError);
+    SmartDashboard.putNumber("Velocity Error", velocityError);
 
-    return Integral;
+    return integral;
 
   }
 
