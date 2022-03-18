@@ -65,7 +65,7 @@ public final class Constants {
     public static final double A1 = 3;
     public static final double H1 = 8;
     public static final double H2 = 38;
-    public static final double RADIAN_CONVERSION = 3.14159 / 180.0;
+    public static final double RADIAN_CONVERSION = 3.14159 / 180; // Math.toDegrees(angrad) and Math.toRadians(angdeg) are cool too
     public static final double[][] SHOOTER_DATA = new double[][] {
             // Distance, Speed
             { 12, 20 },
@@ -79,10 +79,10 @@ public final class Constants {
 
     // DriveTrain Navigation Constants
 
-    public static final double ENCODER_ROTATION_RATIO = ((14 / 68) * (24 / 36)) / 4000;
+    public static final double ENCODER_ROTATION_RATIO = ((14 / 68) * (24 / 30)) / 4096;
     public static final double ROTATION_DISTANCE_RATIO = ENCODER_ROTATION_RATIO * Math.PI * 3;
     public static final int DRIVING_HEADING_PROPORTIONAL_GAIN = 0;
-    public static final double MAX_DRIVE_HEADING_ERROR = 0;
+    public static final double MAX_DRIVE_HEADING_ERROR = 3;
     public static final double DRIVE_SPEED_PROPORTIONAL_GAIN = 0;
     public static final double MAX_WAYPOINT_ERROR = 0;
 
@@ -92,7 +92,7 @@ public final class Constants {
     // Shooter Constants
     public static final int SLIDER_AXIS = 3;
     public static final double SHOOTER_PORPORTIONAL_GAIN = 0.00005;
-    public static final double SHOOTER_INTERGRAL_GAIN = 0.00001;
+    public static final double SHOOTER_INTERGRAL_GAIN = 0.000005;
     public static final double SHOOTER_MAX_INTEGRAL = 1;
     public static final double SHOOTER_POWER_OFFSET = 0.1;
     public static final double ELEVATION_ANGLE_PROPORTIONAL_GAIN = 0.05;
