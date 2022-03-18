@@ -97,7 +97,11 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     leftMotorVelocity = leftMotorFront.getSelectedSensorVelocity();
 
     compHeading = (double) navX.getCompassHeading();
+
+    SmartDashboard.putNumber("Robot Heading:", compHeading);
+
     compHeading = Math.toRadians(compHeading);
+
     yaw = (double) navX.getYaw();
 
     double distanceTravLeft = leftMotorPos - previousLeft;
@@ -109,7 +113,6 @@ public class DriveTrainNavigationSub extends SubsystemBase {
 
     SmartDashboard.putNumber("Robot X:", robotX);
     SmartDashboard.putNumber("Robot Y:", robotY);
-    SmartDashboard.putNumber("Robot Heading:", Math.toDegrees(compHeading));
 
     robotNavData[0] = rightMotorPos;
     robotNavData[1] = leftMotorPos;
@@ -135,6 +138,8 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     double headingRate = compHeading - previousHeading;
     double headingError = targetHeading - compHeading;
     double headingRateError = headingError - headingRate;
+    
+    SmartDashboard.putNumber("Heading Error:", headingError);
 
     double leftDrivePower = -Constants.DRIVING_HEADING_PROPORTIONAL_GAIN * headingRateError;
     double rightDrivePower = Constants.DRIVING_HEADING_PROPORTIONAL_GAIN * headingRateError;
@@ -142,7 +147,9 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     if(headingError < Constants.MAX_DRIVE_HEADING_ERROR)
     {
       double distanceError = Math.sqrt(Math.pow((targetY - robotY), 2)) + (Math.pow((targetX - robotX), 2));
-      
+
+      SmartDashboard.putNumber("Distance to Waypoint:", distanceError);
+
       leftDrivePower = leftDrivePower + distanceError * Constants.DRIVE_SPEED_PROPORTIONAL_GAIN;
       rightDrivePower = rightDrivePower + distanceError * Constants.DRIVE_SPEED_PROPORTIONAL_GAIN;
     }

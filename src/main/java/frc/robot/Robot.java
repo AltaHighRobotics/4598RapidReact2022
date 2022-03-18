@@ -32,6 +32,15 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Climb Target:", "Climb Target has not been updated");
     SmartDashboard.putString("Intake Status:", "Intake Status has not been updated");
     SmartDashboard.putString("Feeder Status:", "Feeder Status has not been updated");
+    SmartDashboard.putString("Shooter Status:", "Shooter Status has not been updated");
+    SmartDashboard.putString("RED:", "No Color Data");
+    SmartDashboard.putString("GREEN:", "No Color Data");
+    SmartDashboard.putString("BLUE:", "No Color Data");
+    SmartDashboard.putString("Robot X:", "No Navigation Data");
+    SmartDashboard.putString("Robot Y:", "No Navigation Data");
+    SmartDashboard.putString("Robot Heading:", "No Navigation Data");
+    SmartDashboard.putString("Heading Error:", "No Navigation Data");
+    SmartDashboard.putString("Distance to Waypoint:", "No Navigation Data");
     m_robotContainer = new RobotContainer();
   }
 

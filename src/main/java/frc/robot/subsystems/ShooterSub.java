@@ -66,9 +66,9 @@ public class ShooterSub extends SubsystemBase {
       rightShooterMotor.set(ControlMode.PercentOutput, finalPower);
     }
 
-    SmartDashboard.putNumber("Shooter Integral", integral);
-    SmartDashboard.putNumber("Final Power", finalPower);
-    SmartDashboard.putNumber("Velocity Error", velocityError);
+    SmartDashboard.putNumber("Shooter Integral:", integral);
+    SmartDashboard.putNumber("Shooter Final Power:", finalPower);
+    SmartDashboard.putNumber("Shooter Velocity Error:", velocityError);
 
     return integral;
 

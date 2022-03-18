@@ -33,7 +33,6 @@ public class ClimbingCommand extends CommandBase {
     currentStage = m_climbingSub.getCurrentStage();
 
     SmartDashboard.putNumber("Climb Stage:", currentStage);
-    SmartDashboard.putNumber("Climb Target:", currentTarget);
 
     m_climbingSub.SetArmsWithClamp(currentTarget);
       //Makes climbing arms go to the current Target
@@ -46,30 +45,36 @@ public class ClimbingCommand extends CommandBase {
       {
         case 1:
           System.out.println("SETTING ARMS TO MIN POSITION");
+          SmartDashboard.putString("Climb Target:", "Minimum Arm Position, Arms up");
           m_climbingSub.setCurrentTarget(Constants.MIN_ARM_POSITION);
           break;
         
         case 2:
           System.out.println("CASE 2");
+          SmartDashboard.putString("Climb Target:", "Almost Minimum Arm Position, Arms up");
           m_climbingSub.setCurrentTarget(Constants.ALMOST_MIN_POSITION);
           break;
 
         case 3:
           System.out.println("CASE 3");
+          SmartDashboard.putString("Climb Target:", "Almost Minimum Arm Position, Arms out");
           m_climbingSub.SwingArms();
           m_climbingSub.setCurrentTarget(Constants.ALMOST_MIN_POSITION);
           break;
         case 4:
           System.out.println("CASE 4");
+          SmartDashboard.putString("Climb Target:", "Maximum Arm Position, Arms out");
           m_climbingSub.setCurrentTarget(Constants.MAX_ARM_POSITION);
           break;
         case 5:
           System.out.println("CASE 5");
+          SmartDashboard.putString("Climb Target:", "Maximum Arm Position, Arms in");
           m_climbingSub.ReturnArms();
           m_climbingSub.setCurrentTarget(Constants.MAX_ARM_POSITION);
           break;
         case 6:
           System.out.println("CASE 6");
+          SmartDashboard.putString("Climb Target:", "Minimum Arm Position, Arms in");
           m_climbingSub.setCurrentTarget(Constants.MIN_ARM_POSITION);
           if(m_climbingSub.getRightCoderPos() < Constants.HALF_ARM_POSITION)
           {
@@ -85,6 +90,8 @@ public class ClimbingCommand extends CommandBase {
           break;
           
         default:
+        SmartDashboard.putString("Climb Stage", "Arms Broken");
+        SmartDashboard.putString("Climb Target:", "Arms Broken");
         System.out.println("Invalid Case");
       }
     }

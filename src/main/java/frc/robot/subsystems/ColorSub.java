@@ -27,8 +27,8 @@ public class ColorSub extends SubsystemBase {
 
   public void getColorlol(){
     detectedColor = m_colorSensor.getColor();
-    SmartDashboard.putNumber("RED", detectedColor.red);
-    SmartDashboard.putNumber("GREEN", detectedColor.green);
-    SmartDashboard.putNumber("BLUE", detectedColor.blue);
+    SmartDashboard.putNumber("RED:", detectedColor.red);
+    SmartDashboard.putNumber("GREEN:", detectedColor.green);
+    SmartDashboard.putNumber("BLUE:", detectedColor.blue);
   }
 }
