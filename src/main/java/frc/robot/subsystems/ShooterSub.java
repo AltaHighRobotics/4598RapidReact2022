@@ -42,14 +42,23 @@ public class ShooterSub extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  /** Proportional Integral Controller used to set the shooter motor speed
+   *  Adjusts motor power to match a target velocity
+   *  @param targetShooterVelocity A double representing the target velocity that the specified motor should attempt to reach
+   *  @param integral A double representing the integral of the specified motor
+   *  @param motorID An int representing the ID of the motor to control (Must be either left or right shooter motor)
+   */
   public double setShooterMotorVelocity(double targetShooterVelocity, double integral, int motorID){
 
     double currentShooterVelocity = 0;
 
     if(motorID == Constants.LEFT_SHOOTER_MOTOR) {
       currentShooterVelocity = leftShooterMotor.getSelectedSensorVelocity();
-    } else {
+    } else if(motorID == Constants.RIGHT_SHOOTER_MOTOR) {
       currentShooterVelocity = rightShooterMotor.getSelectedSensorVelocity();
+    } else {
+      System.out.println("function setShooterMotorVelocity() was used on a motor other than the shooter motors. This is not supported and will cause issues");
+      return 0;
     }
 
     double velocityError = targetShooterVelocity - currentShooterVelocity;
