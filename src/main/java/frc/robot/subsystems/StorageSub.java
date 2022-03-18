@@ -5,8 +5,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,15 +13,10 @@ import frc.robot.Constants;
 public class StorageSub extends SubsystemBase {
   /** Creates a new StorageSub. */
 
-  private TalonSRX elevationAngleMotor;
   private VictorSPX storageMotor;
   private VictorSPX feedMotor;
-  private VictorSPX azimuthMotor;
 
   public StorageSub() {
-    elevationAngleMotor = new TalonSRX(Constants.ELEVATION_ANGLE_MOTOR);
-    elevationAngleMotor.configFactoryDefault();
-
     storageMotor = new VictorSPX(Constants.STORAGE_MOTOR);
     storageMotor.configFactoryDefault();
 
@@ -31,8 +24,6 @@ public class StorageSub extends SubsystemBase {
     feedMotor.configFactoryDefault();
     feedMotor.setInverted(true);
 
-    azimuthMotor = new VictorSPX(Constants.AZIMUTH_MOTOR);
-    azimuthMotor.configFactoryDefault();
   }
 
   public void feedOn(){

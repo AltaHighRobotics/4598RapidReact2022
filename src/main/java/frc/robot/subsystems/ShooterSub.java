@@ -6,7 +6,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,6 +19,8 @@ public class ShooterSub extends SubsystemBase {
 
   private TalonFX leftShooterMotor;
   private TalonFX rightShooterMotor;
+  private TalonFX azimuthMotor;
+  private TalonSRX elevationAngleMotor;
   private double shooterPowers [];
   private double shooterErrors [];
   private double shooterLeftIntegral;
@@ -27,18 +31,28 @@ public class ShooterSub extends SubsystemBase {
 
     leftShooterMotor = new TalonFX(Constants.LEFT_SHOOTER_MOTOR);
     rightShooterMotor = new TalonFX(Constants.RIGHT_SHOOTER_MOTOR);
+    azimuthMotor = new TalonFX(Constants.AZIMUTH_MOTOR);
+    elevationAngleMotor = new TalonSRX(Constants.ELEVATION_ANGLE_MOTOR);
 
     leftShooterMotor.configFactoryDefault();
     rightShooterMotor.configFactoryDefault();
+    azimuthMotor.configFactoryDefault();
+    elevationAngleMotor.configFactoryDefault();
 
     leftShooterMotor.setNeutralMode(NeutralMode.Coast);
     rightShooterMotor.setNeutralMode(NeutralMode.Coast);
+    azimuthMotor.setNeutralMode(NeutralMode.Brake);
+    elevationAngleMotor.setNeutralMode(NeutralMode.Brake);
 
-    leftShooterMotor.setInverted(false);
-    rightShooterMotor.setInverted(true);
-
-    rightShooterMotor.setSensorPhase(false);
     leftShooterMotor.setSensorPhase(false);
+    rightShooterMotor.setSensorPhase(false);
+    azimuthMotor.setSensorPhase(false);
+    elevationAngleMotor.setSensorPhase(false);
+
+    leftShooterMotor.setInverted(TalonFXInvertType.Clockwise);
+    rightShooterMotor.setInverted(TalonFXInvertType.CounterClockwise);
+    azimuthMotor.setInverted(TalonFXInvertType.Clockwise);
+    elevationAngleMotor.setInverted(false);
 
     shooterPowers = new double [2];
     shooterErrors = new double [2];
@@ -91,6 +105,18 @@ public class ShooterSub extends SubsystemBase {
   public void setShooterMotorsPower(double Speed){
     leftShooterMotor.set(ControlMode.PercentOutput, Speed);
     rightShooterMotor.set(ControlMode.PercentOutput, Speed);
+  }
+
+  public void MoveElevationMotorToAngle(double targetElevationAngle){
+    // Gets the current rotation of the elevation motor, relative to the rotation upon robot power-up (1 rotation = 4096 units)
+    double currentElevationAngle = elevationAngleMotor.getSelectedSensorPosition();
+
+    // Gets the difference between the target angle and the current angle
+    double elevationAngleError = targetElevationAngle - currentElevationAngle;
+
+    // Sets the motor power to the error in elevation * a constant gain
+    double elevationMotorPower = elevationAngleError * Constants.ELEVATION_ANGLE_PROPORTIONAL_GAIN;
+    elevationAngleMotor.set(ControlMode.PercentOutput, elevationMotorPower);
   }
 
 }

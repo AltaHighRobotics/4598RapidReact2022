@@ -95,5 +95,6 @@ public final class Constants {
     public static final double SHOOTER_INTERGRAL_GAIN = 0.00001;
     public static final double SHOOTER_MAX_INTEGRAL = 1;
     public static final double SHOOTER_POWER_OFFSET = 0.1;
+    public static final double ELEVATION_ANGLE_PROPORTIONAL_GAIN = 0.05;
 
 }

@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -27,6 +28,22 @@ public class DriveTrainSub extends SubsystemBase
     rightMotorBack = new TalonFX(Constants.RIGHT_DRIVE_MOTOR_BACK);
     leftMotorFront = new TalonFX(Constants.LEFT_DRIVE_MOTOR_FRONT);
     leftMotorBack = new TalonFX(Constants.LEFT_DRIVE_MOTOR_BACK);
+
+    rightMotorFront.configFactoryDefault();
+    rightMotorBack.configFactoryDefault();
+    leftMotorFront.configFactoryDefault();
+    rightMotorFront.configFactoryDefault();
+
+    rightMotorFront.setSensorPhase(false);
+    rightMotorBack.setSensorPhase(false);
+    leftMotorFront.setSensorPhase(true);
+    leftMotorBack.setSensorPhase(true);
+
+    rightMotorFront.setInverted(TalonFXInvertType.Clockwise);
+    rightMotorBack.setInverted(TalonFXInvertType.Clockwise);
+    leftMotorFront.setInverted(TalonFXInvertType.CounterClockwise);
+    leftMotorBack.setInverted(TalonFXInvertType.CounterClockwise);
+
     rightMotorBack.follow(rightMotorFront);
     leftMotorBack.follow(leftMotorFront);
   }
@@ -40,6 +57,6 @@ public class DriveTrainSub extends SubsystemBase
   public void setArcadeDrive(final double joyForward, final double joyTurn)
   {
     rightMotorFront.set(ControlMode.PercentOutput, joyForward * Constants.DRIVE_MAX_SPEED, DemandType.ArbitraryFeedForward, joyTurn*(Constants.DRIVE_MAX_SPEED/2));
-    leftMotorFront.set(ControlMode.PercentOutput, -joyForward * Constants.DRIVE_MAX_SPEED, DemandType.ArbitraryFeedForward, joyTurn*(Constants.DRIVE_MAX_SPEED/2)); 
+    leftMotorFront.set(ControlMode.PercentOutput, joyForward * Constants.DRIVE_MAX_SPEED, DemandType.ArbitraryFeedForward, -joyTurn*(Constants.DRIVE_MAX_SPEED/2)); 
   }
 }

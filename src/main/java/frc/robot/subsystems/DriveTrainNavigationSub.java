@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -53,32 +54,31 @@ public class DriveTrainNavigationSub extends SubsystemBase {
   public double robotNavData [];
 
   public DriveTrainNavigationSub() {
+
+    navX = new AHRS(SPI.Port.kMXP);
+
     rightMotorFront = new TalonFX(Constants.RIGHT_DRIVE_MOTOR_FRONT);
     rightMotorBack = new TalonFX(Constants.RIGHT_DRIVE_MOTOR_BACK);
     leftMotorFront = new TalonFX(Constants.LEFT_DRIVE_MOTOR_FRONT);
     leftMotorBack = new TalonFX(Constants.LEFT_DRIVE_MOTOR_BACK);
 
-    navX = new AHRS(SPI.Port.kMXP);
-
-    leftMotorFront.setNeutralMode(NeutralMode.Brake);
-    rightMotorFront.setNeutralMode(NeutralMode.Brake);
-    leftMotorBack.setNeutralMode(NeutralMode.Brake);
-    rightMotorBack.setNeutralMode(NeutralMode.Brake);
-
+    rightMotorFront.configFactoryDefault();
+    rightMotorBack.configFactoryDefault();
     leftMotorFront.configFactoryDefault();
     rightMotorFront.configFactoryDefault();
-    leftMotorBack.configFactoryDefault();
-    rightMotorBack.configFactoryDefault();
 
-    leftMotorFront.setInverted(false);
-    rightMotorFront.setInverted(false);
-    leftMotorBack.setInverted(false);
-    rightMotorBack.setInverted(false);
-
-    leftMotorFront.setSensorPhase(false);
     rightMotorFront.setSensorPhase(false);
-    leftMotorBack.setSensorPhase(false);
     rightMotorBack.setSensorPhase(false);
+    leftMotorFront.setSensorPhase(true);
+    leftMotorBack.setSensorPhase(true);
+
+    rightMotorFront.setInverted(TalonFXInvertType.Clockwise);
+    rightMotorBack.setInverted(TalonFXInvertType.Clockwise);
+    leftMotorFront.setInverted(TalonFXInvertType.CounterClockwise);
+    leftMotorBack.setInverted(TalonFXInvertType.CounterClockwise);
+
+    rightMotorBack.follow(rightMotorFront);
+    leftMotorBack.follow(leftMotorFront);
 
     robotNavData = new double [4];
   }
