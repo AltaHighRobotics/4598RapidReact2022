@@ -107,7 +107,14 @@ public class ShooterSub extends SubsystemBase {
     rightShooterMotor.set(ControlMode.PercentOutput, Speed);
   }
 
+  /** Proportional Controller used to set the elevation angle for the shooter
+   *  Adjusts the motor power to go to a target angle, in degrees.
+   *  @param targetElevationAngle A double representing the target angle that the elevation angle motor should attempt to reach
+   */
   public void MoveElevationMotorToAngle(double targetElevationAngle){
+    // Converts the target from degrees to encoder units
+    targetElevationAngle = targetElevationAngle/360 * 4096;
+
     // Gets the current rotation of the elevation motor, relative to the rotation upon robot power-up (1 rotation = 4096 units)
     double currentElevationAngle = elevationAngleMotor.getSelectedSensorPosition();
 
