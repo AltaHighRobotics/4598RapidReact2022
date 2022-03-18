@@ -28,11 +28,16 @@ public class RobotContainer {
   // private final IntakeSub m_intakeSub = new IntakeSub();
   private final DriveTrainSub m_driveTrainSub = new DriveTrainSub();
   // private final ColorSub m_colorSub = new ColorSub();
+  private final ShooterSub m_ShooterSub = new ShooterSub();
+  private final StorageSub m_StorageSub = new StorageSub();
+ 
   
   private final JackFrickedUpCommand m_jackFrickedUpCommand = new JackFrickedUpCommand(m_climbingSub);
   private final ClimbingCommand m_climbingCommand = new ClimbingCommand(m_climbingSub);
 
   private final DriveCommand m_driveCommand =  new DriveCommand(m_driveTrainSub, m_driverOne);
+  private final ConstantShootCommand m_ConstantShootCommand = new ConstantShootCommand(m_ShooterSub);
+  private final FeedCommand m_FeedCommand = new FeedCommand(m_StorageSub);
   // private final IntakeCommand m_intakeCommand = new IntakeCommand(m_intakeSub);
   // private final ColorCommand m_colorCommand = new ColorCommand(m_colorSub);
 
@@ -54,12 +59,19 @@ public class RobotContainer {
   private void configureButtonBindings() {
     final JoystickButton climbButton;
     final JoystickButton frickButton;
+    final JoystickButton feedButton;
+    final JoystickButton shootButton;
 
-    climbButton = new JoystickButton(m_driverOne, 7);
-    frickButton = new JoystickButton(m_driverOne, 8);
+    climbButton = new JoystickButton(m_driverOne, 2);
+    frickButton = new JoystickButton(m_driverOne, 9);
+    feedButton = new JoystickButton(m_driverOne, 5);
+    shootButton = new JoystickButton(m_driverOne, 6);
 
     climbButton.toggleWhenPressed(m_climbingCommand);
     frickButton.toggleWhenPressed(m_jackFrickedUpCommand);
+    feedButton.toggleWhenPressed(m_ConstantShootCommand);
+    shootButton.toggleWhenPressed(m_FeedCommand);
+    
   }
 
   /**

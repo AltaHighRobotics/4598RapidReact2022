@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.motorcontrol.Victor;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -17,7 +18,7 @@ public class ShooterSub extends SubsystemBase {
 
   private TalonFX leftShooterMotor;
   private TalonFX rightShooterMotor;
-
+ 
 
   public ShooterSub() {
 
@@ -25,11 +26,17 @@ public class ShooterSub extends SubsystemBase {
     rightShooterMotor = new TalonFX(Constants.RIGHT_SHOOTER_MOTOR);
 
     leftShooterMotor.setInverted(true);
-    //leftShooterMotor.setNeutralMode(NeutralMode.Coast);
-    //rightShooterMotor.setNeutralMode(NeutralMode.Coast);
+    leftShooterMotor.configFactoryDefault();
+    rightShooterMotor.configFactoryDefault();
 
-    //leftShooterMotor.configOpenloopRamp(0.5); 
-    //rightShooterMotor.configOpenloopRamp(0.5);
+    leftShooterMotor.setNeutralMode(NeutralMode.Coast);
+    rightShooterMotor.setNeutralMode(NeutralMode.Coast);
+
+    leftShooterMotor.setInverted(false);
+    rightShooterMotor.setInverted(true);
+
+    rightShooterMotor.setSensorPhase(false);
+    leftShooterMotor.setSensorPhase(false);
   }
 
   @Override
@@ -37,9 +44,30 @@ public class ShooterSub extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void setShooterMotorsVelocity(double Speed){
-    leftShooterMotor.set(ControlMode.Velocity, Speed);
-    rightShooterMotor.set(ControlMode.Velocity, Speed);
+  public double setShooterMotorsVelocity(double TargetShooterVelocity, double Integral){
+
+    leftShooterMotor.follow(rightShooterMotor);
+
+    double currentShooterVelocity = rightShooterMotor.getSelectedSensorVelocity();
+
+    double VelocityError = TargetShooterVelocity - currentShooterVelocity;
+
+    Integral = Math.max(Math.min(Integral+VelocityError*Constants.SHOOTER_INTERGRAL_GAIN,Constants.MAX_ARM_INTEGRAL),-Constants.MAX_ARM_INTEGRAL);
+
+    double power = VelocityError*Constants.SHOOTER_PORPORTIONAL_GAIN;
+
+    double finalPower = Math.max(power + Constants.POWER_OFFSET+Integral,0);
+    
+    System.out.println(VelocityError);
+
+    rightShooterMotor.set(ControlMode.PercentOutput, finalPower);
+
+    SmartDashboard.putNumber("Shooter Integral", Integral);
+    SmartDashboard.putNumber("Final Power", finalPower);
+    SmartDashboard.putNumber("Velocity Error", VelocityError);
+
+    return Integral;
+
   }
 
   public void setShooterMotorsPower(double Speed){
