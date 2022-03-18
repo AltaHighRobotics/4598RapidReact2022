@@ -44,10 +44,10 @@ public class ClimbingSub extends SubsystemBase {
       leftArmMotor.setNeutralMode(NeutralMode.Brake);
       rightArmMotor.setNeutralMode(NeutralMode.Brake);
 
-      leftArmMotor.setInverted(false);
-      rightArmMotor.setInverted(false);
+      leftArmMotor.setInverted(TalonFXInvertType.Clockwise);
+      rightArmMotor.setInverted(TalonFXInvertType.CounterClockwise);
 
-      leftArmMotor.setSensorPhase(false);
+      leftArmMotor.setSensorPhase(true);
       rightArmMotor.setSensorPhase(false);
 
       currentArmTarget = Constants.MAX_ARM_POSITION;
@@ -60,8 +60,9 @@ public class ClimbingSub extends SubsystemBase {
    *  @deprecated
    */
   public void ExtendArms(){
-    leftArmMotor.set(ControlMode.PercentOutput, -Constants.LIFT_ARM_SPEED);
+    leftArmMotor.set(ControlMode.PercentOutput, Constants.LIFT_ARM_SPEED);
     rightArmMotor.set(ControlMode.PercentOutput, Constants.LIFT_ARM_SPEED);
+    System.out.println("ExtendArms() is a deprecated function!");
   }
 
   /** Retracts the climbing arms
@@ -70,7 +71,8 @@ public class ClimbingSub extends SubsystemBase {
    */
   public void RetractArms(){
     leftArmMotor.set(ControlMode.PercentOutput, Constants.LIFT_ARM_SPEED);
-    rightArmMotor.set(ControlMode.PercentOutput, -Constants.LIFT_ARM_SPEED);
+    rightArmMotor.set(ControlMode.PercentOutput, Constants.LIFT_ARM_SPEED);
+    System.out.println("RetractArms() is a deprecated function!");
   }
 
   /** Sets the arms to not move
@@ -110,12 +112,12 @@ public class ClimbingSub extends SubsystemBase {
     /** Gets the average position between the two arms, and then clamps the target for each arm to be within an acceptable range of it. 
      * This ensures the arms do not get out of sync, as that would tip the robot
      */
-    double averageArmPosition = (-leftArmMotorPosition + rightArmMotorPosition)/2;
+    double averageArmPosition = (leftArmMotorPosition + rightArmMotorPosition)/2;
     double armMin = Math.min(targetPosition, averageArmPosition + Constants.MAX_ARM_ERROR);
     double actualTarget = Math.max(armMin, averageArmPosition - Constants.MAX_ARM_ERROR);
 
     // Finds the difference between each arms position and the clamped target, then multiplies it by the max speed
-    double leftArmError = (-actualTarget - leftArmMotorPosition) * Constants.MAX_ARM_SPEED;
+    double leftArmError = (actualTarget - leftArmMotorPosition) * Constants.MAX_ARM_SPEED;
     double rightArmError = (actualTarget - rightArmMotorPosition) * Constants.MAX_ARM_SPEED;
 
     /** Finds the difference between each arms current velocity, and each arms error. 
