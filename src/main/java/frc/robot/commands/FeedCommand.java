@@ -24,14 +24,14 @@ public class FeedCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_StorageSub.elevatorOn();
+    m_StorageSub.feedOn();
     SmartDashboard.putString("Feeder Status:", "Feeding");
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_StorageSub.elevatorOff();
+    m_StorageSub.feedOff();
     SmartDashboard.putString("Feeder Status:", "Stopped");
   }
 

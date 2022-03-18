@@ -9,7 +9,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
-import edu.wpi.first.wpilibj.motorcontrol.Victor;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -23,19 +22,24 @@ public class StorageSub extends SubsystemBase {
 
   public StorageSub() {
     elevationAngleMotor = new TalonSRX(Constants.ELEVATION_ANGLE_MOTOR);
+    elevationAngleMotor.configFactoryDefault();
+
     storageMotor = new VictorSPX(Constants.STORAGE_MOTOR);
+    storageMotor.configFactoryDefault();
+
     feedMotor = new VictorSPX(Constants.FEED_MOTOR);
-    azimuthMotor = new VictorSPX(Constants.AZIMUTH_MOTOR);
-
+    feedMotor.configFactoryDefault();
     feedMotor.setInverted(true);
+
+    azimuthMotor = new VictorSPX(Constants.AZIMUTH_MOTOR);
+    azimuthMotor.configFactoryDefault();
   }
 
-  public void elevatorOn(){
+  public void feedOn(){
     feedMotor.set(ControlMode.PercentOutput, Constants.FEED_POWER);
-    System.out.println(Constants.FEED_POWER);
   }
 
-  public void elevatorOff(){
+  public void feedOff(){
     feedMotor.set(ControlMode.PercentOutput,0);
   }
 
