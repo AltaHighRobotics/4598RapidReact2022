@@ -113,7 +113,7 @@ public class ShooterSub extends SubsystemBase {
    */
   public void MoveElevationMotorToAngle(double targetElevationAngle){
     // Converts the target from degrees to encoder units
-    targetElevationAngle = targetElevationAngle/360 * 4096;
+    targetElevationAngle = targetElevationAngle/360 * 4096 * Constants.ELEVATION_ANGLE_GEAR_RATIO;
 
     // Gets the current rotation of the elevation motor, relative to the rotation upon robot power-up (1 rotation = 4096 units)
     double currentElevationAngle = elevationAngleMotor.getSelectedSensorPosition();
