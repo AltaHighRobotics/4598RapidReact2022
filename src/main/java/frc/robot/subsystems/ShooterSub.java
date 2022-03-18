@@ -24,7 +24,6 @@ public class ShooterSub extends SubsystemBase {
     leftShooterMotor = new TalonFX(Constants.LEFT_SHOOTER_MOTOR);
     rightShooterMotor = new TalonFX(Constants.RIGHT_SHOOTER_MOTOR);
 
-    leftShooterMotor.setInverted(true);
     leftShooterMotor.configFactoryDefault();
     rightShooterMotor.configFactoryDefault();
 
