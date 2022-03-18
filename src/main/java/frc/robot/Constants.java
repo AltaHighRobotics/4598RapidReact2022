@@ -20,22 +20,22 @@ import java.lang.Math;
  */
 public final class Constants {
     // PNEUMATIC CONTROL MODULE
-    public static final int ARM_SWING_SOLENOID = 1;
     public static final int INTAKE_SOLENOID = 0;
+    public static final int ARM_SWING_SOLENOID = 1;
 
     // CAN ID
-    public static final int LEFT_LIFT_MOTOR = 6;
-    public static final int RIGHT_LIFT_MOTOR = 5;
-    public static final int INTAKE_MOTOR = 7;
     public static final int RIGHT_DRIVE_MOTOR_FRONT = 1;
     public static final int RIGHT_DRIVE_MOTOR_BACK = 2;
     public static final int LEFT_DRIVE_MOTOR_FRONT = 3;
     public static final int LEFT_DRIVE_MOTOR_BACK = 4;
-    public static final int LEFT_SHOOTER_MOTOR = 11;
-    public static final int RIGHT_SHOOTER_MOTOR = 10;
-    public static final int ELEVATION_ANGLE_MOTOR = 12;
+    public static final int RIGHT_ARM_MOTOR = 5;
+    public static final int LEFT_ARM_MOTOR = 6;
+    public static final int INTAKE_MOTOR = 7;
     public static final int STORAGE_MOTOR = 8;
     public static final int FEED_MOTOR = 9;
+    public static final int RIGHT_SHOOTER_MOTOR = 10;
+    public static final int LEFT_SHOOTER_MOTOR = 11;
+    public static final int ELEVATION_ANGLE_MOTOR = 12;
     public static final int AZIMUTH_MOTOR = 13;
 
     // MOTOR SPEEDS
@@ -94,6 +94,6 @@ public final class Constants {
     public static final double SHOOTER_PORPORTIONAL_GAIN = 0.00005;
     public static final double SHOOTER_INTERGRAL_GAIN = 0.00001;
     public static final double SHOOTER_MAX_INTEGRAL = 1;
-    public static final double POWER_OFFSET = 0.1;
+    public static final double SHOOTER_POWER_OFFSET = 0.1;
 
 }
