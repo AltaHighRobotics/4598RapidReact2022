@@ -36,6 +36,7 @@ public class JackFrickedUpCommand extends CommandBase {
     m_climbingSub.setHasRun(false);
       //Sets arm variables to their original state 
     m_climbingSub.ArmsStationary();
+    SmartDashboard.putString("Has Jack goofed up yet?", "No");
   }
 
   @Override
