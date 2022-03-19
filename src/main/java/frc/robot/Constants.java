@@ -104,6 +104,9 @@ public final class Constants {
     public static final double SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT = 80; //Actually 86
     public static final double SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT = 30;
     public static final double ELEVATION_SPEED = 0.1;
+    public static final double AZIMUTH_LOWER_LIMIT = -45;
+    public static final double AZIMUTH_UPPER_LIMIT = 45;
+    public static final double AZIMUTH_PROPORTIONAL_GAIN = 0.001;
 
 
 
