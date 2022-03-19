@@ -22,7 +22,7 @@ public class JackFrickedUpCommand extends CommandBase {
 
   @Override
   public void execute() {
-    m_climbingSub.SetArmsWithClamp(Constants.MIN_ARM_POSITION);
+    m_climbingSub.SetArmsWithClamp(Constants.MIN_ARM_POSITION, Constants.ARM_SLOW_SPEED);
       //Sets arm position to its retracted position
   }
 

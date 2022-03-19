@@ -30,6 +30,7 @@ public class ClimbingSub extends SubsystemBase {
   private double leftArmIntegral;
 
   private double currentArmTarget;
+  private double currentArmSpeed;
   private int currentStage;
   private boolean hasRun;
 
@@ -51,6 +52,7 @@ public class ClimbingSub extends SubsystemBase {
       rightArmMotor.setSensorPhase(false);
 
       currentArmTarget = Constants.MAX_ARM_POSITION;
+      currentArmSpeed = Constants.ARM_FAST_SPEED;
       currentStage = 0;
       hasRun = false;
     }
@@ -101,7 +103,7 @@ public class ClimbingSub extends SubsystemBase {
    *  Scales the motors power to reach the target position as fast as possible
    *  @param targetPosition A double representing the target position tracked by the encoder that the controller will attempt to reach
    */
-  public void SetArmsWithClamp(double targetPosition)
+  public void SetArmsWithClamp(double targetPosition, double targetVelocity)
   {
     // Gets the position and velocity of both arm motors
     rightArmMotorPosition = rightArmMotor.getSelectedSensorPosition();
@@ -117,8 +119,8 @@ public class ClimbingSub extends SubsystemBase {
     double actualTarget = Math.max(armMin, averageArmPosition - Constants.MAX_ARM_ERROR);
 
     // Finds the difference between each arms position and the clamped target, then multiplies it by the max speed
-    double leftArmError = (actualTarget - leftArmMotorPosition) * Constants.MAX_ARM_SPEED;
-    double rightArmError = (actualTarget - rightArmMotorPosition) * Constants.MAX_ARM_SPEED;
+    double leftArmError = (actualTarget - leftArmMotorPosition) * targetVelocity;
+    double rightArmError = (actualTarget - rightArmMotorPosition) * targetVelocity;
 
     /** Finds the difference between each arms current velocity, and each arms error. 
      *  By using velocity and position, the controller is more stable than if we only used position, 
@@ -163,6 +165,22 @@ public class ClimbingSub extends SubsystemBase {
   public void setCurrentTarget(double target)
   {
     currentArmTarget = target;
+  }
+
+  /** Gets the current speed for use in SetArmsWithClamp() later in the code
+   *  @return A double representing the speed of the arms
+   */
+  public double getCurrentSpeed()
+  {
+    return currentArmSpeed;
+  }
+
+  /** Sets the current speed for use in SetArmsWithClamp() later in the code
+   *  @param speed A double representing the speed of the arms
+   */
+  public void setCurrentSpeed(double speed)
+  {
+    currentArmSpeed = speed;
   }
 
   /** Gets the current stage the robot is on when climbing

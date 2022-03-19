@@ -50,7 +50,8 @@ public final class Constants {
 
     // ARM CONSTANTS
     public static final double MAX_ARM_ERROR = 40000;
-    public static final double MAX_ARM_SPEED = 3; // TODO allow speed to be set per-position
+    public static final double ARM_SLOW_SPEED = 1;
+    public static final double ARM_FAST_SPEED = 3;
     public static final double MAX_ARM_INTEGRAL = 0.25;
     public static final double ARM_PROPORTIONAL_GAIN = 0.00001;
     public static final double FIRST_HOOK_POSITION = 150000;

@@ -14,6 +14,8 @@ public class ClimbingCommand extends CommandBase {
   private ClimbingSub m_climbingSub;
   private double currentTarget;
     //Current target the robot is attempting to reach
+  private double currentSpeed;
+    //Current speed the arms should travel at
   private int currentStage;
     //Current stage of climbing the robot is on
 
@@ -24,17 +26,19 @@ public class ClimbingCommand extends CommandBase {
   @Override
   public void initialize() {
     currentTarget = m_climbingSub.getCurrentTarget();
+    currentSpeed = m_climbingSub.getCurrentSpeed();
     currentStage = m_climbingSub.getCurrentStage();
   }
 
   @Override
   public void execute() {
     currentTarget = m_climbingSub.getCurrentTarget();
+    currentSpeed = m_climbingSub.getCurrentSpeed();
     currentStage = m_climbingSub.getCurrentStage();
 
     SmartDashboard.putNumber("Climb Stage:", currentStage);
 
-    m_climbingSub.SetArmsWithClamp(currentTarget);
+    m_climbingSub.SetArmsWithClamp(currentTarget, currentSpeed);
       //Makes climbing arms go to the current Target
 
     if (m_climbingSub.hasReachedPosition(currentTarget))
@@ -47,12 +51,14 @@ public class ClimbingCommand extends CommandBase {
           System.out.println("SETTING ARMS TO MIN POSITION");
           SmartDashboard.putString("Climb Target:", "Minimum Arm Position, Arms up");
           m_climbingSub.setCurrentTarget(Constants.MIN_ARM_POSITION);
+          m_climbingSub.setCurrentSpeed(Constants.ARM_SLOW_SPEED);
           break;
         
         case 2:
           System.out.println("CASE 2");
           SmartDashboard.putString("Climb Target:", "Almost Minimum Arm Position, Arms up");
           m_climbingSub.setCurrentTarget(Constants.ALMOST_MIN_POSITION);
+          m_climbingSub.setCurrentSpeed(Constants.ARM_SLOW_SPEED);
           break;
 
         case 3:
@@ -60,22 +66,26 @@ public class ClimbingCommand extends CommandBase {
           SmartDashboard.putString("Climb Target:", "Almost Minimum Arm Position, Arms out");
           m_climbingSub.SwingArms();
           m_climbingSub.setCurrentTarget(Constants.ALMOST_MIN_POSITION);
+          m_climbingSub.setCurrentSpeed(Constants.ARM_SLOW_SPEED);
           break;
         case 4:
           System.out.println("CASE 4");
           SmartDashboard.putString("Climb Target:", "Maximum Arm Position, Arms out");
           m_climbingSub.setCurrentTarget(Constants.MAX_ARM_POSITION);
+          m_climbingSub.setCurrentSpeed(Constants.ARM_FAST_SPEED);
           break;
         case 5:
           System.out.println("CASE 5");
           SmartDashboard.putString("Climb Target:", "Maximum Arm Position, Arms in");
           m_climbingSub.ReturnArms();
           m_climbingSub.setCurrentTarget(Constants.MAX_ARM_POSITION);
+          m_climbingSub.setCurrentSpeed(Constants.ARM_FAST_SPEED);
           break;
         case 6:
           System.out.println("CASE 6");
           SmartDashboard.putString("Climb Target:", "Minimum Arm Position, Arms in");
           m_climbingSub.setCurrentTarget(Constants.MIN_ARM_POSITION);
+          m_climbingSub.setCurrentSpeed(Constants.ARM_SLOW_SPEED);
           if(m_climbingSub.getRightCoderPos() < Constants.HALF_ARM_POSITION)
           {
             m_climbingSub.SwingArms();
