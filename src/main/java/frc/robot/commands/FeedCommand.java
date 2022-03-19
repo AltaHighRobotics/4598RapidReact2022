@@ -6,32 +6,39 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.FeedSub;
 import frc.robot.subsystems.StorageSub;
 
 public class FeedCommand extends CommandBase {
   /** Creates a new ElevatorOnCommand. */
-  private StorageSub m_StorageSub;
-  public FeedCommand(StorageSub storageSub) {
+  private FeedSub m_feedSub;
+  private int t;
+  public FeedCommand(FeedSub feedSub) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_StorageSub = storageSub;
-    addRequirements(storageSub);
+    m_feedSub = feedSub  ;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    t = 0;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    m_StorageSub.feedOn();
-    SmartDashboard.putString("Feeder Status:", "Feeding");
+  public void execute() {;
+    if (t > 150)
+    {
+      m_feedSub.feedOn(); 
+      SmartDashboard.putString("Feeder Status:", "Feeding");
+    }
+    t++;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_StorageSub.feedOff();
+    m_feedSub.feedOff();
     SmartDashboard.putString("Feeder Status:", "Stopped");
   }
 

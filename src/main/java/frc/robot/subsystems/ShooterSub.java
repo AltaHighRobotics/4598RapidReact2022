@@ -20,7 +20,6 @@ public class ShooterSub extends SubsystemBase {
   private TalonFX leftShooterMotor;
   private TalonFX rightShooterMotor;
   private TalonFX azimuthMotor;
-  private TalonSRX elevationAngleMotor;
   private double shooterPowers [];
   private double shooterErrors [];
   private double shooterLeftIntegral;
@@ -32,27 +31,22 @@ public class ShooterSub extends SubsystemBase {
     leftShooterMotor = new TalonFX(Constants.LEFT_SHOOTER_MOTOR);
     rightShooterMotor = new TalonFX(Constants.RIGHT_SHOOTER_MOTOR);
     azimuthMotor = new TalonFX(Constants.AZIMUTH_MOTOR);
-    elevationAngleMotor = new TalonSRX(Constants.ELEVATION_ANGLE_MOTOR);
 
     leftShooterMotor.configFactoryDefault();
     rightShooterMotor.configFactoryDefault();
     azimuthMotor.configFactoryDefault();
-    elevationAngleMotor.configFactoryDefault();
 
     leftShooterMotor.setNeutralMode(NeutralMode.Coast);
     rightShooterMotor.setNeutralMode(NeutralMode.Coast);
     azimuthMotor.setNeutralMode(NeutralMode.Brake);
-    elevationAngleMotor.setNeutralMode(NeutralMode.Brake);
 
     leftShooterMotor.setSensorPhase(false);
     rightShooterMotor.setSensorPhase(false);
     azimuthMotor.setSensorPhase(false);
-    elevationAngleMotor.setSensorPhase(false);
 
     leftShooterMotor.setInverted(TalonFXInvertType.CounterClockwise);
     rightShooterMotor.setInverted(TalonFXInvertType.Clockwise);
     azimuthMotor.setInverted(TalonFXInvertType.CounterClockwise);
-    elevationAngleMotor.setInverted(false);
 
     shooterPowers = new double [2];
     shooterErrors = new double [2];
@@ -77,8 +71,8 @@ public class ShooterSub extends SubsystemBase {
     double shooterRightVelocityError = targetShooterVelocity - shooterRightVelocity;
 
     // Adds the current error to the sum of all past errors, which allows the controller to find the exact power level needed
-    shooterLeftIntegral = Math.max(Math.min(shooterLeftIntegral + shooterLeftVelocityError * Constants.SHOOTER_INTERGRAL_GAIN, Constants.MAX_ARM_INTEGRAL), -Constants.MAX_ARM_INTEGRAL);
-    shooterRightIntegral = Math.max(Math.min(shooterRightIntegral + shooterRightVelocityError * Constants.SHOOTER_INTERGRAL_GAIN, Constants.MAX_ARM_INTEGRAL), -Constants.MAX_ARM_INTEGRAL);
+    shooterLeftIntegral = Math.max(Math.min(shooterLeftIntegral + shooterLeftVelocityError * Constants.SHOOTER_INTERGRAL_GAIN, Constants.SHOOTER_MAX_INTEGRAL), -Constants.SHOOTER_MAX_INTEGRAL);
+    shooterRightIntegral = Math.max(Math.min(shooterRightIntegral + shooterRightVelocityError * Constants.SHOOTER_INTERGRAL_GAIN, Constants.SHOOTER_MAX_INTEGRAL), -Constants.SHOOTER_MAX_INTEGRAL);
 
     // Adds the current error * a constant gain to the output power, which improves response time for changes in target velocity
     double shooterLeftPower = shooterLeftIntegral + shooterLeftVelocityError * Constants.SHOOTER_PORPORTIONAL_GAIN;
@@ -98,32 +92,19 @@ public class ShooterSub extends SubsystemBase {
     shooterErrors[0] = shooterLeftVelocityError;
     shooterErrors[1] = shooterRightVelocityError;
 
-    SmartDashboard.putNumberArray("Shooter Power:", shooterPowers);
-    SmartDashboard.putNumberArray("Shooter Velocity Errors:", shooterErrors);
+    //SmartDashboard.putNumberArray("Shooter Power:", shooterPowers);
+    //SmartDashboard.putNumberArray("Shooter Velocity Errors:", shooterErrors);
+    SmartDashboard.putNumber("Shooter Left Power", shooterLeftPower);
+    SmartDashboard.putNumber("Shooter Right Power", shooterRightPower);
+    SmartDashboard.putNumber("Shooter Left Integral", shooterLeftIntegral);
+    SmartDashboard.putNumber("Shooter Right Integral", shooterRightIntegral);
+    SmartDashboard.putNumber("Shooter Left Error", shooterLeftVelocityError);
+    SmartDashboard.putNumber("Shooter Right Error", shooterRightVelocityError);
   }
 
   public void setShooterMotorsPower(double Speed){
     leftShooterMotor.set(ControlMode.PercentOutput, Speed);
     rightShooterMotor.set(ControlMode.PercentOutput, Speed);
-  }
-
-  /** Proportional Controller used to set the elevation angle for the shooter
-   *  Adjusts the motor power to go to a target angle, in degrees.
-   *  @param targetElevationAngle A double representing the target angle that the elevation angle motor should attempt to reach
-   */
-  public void MoveElevationMotorToAngle(double targetElevationAngle){
-    // Converts the target from degrees to encoder units
-    targetElevationAngle = targetElevationAngle/360 * 4096 * Constants.ELEVATION_ANGLE_GEAR_RATIO;
-
-    // Gets the current rotation of the elevation motor, relative to the rotation upon robot power-up (1 rotation = 4096 units)
-    double currentElevationAngle = elevationAngleMotor.getSelectedSensorPosition();
-
-    // Gets the difference between the target angle and the current angle
-    double elevationAngleError = targetElevationAngle - currentElevationAngle;
-
-    // Sets the motor power to the error in elevation * a constant gain
-    double elevationMotorPower = elevationAngleError * Constants.ELEVATION_ANGLE_PROPORTIONAL_GAIN;
-    elevationAngleMotor.set(ControlMode.PercentOutput, elevationMotorPower);
   }
 
 }

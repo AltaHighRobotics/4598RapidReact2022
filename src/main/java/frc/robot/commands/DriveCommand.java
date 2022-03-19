@@ -35,8 +35,8 @@ public class DriveCommand extends CommandBase
   @Override
   public void execute() 
   {
-    double speed = controller.getRawAxis(Constants.Y_AXIS);
-    double turn = controller.getRawAxis(Constants.X_AXIS);
+    double speed = -controller.getRawAxis(Constants.PS4_RIGHT_STICK_Y_AXIS);
+    double turn = controller.getRawAxis(Constants.PS4_RIGHT_STICK_X_AXIS);
     driveTrain.setArcadeDrive(speed, turn);
     //System.out.println("Moving");
   }

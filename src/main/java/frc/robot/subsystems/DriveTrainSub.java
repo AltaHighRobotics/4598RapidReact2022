@@ -56,7 +56,7 @@ public class DriveTrainSub extends SubsystemBase
 
   public void setArcadeDrive(final double joyForward, final double joyTurn)
   {
-    rightMotorFront.set(ControlMode.PercentOutput, joyForward * Constants.DRIVE_MAX_SPEED, DemandType.ArbitraryFeedForward, joyTurn*(Constants.DRIVE_MAX_SPEED/2));
-    leftMotorFront.set(ControlMode.PercentOutput, joyForward * Constants.DRIVE_MAX_SPEED, DemandType.ArbitraryFeedForward, -joyTurn*(Constants.DRIVE_MAX_SPEED/2)); 
+    rightMotorFront.set(ControlMode.PercentOutput, joyForward * Constants.DRIVE_MAX_SPEED, DemandType.ArbitraryFeedForward, -joyTurn*(Constants.DRIVE_MAX_SPEED/2));
+    leftMotorFront.set(ControlMode.PercentOutput, joyForward * Constants.DRIVE_MAX_SPEED, DemandType.ArbitraryFeedForward, joyTurn*(Constants.DRIVE_MAX_SPEED/2)); 
   }
 }

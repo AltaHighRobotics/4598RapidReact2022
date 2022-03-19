@@ -45,8 +45,10 @@ public final class Constants {
 
     // DRIVER CONTROLS
     public static final int DRIVER_ONE = 0;
-    public static final int Y_AXIS = 5;
-    public static final int X_AXIS = 2;
+    public static final int PS4_LEFT_STICK_Y_AXIS = 1;
+    public static final int PS4_LEFT_STICK_X_AXIS = 0;
+    public static final int PS4_RIGHT_STICK_Y_AXIS = 5;
+    public static final int PS4_RIGHT_STICK_X_AXIS = 2;
 
     // ARM CONSTANTS
     public static final double MAX_ARM_ERROR = 40000;
@@ -68,14 +70,14 @@ public final class Constants {
     public static final double H2 = 38;
     public static final double RADIAN_CONVERSION = 3.14159 / 180.0; // Math.toDegrees(angrad) and Math.toRadians(angdeg) are cool too
     public static final double[][] SHOOTER_DATA = new double[][] {
-            // Distance, Speed
-            { 12, 20 },
-            { 36, 25 },
-            { 60, 30 },
-            { 120, 40 },
-            { 180, 60 },
-            { 240, 80 },
-            { 300, 95 }
+            // Distance, Velocity, Angle
+            { 72.5, 4200, 70},
+            { 36, 25, 0 },
+            { 60, 30, 0 },
+            { 120, 40, 0 },
+            { 180, 60, 0 },
+            { 240, 80, 0 },
+            { 300, 95, 0 }
     };
 
     // DriveTrain Navigation Constants
@@ -89,14 +91,20 @@ public final class Constants {
 
     // Storage Constants
     public static final double FEED_POWER = 0.7;
+    public static final double STORAGE_POWER = 0.5;
 
     // Shooter Constants
     public static final int SLIDER_AXIS = 3;
-    public static final double SHOOTER_PORPORTIONAL_GAIN = 0.00005;
-    public static final double SHOOTER_INTERGRAL_GAIN = 0.000005;
+    public static final double SHOOTER_PORPORTIONAL_GAIN = 0.000006;
+    public static final double SHOOTER_INTERGRAL_GAIN = 0.000003;
     public static final double SHOOTER_MAX_INTEGRAL = 1;
     public static final double SHOOTER_POWER_OFFSET = 0.1;
-    public static final double ELEVATION_ANGLE_PROPORTIONAL_GAIN = 0.05;
-    public static final double ELEVATION_ANGLE_GEAR_RATIO = 1; // TODO actually find this value
+    public static final double ELEVATION_ANGLE_PROPORTIONAL_GAIN = 0.5;
+    public static final double ELEVATION_ANGLE_GEAR_RATIO = 0.145; // TODO actually find this value
+    public static final double SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT = 80; //Actually 86
+    public static final double SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT = 30;
+    public static final double ELEVATION_SPEED = 0.1;
+
+
 
 }

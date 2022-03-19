@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import javax.print.attribute.standard.JobHoldUntil;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
@@ -25,11 +27,13 @@ public class RobotContainer {
   private final PS4Controller m_driverOne = new PS4Controller(Constants.DRIVER_ONE);
 
   private final ClimbingSub m_climbingSub = new ClimbingSub();
-  // private final IntakeSub m_intakeSub = new IntakeSub();
+  //private final IntakeSub m_intakeSub = new IntakeSub();
   private final DriveTrainSub m_driveTrainSub = new DriveTrainSub();
   // private final ColorSub m_colorSub = new ColorSub();
   private final ShooterSub m_ShooterSub = new ShooterSub();
   private final StorageSub m_StorageSub = new StorageSub();
+  private final FeedSub m_feedSub = new FeedSub();
+  private final ElevationAngleSub m_ElevationAngleSub = new ElevationAngleSub();
  
   
   private final JackFrickedUpCommand m_jackFrickedUpCommand = new JackFrickedUpCommand(m_climbingSub);
@@ -37,7 +41,10 @@ public class RobotContainer {
 
   private final DriveCommand m_driveCommand =  new DriveCommand(m_driveTrainSub, m_driverOne);
   private final ConstantShootCommand m_ConstantShootCommand = new ConstantShootCommand(m_ShooterSub);
-  private final FeedCommand m_FeedCommand = new FeedCommand(m_StorageSub);
+  private final FeedCommand m_FeedCommand = new FeedCommand(m_feedSub);
+  private final ElevationAngleCommand m_ElevationAngleCommand = new ElevationAngleCommand(m_ElevationAngleSub, m_driverOne);
+  private final StorageCommand m_StorageCommand = new StorageCommand(m_StorageSub);
+  //private final IntakeCommand m_IntakeCommand = new IntakeCommand(m_intakeSub);
   // private final IntakeCommand m_intakeCommand = new IntakeCommand(m_intakeSub);
   // private final ColorCommand m_colorCommand = new ColorCommand(m_colorSub);
 
@@ -46,7 +53,8 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     
-     CommandScheduler.getInstance().setDefaultCommand(m_driveTrainSub, m_driveCommand);
+     //CommandScheduler.getInstance().setDefaultCommand(m_driveTrainSub, m_driveCommand);
+     CommandScheduler.getInstance().setDefaultCommand(m_ElevationAngleSub, m_ElevationAngleCommand);
   //   CommandScheduler.getInstance().setDefaultCommand(m_computerVisionSub, m_intakeVisionCommand);
   }
 
@@ -61,16 +69,19 @@ public class RobotContainer {
     final JoystickButton frickButton;
     final JoystickButton feedButton;
     final JoystickButton shootButton;
+    final JoystickButton storageButton;
 
-    climbButton = new JoystickButton(m_driverOne, 2);
-    frickButton = new JoystickButton(m_driverOne, 9);
-    feedButton = new JoystickButton(m_driverOne, 5);
-    shootButton = new JoystickButton(m_driverOne, 6);
+    climbButton = new JoystickButton(m_driverOne, 2); // X button
+    frickButton = new JoystickButton(m_driverOne, 9); // Share button
+    feedButton = new JoystickButton(m_driverOne, 5); // Left bumper
+    shootButton = new JoystickButton(m_driverOne, 5); // Right bumper
+    storageButton = new JoystickButton(m_driverOne, 3); // Circle button
 
     climbButton.toggleWhenPressed(m_climbingCommand);
     frickButton.toggleWhenPressed(m_jackFrickedUpCommand);
     feedButton.toggleWhenPressed(m_ConstantShootCommand);
     shootButton.toggleWhenPressed(m_FeedCommand);
+    storageButton.toggleWhenPressed(m_StorageCommand);
     
   }
 

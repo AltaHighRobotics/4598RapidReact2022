@@ -10,24 +10,25 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class StorageSub extends SubsystemBase {
+public class FeedSub extends SubsystemBase {
   /** Creates a new StorageSub. */
 
-  private VictorSPX storageMotor;
+  private VictorSPX feedMotor;
 
-  public StorageSub() {
-    storageMotor = new VictorSPX(Constants.STORAGE_MOTOR);
-    storageMotor.configFactoryDefault();
+  public FeedSub() {
+    feedMotor = new VictorSPX(Constants.FEED_MOTOR);
+    feedMotor.configFactoryDefault();
+    feedMotor.setInverted(true);
+
   }
 
-  public void storageOn(){
-    storageMotor.set(ControlMode.PercentOutput, Constants.STORAGE_POWER);
+  public void feedOn(){
+    feedMotor.set(ControlMode.PercentOutput, Constants.FEED_POWER);
   }
 
-  public void storageOff(){
-    storageMotor.set(ControlMode.PercentOutput, 0);
+  public void feedOff(){
+    feedMotor.set(ControlMode.PercentOutput, 0);
   }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
