@@ -10,9 +10,12 @@ import frc.robot.Constants;
 
 public class ElevationAngleSub extends SubsystemBase{
   private TalonSRX elevationAngleMotor;
+  private ConfigurablePID elevationAnglePID;
   
   public ElevationAngleSub() {
     elevationAngleMotor = new TalonSRX(Constants.ELEVATION_ANGLE_MOTOR);
+
+    elevationAnglePID = new ConfigurablePID(Constants.ELEVATION_ANGLE_PROPORTIONAL_GAIN, 0, 0, 1, 0, 0);
 
     elevationAngleMotor.configFactoryDefault();
 
@@ -26,21 +29,20 @@ public class ElevationAngleSub extends SubsystemBase{
    *  Adjusts the motor power to go to a target angle, in degrees.
    *  @param targetElevationAngle A double representing the target angle that the elevation angle motor should attempt to reach
    */
-  public void MoveElevationMotorToAngle(double targetElevationAngle){
-    SmartDashboard.putNumber("Target Elevation Angle:", targetElevationAngle);
-    targetElevationAngle = Math.min(Math.max(targetElevationAngle, Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT),Constants.SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT);
-    // Converts the target from degrees to encoder units
+  public void MoveElevationMotorToAngle(double targetElevationAngle) {
 
-    // Gets the current rotation of the elevation motor, relative to the rotation upon robot power-up (1 rotation = 4096 units)
+    SmartDashboard.putNumber("Target Elevation Angle:", targetElevationAngle);
+
+    targetElevationAngle = Math.min(Math.max(targetElevationAngle, Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT),Constants.SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT);
     double currentElevationAngle = (elevationAngleMotor.getSelectedSensorPosition()*Constants.ELEVATION_ANGLE_GEAR_RATIO)/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT;
+
     SmartDashboard.putNumber("Raw Encoder Angle Degrees",(elevationAngleMotor.getSelectedSensorPosition())/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT);
     SmartDashboard.putNumber("Current Elevation Angle", currentElevationAngle);
-    // Gets the difference between the target angle and the current angle
-    double elevationAngleError = targetElevationAngle - currentElevationAngle;
 
-    // Sets the motor power to the error in elevation * a constant gain
-    double elevationMotorPower = elevationAngleError * Constants.ELEVATION_ANGLE_PROPORTIONAL_GAIN;
+    double elevationMotorPower = elevationAnglePID.runPID(targetElevationAngle, currentElevationAngle);
+
     SmartDashboard.putNumber("Elevation Angle Motor Power", elevationMotorPower);
+
     elevationAngleMotor.set(ControlMode.PercentOutput, elevationMotorPower);
   }
 }
