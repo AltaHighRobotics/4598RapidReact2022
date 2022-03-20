@@ -13,9 +13,16 @@ public class ElevationAngleSub extends SubsystemBase{
   private ConfigurablePID elevationAnglePID;
   
   public ElevationAngleSub() {
-    elevationAngleMotor = new TalonSRX(Constants.ELEVATION_ANGLE_MOTOR);
+    elevationAnglePID = new ConfigurablePID(
+      Constants.ELEVATION_ANGLE_PROPORTIONAL_GAIN,
+      Constants.ELEVATION_ANGLE_INTEGRAL_GAIN,
+      Constants.ELEVATION_ANGLE_DERIVITIVE_GAIN,
+      Constants.ELEVATION_ANGLE_MAX_PROPORTIONAL,
+      Constants.ELEVATION_ANGLE_MAX_INTEGRAL,
+      Constants.ELEVATION_ANGLE_MAX_DERIVITIVE
+    );
 
-    elevationAnglePID = new ConfigurablePID(Constants.ELEVATION_ANGLE_PROPORTIONAL_GAIN, 0, 0, 1, 0, 0);
+    elevationAngleMotor = new TalonSRX(Constants.ELEVATION_ANGLE_MOTOR);
 
     elevationAngleMotor.configFactoryDefault();
 

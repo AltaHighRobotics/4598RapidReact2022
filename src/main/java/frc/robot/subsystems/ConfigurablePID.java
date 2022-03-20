@@ -1,15 +1,12 @@
 package frc.robot.subsystems;
-
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 public class ConfigurablePID {
     private double PROPORTIONAL_GAIN = 0;
     private double INTEGRAL_GAIN = 0;
     private double DERIVITIVE_GAIN = 0;
 
-    private double MAX_PROPORTIONAL_GAIN = 0;
-    private double MAX_INTEGRAL_GAIN = 0;
-    private double MAX_DERIVITIVE_GAIN = 0;
+    private double MAX_PROPORTIONAL = 0;
+    private double MAX_INTEGRAL = 0;
+    private double MAX_DERIVITIVE = 0;
 
     private double proportional = 0;
     private double integral = 0;
@@ -24,9 +21,9 @@ public class ConfigurablePID {
         INTEGRAL_GAIN = i;
         DERIVITIVE_GAIN = d;
 
-        MAX_PROPORTIONAL_GAIN = maxP;
-        MAX_INTEGRAL_GAIN = maxI;
-        MAX_DERIVITIVE_GAIN = maxD;
+        MAX_PROPORTIONAL = maxP;
+        MAX_INTEGRAL = maxI;
+        MAX_DERIVITIVE = maxD;
     }
 
     public double runPID(double target, double current) {
@@ -34,9 +31,9 @@ public class ConfigurablePID {
         this.differenceDelta = this.newDifference - this.difference;
         this.difference = this.newDifference;
 
-        this.proportional = clamp(difference * this.PROPORTIONAL_GAIN, -this.MAX_PROPORTIONAL_GAIN, this.PROPORTIONAL_GAIN);
-        this.integral = clamp(this.integral + (this.difference * this.INTEGRAL_GAIN), -this.MAX_INTEGRAL_GAIN, this.MAX_INTEGRAL_GAIN);
-        this.derivitive = clamp(this.differenceDelta * this.DERIVITIVE_GAIN, -this.MAX_DERIVITIVE_GAIN, this.MAX_DERIVITIVE_GAIN);
+        this.proportional = clamp(difference * this.PROPORTIONAL_GAIN, -this.MAX_PROPORTIONAL, this.MAX_PROPORTIONAL);
+        this.integral = clamp(this.integral + (this.difference * this.INTEGRAL_GAIN), -this.MAX_INTEGRAL, this.MAX_INTEGRAL);
+        this.derivitive = clamp(this.differenceDelta * this.DERIVITIVE_GAIN, -this.MAX_DERIVITIVE, this.MAX_DERIVITIVE);
 
         return(this.proportional + this.integral + this.derivitive);
     }

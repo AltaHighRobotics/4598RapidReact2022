@@ -54,15 +54,19 @@ public final class Constants {
     public static final double MAX_ARM_ERROR = 40000;
     public static final double ARM_SLOW_SPEED = 1;
     public static final double ARM_FAST_SPEED = 3;
-    public static final double MAX_ARM_INTEGRAL = 0.25;
-    public static final double ARM_PROPORTIONAL_GAIN = 0.00001;
     public static final double FIRST_HOOK_POSITION = 150000;
     public static final double MIN_ARM_POSITION = 0;
     public static final double ALMOST_MIN_POSITION = 50000;
     public static final double HALF_ARM_POSITION = 100000;
     public static final double MAX_ARM_POSITION = 200000;
-    public static final double ARM_INTEGRAL_GAIN = 0.00000003;
     public static final double ACCEPTABLE_ERROR = 8000;
+        // Arm Controller Constants
+        public static final double ARM_PROPORTIONAL_GAIN = 0.00001;
+        public static final double ARM_INTEGRAL_GAIN = 0.00000003;
+        public static final double ARM_DERIVITIVE_GAIN = 0;
+        public static final double MAX_ARM_PROPORTIONAL = 1;
+        public static final double MAX_ARM_INTEGRAL = 0.25;
+        public static final double MAX_ARM_DERIVITIVE = 0;
 
     // LIMELIGHT CONSTANTS
     public static final double A1 = 3;
@@ -95,18 +99,40 @@ public final class Constants {
 
     // Shooter Constants
     public static final int SLIDER_AXIS = 3;
-    public static final double SHOOTER_PORPORTIONAL_GAIN = 0.000006;
-    public static final double SHOOTER_INTERGRAL_GAIN = 0.000003;
-    public static final double SHOOTER_MAX_INTEGRAL = 1;
     public static final double SHOOTER_POWER_OFFSET = 0.1;
-    public static final double ELEVATION_ANGLE_PROPORTIONAL_GAIN = 0.5;
-    public static final double ELEVATION_ANGLE_GEAR_RATIO = 0.145; // TODO actually find this value
+
+        // Shooter Controller Constants
+        public static final double SHOOTER_PORPORTIONAL_GAIN = 0.000006;
+        public static final double SHOOTER_INTERGRAL_GAIN = 0.000003;
+        public static final double SHOOTER_DERIVITIVE_GAIN = 0;
+        public static final double SHOOTER_MAX_PROPORTIONAL = 1;
+        public static final double SHOOTER_MAX_INTEGRAL = 1;
+        public static final double SHOOTER_MAX_DERIVITIVE = 0;
+    
+    // Elevation Angle Constants
+    public static final double ELEVATION_ANGLE_GEAR_RATIO = 0.145;
     public static final double SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT = 80; //Actually 86
     public static final double SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT = 30;
     public static final double ELEVATION_SPEED = 0.1;
+
+        //Elevation Angle Controller Constants
+        public static final double ELEVATION_ANGLE_PROPORTIONAL_GAIN = 0.5;
+        public static final double ELEVATION_ANGLE_INTEGRAL_GAIN = 0;
+        public static final double ELEVATION_ANGLE_DERIVITIVE_GAIN = 0;
+        public static final double ELEVATION_ANGLE_MAX_PROPORTIONAL = 1;
+        public static final double ELEVATION_ANGLE_MAX_INTEGRAL = 0;
+        public static final double ELEVATION_ANGLE_MAX_DERIVITIVE = 0;
+
+    // Azimuth Constants
     public static final double AZIMUTH_LOWER_LIMIT = -45;
     public static final double AZIMUTH_UPPER_LIMIT = 45;
-    public static final double AZIMUTH_PROPORTIONAL_GAIN = 0.001;
+        // Azimuth Controller Constants
+        public static final double AZIMUTH_PROPORTIONAL_GAIN = 0.001;
+        public static final double AZIMUTH_INTEGRAL_GAIN = 0;
+        public static final double AZIMUTH_DERIVITIVE_GAIN = 0;
+        public static final double AZIMUTH_MAX_PROPORTIONAL = 1;
+        public static final double AZIMUTH_MAX_INTEGRAL = 0;
+        public static final double AZIMUTH_MAX_DERIVITIVE = 0;
 
 
 

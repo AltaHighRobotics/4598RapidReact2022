@@ -19,15 +19,14 @@ public class ClimbingSub extends SubsystemBase {
   private Solenoid armSwingSolenoid;
   private TalonFX leftArmMotor;
   private TalonFX rightArmMotor;
+  private ConfigurablePID leftArmPID;
+  private ConfigurablePID rightArmPID;
 
   private double rightArmMotorVelocity;
   private double leftArmMotorVelocity;
 
   private double rightArmMotorPosition;
   private double leftArmMotorPosition;
-
-  private double rightArmIntegral;
-  private double leftArmIntegral;
 
   private double currentArmTarget;
   private double currentArmSpeed;
@@ -38,6 +37,23 @@ public class ClimbingSub extends SubsystemBase {
       armSwingSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.ARM_SWING_SOLENOID);
       leftArmMotor = new TalonFX(Constants.LEFT_ARM_MOTOR);
       rightArmMotor = new TalonFX(Constants.RIGHT_ARM_MOTOR);
+
+      leftArmPID = new ConfigurablePID(
+        Constants.ARM_PROPORTIONAL_GAIN,
+        Constants.ARM_INTEGRAL_GAIN,
+        Constants.ARM_DERIVITIVE_GAIN,
+        Constants.MAX_ARM_PROPORTIONAL,
+        Constants.MAX_ARM_INTEGRAL,
+        Constants.MAX_ARM_DERIVITIVE
+      );
+      rightArmPID = new ConfigurablePID(
+        Constants.ARM_PROPORTIONAL_GAIN,
+        Constants.ARM_INTEGRAL_GAIN,
+        Constants.ARM_DERIVITIVE_GAIN,
+        Constants.MAX_ARM_PROPORTIONAL,
+        Constants.MAX_ARM_INTEGRAL,
+        Constants.MAX_ARM_DERIVITIVE
+      );
 
       leftArmMotor.configFactoryDefault();
       rightArmMotor.configFactoryDefault();
@@ -122,30 +138,12 @@ public class ClimbingSub extends SubsystemBase {
     double leftArmError = (actualTarget - leftArmMotorPosition) * targetVelocity;
     double rightArmError = (actualTarget - rightArmMotorPosition) * targetVelocity;
 
-    /** Finds the difference between each arms current velocity, and each arms error. 
-     *  By using velocity and position, the controller is more stable than if we only used position, 
-     *  as it will now slow down to stop directly on the target, rather than coasting past it
-     */
-    double leftArmVelocityError = leftArmError - leftArmMotorVelocity;
-    double rightArmVelocityError = rightArmError - rightArmMotorVelocity;
-
-    double leftArmProportional = leftArmVelocityError * Constants.ARM_PROPORTIONAL_GAIN;
-    double rightArmProportional = rightArmVelocityError * Constants.ARM_PROPORTIONAL_GAIN;
-
-    // This adds the current error in speed to the sum of all previous errors. This helps when the arms are under load
-    leftArmIntegral = Math.min(Math.max((leftArmIntegral + leftArmVelocityError) * Constants.ARM_INTEGRAL_GAIN, -Constants.MAX_ARM_INTEGRAL), Constants.MAX_ARM_INTEGRAL);
-    rightArmIntegral = Math.min(Math.max((rightArmIntegral + rightArmVelocityError) * Constants.ARM_INTEGRAL_GAIN, -Constants.MAX_ARM_INTEGRAL), Constants.MAX_ARM_INTEGRAL);
-
-    double leftArmPower = leftArmProportional + leftArmIntegral;
-    double rightArmPower = rightArmProportional + rightArmIntegral;
+    double leftArmPower = leftArmPID.runPID(leftArmError, leftArmMotorVelocity);
+    double rightArmPower = rightArmPID.runPID(rightArmError, rightArmMotorVelocity);
 
     SmartDashboard.putNumber("Left Arm Power", leftArmPower);
-    SmartDashboard.putNumber("Left Arm Proportional", leftArmProportional);
-    SmartDashboard.putNumber("Left Arm Integral", leftArmIntegral);
 
     SmartDashboard.putNumber("Right Arm Power", rightArmPower);
-    SmartDashboard.putNumber("Right Arm Proportional", rightArmProportional);
-    SmartDashboard.putNumber("Right Arm Integral", rightArmIntegral);
 
     leftArmMotor.set(ControlMode.PercentOutput, leftArmPower);
     rightArmMotor.set(ControlMode.PercentOutput, rightArmPower);
