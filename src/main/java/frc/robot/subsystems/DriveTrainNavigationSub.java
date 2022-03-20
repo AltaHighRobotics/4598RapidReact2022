@@ -28,6 +28,9 @@ public class DriveTrainNavigationSub extends SubsystemBase {
   public TalonFX leftMotorFront;
   public TalonFX leftMotorBack;
 
+  private ConfigurablePID drivetrainHeadingPID;
+  private ConfigurablePID drivetrainSpeedPID;
+
   public AHRS navX;
 
   public double rightMotorVelocity;
@@ -54,6 +57,24 @@ public class DriveTrainNavigationSub extends SubsystemBase {
   public double robotNavData [];
 
   public DriveTrainNavigationSub() {
+
+    drivetrainHeadingPID = new ConfigurablePID(
+      Constants.DRIVETRAIN_HEADING_PROPORTIONAL_GAIN,
+      Constants.DRIVETRAIN_HEADING_INTEGRAL_GAIN,
+      Constants.DRIVETRAIN_HEADING_DERIVITIVE_GAIN,
+      Constants.DRIVETRAIN_HEADING_MAX_PROPORTIONAL,
+      Constants.DRIVETRAIN_HEADING_MAX_INTEGRAL,
+      Constants.DRIVETRAIN_HEADING_MAX_DERIVITIVE
+    );
+
+    drivetrainSpeedPID = new ConfigurablePID(
+      Constants.DRIVETRAIN_SPEED_PROPORTIONAL_GAIN,
+      Constants.DRIVETRAIN_SPEED_INTEGRAL_GAIN,
+      Constants.DRIVETRAIN_SPEED_DERIVITIVE_GAIN,
+      Constants.DRIVETRAIN_SPEED_MAX_PROPORTIONAL,
+      Constants.DRIVETRAIN_SPEED_MAX_INTEGRAL,
+      Constants.DRIVETRAIN_SPEED_MAX_DERIVITIVE
+    );
 
     navX = new AHRS(SPI.Port.kMXP);
 
@@ -137,21 +158,23 @@ public class DriveTrainNavigationSub extends SubsystemBase {
 
     double headingRate = compHeading - previousHeading;
     double headingError = targetHeading - compHeading;
-    double headingRateError = headingError - headingRate;
-    
+
+    double steeringPower = drivetrainHeadingPID.runPID(headingError, headingRate);
+
     SmartDashboard.putNumber("Heading Error:", headingError);
 
-    double leftDrivePower = -Constants.DRIVING_HEADING_PROPORTIONAL_GAIN * headingRateError;
-    double rightDrivePower = Constants.DRIVING_HEADING_PROPORTIONAL_GAIN * headingRateError;
+    double leftDrivePower = -steeringPower;
+    double rightDrivePower = steeringPower;
 
     if(headingError < Constants.MAX_DRIVE_HEADING_ERROR)
     {
       double distanceError = Math.sqrt(Math.pow((targetY - robotY), 2)) + (Math.pow((targetX - robotX), 2));
+      double speedPower = drivetrainSpeedPID.runPID(0, distanceError);
 
       SmartDashboard.putNumber("Distance to Waypoint:", distanceError);
 
-      leftDrivePower = leftDrivePower + distanceError * Constants.DRIVE_SPEED_PROPORTIONAL_GAIN;
-      rightDrivePower = rightDrivePower + distanceError * Constants.DRIVE_SPEED_PROPORTIONAL_GAIN;
+      leftDrivePower = leftDrivePower + speedPower;
+      rightDrivePower = rightDrivePower + speedPower;
     }
 
     leftMotorFront.set(ControlMode.PercentOutput, leftDrivePower);

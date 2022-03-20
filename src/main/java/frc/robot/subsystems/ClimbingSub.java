@@ -34,44 +34,46 @@ public class ClimbingSub extends SubsystemBase {
   private boolean hasRun;
 
   public ClimbingSub() {
-      armSwingSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.ARM_SWING_SOLENOID);
-      leftArmMotor = new TalonFX(Constants.LEFT_ARM_MOTOR);
-      rightArmMotor = new TalonFX(Constants.RIGHT_ARM_MOTOR);
 
-      leftArmPID = new ConfigurablePID(
-        Constants.ARM_PROPORTIONAL_GAIN,
-        Constants.ARM_INTEGRAL_GAIN,
-        Constants.ARM_DERIVITIVE_GAIN,
-        Constants.MAX_ARM_PROPORTIONAL,
-        Constants.MAX_ARM_INTEGRAL,
-        Constants.MAX_ARM_DERIVITIVE
-      );
-      rightArmPID = new ConfigurablePID(
-        Constants.ARM_PROPORTIONAL_GAIN,
-        Constants.ARM_INTEGRAL_GAIN,
-        Constants.ARM_DERIVITIVE_GAIN,
-        Constants.MAX_ARM_PROPORTIONAL,
-        Constants.MAX_ARM_INTEGRAL,
-        Constants.MAX_ARM_DERIVITIVE
-      );
+    armSwingSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.ARM_SWING_SOLENOID);
+    leftArmMotor = new TalonFX(Constants.LEFT_ARM_MOTOR);
+    rightArmMotor = new TalonFX(Constants.RIGHT_ARM_MOTOR);
 
-      leftArmMotor.configFactoryDefault();
-      rightArmMotor.configFactoryDefault();
+    leftArmPID = new ConfigurablePID(
+      Constants.ARM_PROPORTIONAL_GAIN,
+      Constants.ARM_INTEGRAL_GAIN,
+      Constants.ARM_DERIVITIVE_GAIN,
+      Constants.MAX_ARM_PROPORTIONAL,
+      Constants.MAX_ARM_INTEGRAL,
+      Constants.MAX_ARM_DERIVITIVE
+    );
+    
+    rightArmPID = new ConfigurablePID(
+      Constants.ARM_PROPORTIONAL_GAIN,
+      Constants.ARM_INTEGRAL_GAIN,
+      Constants.ARM_DERIVITIVE_GAIN,
+      Constants.MAX_ARM_PROPORTIONAL,
+      Constants.MAX_ARM_INTEGRAL,
+      Constants.MAX_ARM_DERIVITIVE
+    );
 
-      leftArmMotor.setNeutralMode(NeutralMode.Brake);
-      rightArmMotor.setNeutralMode(NeutralMode.Brake);
+    leftArmMotor.configFactoryDefault();
+    rightArmMotor.configFactoryDefault();
 
-      leftArmMotor.setInverted(TalonFXInvertType.Clockwise);
-      rightArmMotor.setInverted(TalonFXInvertType.CounterClockwise);
+    leftArmMotor.setNeutralMode(NeutralMode.Brake);
+    rightArmMotor.setNeutralMode(NeutralMode.Brake);
 
-      leftArmMotor.setSensorPhase(true);
-      rightArmMotor.setSensorPhase(false);
+    leftArmMotor.setInverted(TalonFXInvertType.Clockwise);
+    rightArmMotor.setInverted(TalonFXInvertType.CounterClockwise);
 
-      currentArmTarget = Constants.MAX_ARM_POSITION;
-      currentArmSpeed = Constants.ARM_FAST_SPEED;
-      currentStage = 0;
-      hasRun = false;
-    }
+    leftArmMotor.setSensorPhase(true);
+    rightArmMotor.setSensorPhase(false);
+
+    currentArmTarget = Constants.MAX_ARM_POSITION;
+    currentArmSpeed = Constants.ARM_FAST_SPEED;
+    currentStage = 0;
+    hasRun = false;
+  }
 
   /** Extends the climbing arms
    *  WARNING! This command has no automatic stop programmed into it and will break the robot if not used correctly

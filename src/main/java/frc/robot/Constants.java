@@ -85,13 +85,25 @@ public final class Constants {
     };
 
     // DriveTrain Navigation Constants
-
     public static final double ENCODER_ROTATION_RATIO = ((14 / 68) * (24 / 30)) / 4096;
     public static final double ROTATION_DISTANCE_RATIO = ENCODER_ROTATION_RATIO * Math.PI * 2;
-    public static final int DRIVING_HEADING_PROPORTIONAL_GAIN = 0;
-    public static final double MAX_DRIVE_HEADING_ERROR = 3;
-    public static final double DRIVE_SPEED_PROPORTIONAL_GAIN = 0;
     public static final double MAX_WAYPOINT_ERROR = 0;
+    public static final double MAX_DRIVE_HEADING_ERROR = 3;
+
+        // Drivetrain Controller Constants
+        public static final double DRIVETRAIN_HEADING_PROPORTIONAL_GAIN = 0;
+        public static final double DRIVETRAIN_SPEED_PROPORTIONAL_GAIN = 0;
+        public static final double DRIVETRAIN_HEADING_INTEGRAL_GAIN = 0;
+        public static final double DRIVETRAIN_SPEED_INTEGRAL_GAIN = 0;
+        public static final double DRIVETRAIN_HEADING_DERIVITIVE_GAIN = 0;
+        public static final double DRIVETRAIN_SPEED_DERIVITIVE_GAIN = 0;
+        public static final double DRIVETRAIN_HEADING_MAX_PROPORTIONAL = 0;
+        public static final double DRIVETRAIN_SPEED_MAX_PROPORTIONAL = 0;
+        public static final double DRIVETRAIN_HEADING_MAX_INTEGRAL = 0;
+        public static final double DRIVETRAIN_SPEED_MAX_INTEGRAL = 0;
+        public static final double DRIVETRAIN_HEADING_MAX_DERIVITIVE = 0;
+        public static final double DRIVETRAIN_SPEED_MAX_DERIVITIVE = 0;
+    
 
     // Storage Constants
     public static final double FEED_POWER = 0.7;

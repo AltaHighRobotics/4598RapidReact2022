@@ -22,6 +22,7 @@ public class ShooterSub extends SubsystemBase {
   private ConfigurablePID rightShooterPID;
 
   public ShooterSub() {
+    
     leftShooterPID = new ConfigurablePID(
       Constants.SHOOTER_PORPORTIONAL_GAIN,
       Constants.SHOOTER_INTERGRAL_GAIN,

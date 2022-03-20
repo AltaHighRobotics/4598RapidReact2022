@@ -14,6 +14,7 @@ public class AzimuthSub extends SubsystemBase {
   private ConfigurablePID azimuthPID;
 
   public AzimuthSub() {
+    
     azimuthPID = new ConfigurablePID(
       Constants.AZIMUTH_PROPORTIONAL_GAIN,
       Constants.AZIMUTH_INTEGRAL_GAIN,
@@ -22,7 +23,7 @@ public class AzimuthSub extends SubsystemBase {
       Constants.AZIMUTH_MAX_INTEGRAL,
       Constants.AZIMUTH_MAX_DERIVITIVE
     );
-    
+
     azimuthMotor = new TalonFX(Constants.AZIMUTH_MOTOR);
     azimuthMotor.configFactoryDefault();
     azimuthMotor.setNeutralMode(NeutralMode.Brake);
