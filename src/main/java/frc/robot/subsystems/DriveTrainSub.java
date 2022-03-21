@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
@@ -19,11 +20,14 @@ public class DriveTrainSub extends SubsystemBase
   public TalonFX rightMotorBack;
   public TalonFX leftMotorFront;
   public TalonFX leftMotorBack;
+  public SupplyCurrentLimitConfiguration drivetrainCurrentLimit;
   public DifferentialDrive diffDrive;
   
   /** Creates a new DriveTrainSub. */
   public DriveTrainSub() 
   {
+    drivetrainCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.DRIVETRAIN_CURRENT_LIMIT, 0, 0.1);
+
     rightMotorFront = new TalonFX(Constants.RIGHT_DRIVE_MOTOR_FRONT);
     rightMotorBack = new TalonFX(Constants.RIGHT_DRIVE_MOTOR_BACK);
     leftMotorFront = new TalonFX(Constants.LEFT_DRIVE_MOTOR_FRONT);
@@ -43,6 +47,16 @@ public class DriveTrainSub extends SubsystemBase
     rightMotorBack.setInverted(TalonFXInvertType.Clockwise);
     leftMotorFront.setInverted(TalonFXInvertType.CounterClockwise);
     leftMotorBack.setInverted(TalonFXInvertType.CounterClockwise);
+
+    rightMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
+    rightMotorBack.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
+    leftMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
+    rightMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
+
+    rightMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
+    rightMotorBack.configSupplyCurrentLimit(drivetrainCurrentLimit);
+    leftMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
+    rightMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
 
     rightMotorBack.follow(rightMotorFront);
     leftMotorBack.follow(leftMotorFront);

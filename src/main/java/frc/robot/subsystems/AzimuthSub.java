@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
@@ -13,8 +14,11 @@ public class AzimuthSub extends SubsystemBase {
 
   private TalonFX azimuthMotor;
   private ConfigurablePID azimuthPID;
+  private SupplyCurrentLimitConfiguration azimuthCurrentLimit;
 
   public AzimuthSub() {
+
+    azimuthCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.AZIMUTH_CURRENT_LIMIT, 0, 0.1);
 
     azimuthPID = new ConfigurablePID(
       Constants.AZIMUTH_PROPORTIONAL_GAIN,
@@ -30,6 +34,8 @@ public class AzimuthSub extends SubsystemBase {
     azimuthMotor.setNeutralMode(NeutralMode.Brake);
     azimuthMotor.setSensorPhase(false);
     azimuthMotor.setInverted(TalonFXInvertType.CounterClockwise);
+    azimuthMotor.configOpenloopRamp(Constants.AZIMUTH_POWER_RAMP_TIME, 0);
+    azimuthMotor.configSupplyCurrentLimit(azimuthCurrentLimit);
   }
 
   public void moveAzimuthMotorToAngle(double azimuthTargetAngle) {

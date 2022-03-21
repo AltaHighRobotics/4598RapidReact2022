@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.kauailabs.navx.frc.AHRS;
@@ -31,6 +32,7 @@ public class DriveTrainNavigationSub extends SubsystemBase {
 
   private ConfigurablePID drivetrainHeadingPID;
   private ConfigurablePID drivetrainSpeedPID;
+  private SupplyCurrentLimitConfiguration drivetrainCurrentLimit;
 
   public AHRS navX;
 
@@ -58,6 +60,8 @@ public class DriveTrainNavigationSub extends SubsystemBase {
   public double robotNavData [];
 
   public DriveTrainNavigationSub() {
+
+    drivetrainCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.DRIVETRAIN_CURRENT_LIMIT, 0, 0.1);
 
     drivetrainHeadingPID = new ConfigurablePID(
       Constants.DRIVETRAIN_HEADING_PROPORTIONAL_GAIN,
@@ -98,6 +102,16 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     rightMotorBack.setInverted(TalonFXInvertType.Clockwise);
     leftMotorFront.setInverted(TalonFXInvertType.CounterClockwise);
     leftMotorBack.setInverted(TalonFXInvertType.CounterClockwise);
+
+    rightMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
+    rightMotorBack.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
+    leftMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
+    rightMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
+
+    rightMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
+    rightMotorBack.configSupplyCurrentLimit(drivetrainCurrentLimit);
+    leftMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
+    rightMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
 
     rightMotorBack.follow(rightMotorFront);
     leftMotorBack.follow(leftMotorFront);

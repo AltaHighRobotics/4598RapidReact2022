@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
@@ -21,8 +22,11 @@ public class ShooterSub extends SubsystemBase {
   private TalonFX rightShooterMotor;
   private ConfigurablePID leftShooterPID;
   private ConfigurablePID rightShooterPID;
+  private SupplyCurrentLimitConfiguration shooterCurrentLimit;
 
   public ShooterSub() {
+
+    shooterCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.SHOOTER_CURRENT_LIMIT, 0, 0.1);
 
     leftShooterPID = new ConfigurablePID(
       Constants.SHOOTER_PORPORTIONAL_GAIN,
@@ -56,6 +60,12 @@ public class ShooterSub extends SubsystemBase {
 
     leftShooterMotor.setInverted(TalonFXInvertType.CounterClockwise);
     rightShooterMotor.setInverted(TalonFXInvertType.Clockwise);
+
+    leftShooterMotor.configOpenloopRamp(Constants.SHOOTER_POWER_RAMP_TIME, 0);
+    rightShooterMotor.configOpenloopRamp(Constants.SHOOTER_POWER_RAMP_TIME, 0);
+
+    leftShooterMotor.configSupplyCurrentLimit(shooterCurrentLimit);
+    rightShooterMotor.configSupplyCurrentLimit(shooterCurrentLimit);
   }
 
   @Override

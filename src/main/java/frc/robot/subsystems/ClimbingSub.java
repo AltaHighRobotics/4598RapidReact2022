@@ -22,6 +22,7 @@ public class ClimbingSub extends SubsystemBase {
   private TalonFX rightArmMotor;
   private ConfigurablePID leftArmPID;
   private ConfigurablePID rightArmPID;
+  private SupplyCurrentLimitConfiguration armCurrentLimit;
 
   private double rightArmMotorVelocity;
   private double leftArmMotorVelocity;
@@ -40,6 +41,8 @@ public class ClimbingSub extends SubsystemBase {
     leftArmMotor = new TalonFX(Constants.LEFT_ARM_MOTOR);
     rightArmMotor = new TalonFX(Constants.RIGHT_ARM_MOTOR);
 
+    armCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.ARM_CURRENT_LIMIT, 0, 0.1);
+    
     leftArmPID = new ConfigurablePID(
       Constants.ARM_PROPORTIONAL_GAIN,
       Constants.ARM_INTEGRAL_GAIN,
@@ -69,6 +72,12 @@ public class ClimbingSub extends SubsystemBase {
 
     leftArmMotor.setSensorPhase(true);
     rightArmMotor.setSensorPhase(false);
+
+    leftArmMotor.configOpenloopRamp(Constants.ARM_POWER_RAMP_TIME, 0);
+    rightArmMotor.configOpenloopRamp(Constants.ARM_POWER_RAMP_TIME, 0);
+
+    leftArmMotor.configSupplyCurrentLimit(armCurrentLimit);
+    rightArmMotor.configSupplyCurrentLimit(armCurrentLimit);
 
     currentArmTarget = Constants.MAX_ARM_POSITION;
     currentArmSpeed = Constants.ARM_FAST_SPEED;

@@ -60,6 +60,9 @@ public final class Constants {
     public static final double HALF_ARM_POSITION = 100000;
     public static final double MAX_ARM_POSITION = 200000;
     public static final double ACCEPTABLE_ERROR = 8000;
+    public static final double ARM_CURRENT_LIMIT = 40;
+    public static final double ARM_POWER_RAMP_TIME = 0.5;
+
         // Arm Controller Constants
         public static final double ARM_PROPORTIONAL_GAIN = 0.00001;
         public static final double ARM_INTEGRAL_GAIN = 0.00000003;
@@ -89,6 +92,8 @@ public final class Constants {
     public static final double ROTATION_DISTANCE_RATIO = ENCODER_ROTATION_RATIO * Math.PI * 2;
     public static final double MAX_WAYPOINT_ERROR = 0;
     public static final double MAX_DRIVE_HEADING_ERROR = 3;
+    public static final double DRIVETRAIN_CURRENT_LIMIT = 40;
+    public static final double DRIVETRAIN_POWER_RAMP_TIME = 0.5;
 
         // Drivetrain Controller Constants
         public static final double DRIVETRAIN_HEADING_PROPORTIONAL_GAIN = 0;
@@ -112,6 +117,8 @@ public final class Constants {
     // Shooter Constants
     public static final int SLIDER_AXIS = 3;
     public static final double SHOOTER_POWER_OFFSET = 0.1;
+    public static final double SHOOTER_CURRENT_LIMIT = 20;
+    public static final double SHOOTER_POWER_RAMP_TIME = 0.5;
 
         // Shooter Controller Constants
         public static final double SHOOTER_PORPORTIONAL_GAIN = 0.000006;
@@ -138,6 +145,9 @@ public final class Constants {
     // Azimuth Constants
     public static final double AZIMUTH_LOWER_LIMIT = -45;
     public static final double AZIMUTH_UPPER_LIMIT = 45;
+    public static final double AZIMUTH_CURRENT_LIMIT = 20;
+    public static final double AZIMUTH_POWER_RAMP_TIME = 0.5;
+
         // Azimuth Controller Constants
         public static final double AZIMUTH_PROPORTIONAL_GAIN = 0.001;
         public static final double AZIMUTH_INTEGRAL_GAIN = 0;
