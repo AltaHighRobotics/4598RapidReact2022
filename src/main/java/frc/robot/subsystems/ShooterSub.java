@@ -6,12 +6,13 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.ConfigurablePID;
 import frc.robot.Constants;
 
 public class ShooterSub extends SubsystemBase {
@@ -19,37 +20,58 @@ public class ShooterSub extends SubsystemBase {
 
   private TalonFX leftShooterMotor;
   private TalonFX rightShooterMotor;
-  private TalonFX azimuthMotor;
-  private double shooterPowers [];
-  private double shooterErrors [];
-  private double shooterLeftIntegral;
-  private double shooterRightIntegral;
- 
+  private ConfigurablePID leftShooterPID;
+  private ConfigurablePID rightShooterPID;
+  private SupplyCurrentLimitConfiguration shooterCurrentLimit;
 
   public ShooterSub() {
 
+    shooterCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.SHOOTER_CURRENT_LIMIT, 0, 0.1);
+
+    leftShooterPID = new ConfigurablePID(
+      Constants.SHOOTER_PORPORTIONAL_GAIN,
+      Constants.SHOOTER_INTERGRAL_GAIN,
+      Constants.SHOOTER_DERIVITIVE_GAIN,
+      Constants.SHOOTER_MAX_PROPORTIONAL,
+      Constants.SHOOTER_MAX_INTEGRAL,
+      Constants.SHOOTER_MAX_DERIVITIVE,
+      Constants.SHOOTER_POWER_OFFSET,
+      1,
+      1
+    );
+
+    rightShooterPID = new ConfigurablePID(
+      Constants.SHOOTER_PORPORTIONAL_GAIN,
+      Constants.SHOOTER_INTERGRAL_GAIN,
+      Constants.SHOOTER_DERIVITIVE_GAIN,
+      Constants.SHOOTER_MAX_PROPORTIONAL,
+      Constants.SHOOTER_MAX_INTEGRAL,
+      Constants.SHOOTER_MAX_DERIVITIVE,
+      Constants.SHOOTER_POWER_OFFSET,
+      1,
+      1
+    );
+
     leftShooterMotor = new TalonFX(Constants.LEFT_SHOOTER_MOTOR);
     rightShooterMotor = new TalonFX(Constants.RIGHT_SHOOTER_MOTOR);
-    azimuthMotor = new TalonFX(Constants.AZIMUTH_MOTOR);
 
     leftShooterMotor.configFactoryDefault();
     rightShooterMotor.configFactoryDefault();
-    azimuthMotor.configFactoryDefault();
 
     leftShooterMotor.setNeutralMode(NeutralMode.Coast);
     rightShooterMotor.setNeutralMode(NeutralMode.Coast);
-    azimuthMotor.setNeutralMode(NeutralMode.Brake);
 
     leftShooterMotor.setSensorPhase(false);
     rightShooterMotor.setSensorPhase(false);
-    azimuthMotor.setSensorPhase(false);
 
     leftShooterMotor.setInverted(TalonFXInvertType.CounterClockwise);
     rightShooterMotor.setInverted(TalonFXInvertType.Clockwise);
-    azimuthMotor.setInverted(TalonFXInvertType.CounterClockwise);
 
-    shooterPowers = new double [2];
-    shooterErrors = new double [2];
+    leftShooterMotor.configOpenloopRamp(Constants.SHOOTER_POWER_RAMP_TIME, 0);
+    rightShooterMotor.configOpenloopRamp(Constants.SHOOTER_POWER_RAMP_TIME, 0);
+
+    leftShooterMotor.configSupplyCurrentLimit(shooterCurrentLimit);
+    rightShooterMotor.configSupplyCurrentLimit(shooterCurrentLimit);
   }
 
   @Override
@@ -62,44 +84,22 @@ public class ShooterSub extends SubsystemBase {
    *  @param targetShooterVelocity A double representing the target velocity that the shooter motors should attempt to reach
    */
   public void setShooterMotorsVelocity(double targetShooterVelocity){
+
     // Gets the velocity of each of the two shooter motors
     double shooterLeftVelocity = leftShooterMotor.getSelectedSensorVelocity();
     double shooterRightVelocity = rightShooterMotor.getSelectedSensorVelocity();
 
-    // Finds the difference between the target velocity and the current velocity for each motor
-    double shooterLeftVelocityError = targetShooterVelocity - shooterLeftVelocity;
-    double shooterRightVelocityError = targetShooterVelocity - shooterRightVelocity;
-
-    // Adds the current error to the sum of all past errors, which allows the controller to find the exact power level needed
-    shooterLeftIntegral = Math.max(Math.min(shooterLeftIntegral + shooterLeftVelocityError * Constants.SHOOTER_INTERGRAL_GAIN, Constants.SHOOTER_MAX_INTEGRAL), -Constants.SHOOTER_MAX_INTEGRAL);
-    shooterRightIntegral = Math.max(Math.min(shooterRightIntegral + shooterRightVelocityError * Constants.SHOOTER_INTERGRAL_GAIN, Constants.SHOOTER_MAX_INTEGRAL), -Constants.SHOOTER_MAX_INTEGRAL);
-
-    // Adds the current error * a constant gain to the output power, which improves response time for changes in target velocity
-    double shooterLeftPower = shooterLeftIntegral + shooterLeftVelocityError * Constants.SHOOTER_PORPORTIONAL_GAIN;
-    double shooterRightPower = shooterRightIntegral + shooterRightVelocityError * Constants.SHOOTER_PORPORTIONAL_GAIN;
-
-    // Clamps the power output above the power offset value, which ensures the motors don't apply brakes, as that would cause instability and vibrations
-    shooterLeftPower = Math.max(shooterLeftPower, Constants.SHOOTER_POWER_OFFSET);
-    shooterRightPower = Math.max(shooterRightPower, Constants.SHOOTER_POWER_OFFSET);
+    // Runs the controllers
+    double shooterLeftPower = leftShooterPID.runPID(targetShooterVelocity, shooterLeftVelocity);
+    double shooterRightPower = rightShooterPID.runPID(targetShooterVelocity, shooterRightVelocity);
 
     // Sets the motors to the computed power levels
     leftShooterMotor.set(ControlMode.PercentOutput, shooterLeftPower);
     rightShooterMotor.set(ControlMode.PercentOutput, shooterRightPower);
 
     // Displays useful values in Smart Dashboard
-    shooterPowers[0] = shooterLeftPower;
-    shooterPowers[1] = shooterRightPower;
-    shooterErrors[0] = shooterLeftVelocityError;
-    shooterErrors[1] = shooterRightVelocityError;
-
-    //SmartDashboard.putNumberArray("Shooter Power:", shooterPowers);
-    //SmartDashboard.putNumberArray("Shooter Velocity Errors:", shooterErrors);
     SmartDashboard.putNumber("Shooter Left Power", shooterLeftPower);
     SmartDashboard.putNumber("Shooter Right Power", shooterRightPower);
-    SmartDashboard.putNumber("Shooter Left Integral", shooterLeftIntegral);
-    SmartDashboard.putNumber("Shooter Right Integral", shooterRightIntegral);
-    SmartDashboard.putNumber("Shooter Left Error", shooterLeftVelocityError);
-    SmartDashboard.putNumber("Shooter Right Error", shooterRightVelocityError);
   }
 
   public void setShooterMotorsPower(double Speed){

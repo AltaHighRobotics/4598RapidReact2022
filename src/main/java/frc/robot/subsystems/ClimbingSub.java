@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.ConfigurablePID;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.*;
@@ -19,6 +20,9 @@ public class ClimbingSub extends SubsystemBase {
   private Solenoid armSwingSolenoid;
   private TalonFX leftArmMotor;
   private TalonFX rightArmMotor;
+  private ConfigurablePID leftArmPID;
+  private ConfigurablePID rightArmPID;
+  private SupplyCurrentLimitConfiguration armCurrentLimit;
 
   private double rightArmMotorVelocity;
   private double leftArmMotorVelocity;
@@ -26,40 +30,70 @@ public class ClimbingSub extends SubsystemBase {
   private double rightArmMotorPosition;
   private double leftArmMotorPosition;
 
-  private double rightArmIntegral;
-  private double leftArmIntegral;
-
   private double currentArmTarget;
   private double currentArmSpeed;
   private int currentStage;
   private boolean hasRun;
 
   public ClimbingSub() {
-      armSwingSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.ARM_SWING_SOLENOID);
-      leftArmMotor = new TalonFX(Constants.LEFT_ARM_MOTOR);
-      rightArmMotor = new TalonFX(Constants.RIGHT_ARM_MOTOR);
 
-      leftArmMotor.configFactoryDefault();
-      rightArmMotor.configFactoryDefault();
+    armSwingSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.ARM_SWING_SOLENOID);
+    leftArmMotor = new TalonFX(Constants.LEFT_ARM_MOTOR);
+    rightArmMotor = new TalonFX(Constants.RIGHT_ARM_MOTOR);
 
-      leftArmMotor.setNeutralMode(NeutralMode.Brake);
-      rightArmMotor.setNeutralMode(NeutralMode.Brake);
+    armCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.ARM_CURRENT_LIMIT, 0, 0.1);
+    
+    leftArmPID = new ConfigurablePID(
+      Constants.ARM_PROPORTIONAL_GAIN,
+      Constants.ARM_INTEGRAL_GAIN,
+      Constants.ARM_DERIVITIVE_GAIN,
+      Constants.MAX_ARM_PROPORTIONAL,
+      Constants.MAX_ARM_INTEGRAL,
+      Constants.MAX_ARM_DERIVITIVE,
+      -Constants.ARM_MAX_POWER,
+      Constants.ARM_MAX_POWER,
+      Constants.ARM_SLOW_SPEED
+    );
 
-      leftArmMotor.setInverted(TalonFXInvertType.Clockwise);
-      rightArmMotor.setInverted(TalonFXInvertType.CounterClockwise);
+    rightArmPID = new ConfigurablePID(
+      Constants.ARM_PROPORTIONAL_GAIN,
+      Constants.ARM_INTEGRAL_GAIN,
+      Constants.ARM_DERIVITIVE_GAIN,
+      Constants.MAX_ARM_PROPORTIONAL,
+      Constants.MAX_ARM_INTEGRAL,
+      Constants.MAX_ARM_DERIVITIVE,
+      -Constants.ARM_MAX_POWER,
+      Constants.ARM_MAX_POWER,
+      Constants.ARM_SLOW_SPEED
+    );
 
-      leftArmMotor.setSensorPhase(true);
-      rightArmMotor.setSensorPhase(false);
+    leftArmMotor.configFactoryDefault();
+    rightArmMotor.configFactoryDefault();
 
-      currentArmTarget = Constants.MAX_ARM_POSITION;
-      currentArmSpeed = Constants.ARM_FAST_SPEED;
-      currentStage = 0;
-      hasRun = false;
-    }
+    leftArmMotor.setNeutralMode(NeutralMode.Brake);
+    rightArmMotor.setNeutralMode(NeutralMode.Brake);
+
+    leftArmMotor.setInverted(TalonFXInvertType.Clockwise);
+    rightArmMotor.setInverted(TalonFXInvertType.CounterClockwise);
+
+    leftArmMotor.setSensorPhase(true);
+    rightArmMotor.setSensorPhase(false);
+
+    leftArmMotor.configOpenloopRamp(Constants.ARM_POWER_RAMP_TIME, 0);
+    rightArmMotor.configOpenloopRamp(Constants.ARM_POWER_RAMP_TIME, 0);
+
+    leftArmMotor.configSupplyCurrentLimit(armCurrentLimit);
+    rightArmMotor.configSupplyCurrentLimit(armCurrentLimit);
+
+    currentArmTarget = Constants.MAX_ARM_POSITION;
+    currentArmSpeed = Constants.ARM_FAST_SPEED;
+    currentStage = 0;
+    hasRun = false;
+  }
 
   /** Extends the climbing arms
    *  WARNING! This command has no automatic stop programmed into it and will break the robot if not used correctly
-   *  @deprecated
+   *  @Deprecated
    */
   public void ExtendArms(){
     leftArmMotor.set(ControlMode.PercentOutput, Constants.LIFT_ARM_SPEED);
@@ -69,7 +103,7 @@ public class ClimbingSub extends SubsystemBase {
 
   /** Retracts the climbing arms
    *  WARNING! This command has no automatic stop programmed into it and will break the robot if not used correctly
-   *  @deprecated
+   *  @Deprecated
    */
   public void RetractArms(){
     leftArmMotor.set(ControlMode.PercentOutput, Constants.LIFT_ARM_SPEED);
@@ -118,34 +152,14 @@ public class ClimbingSub extends SubsystemBase {
     double armMin = Math.min(targetPosition, averageArmPosition + Constants.MAX_ARM_ERROR);
     double actualTarget = Math.max(armMin, averageArmPosition - Constants.MAX_ARM_ERROR);
 
-    // Finds the difference between each arms position and the clamped target, then multiplies it by the max speed
-    double leftArmError = (actualTarget - leftArmMotorPosition) * targetVelocity;
-    double rightArmError = (actualTarget - rightArmMotorPosition) * targetVelocity;
+    leftArmPID.setSpeed(targetVelocity);
+    rightArmPID.setSpeed(targetVelocity);
 
-    /** Finds the difference between each arms current velocity, and each arms error. 
-     *  By using velocity and position, the controller is more stable than if we only used position, 
-     *  as it will now slow down to stop directly on the target, rather than coasting past it
-     */
-    double leftArmVelocityError = leftArmError - leftArmMotorVelocity;
-    double rightArmVelocityError = rightArmError - rightArmMotorVelocity;
-
-    double leftArmProportional = leftArmVelocityError * Constants.ARM_PROPORTIONAL_GAIN;
-    double rightArmProportional = rightArmVelocityError * Constants.ARM_PROPORTIONAL_GAIN;
-
-    // This adds the current error in speed to the sum of all previous errors. This helps when the arms are under load
-    leftArmIntegral = Math.min(Math.max((leftArmIntegral + leftArmVelocityError) * Constants.ARM_INTEGRAL_GAIN, -Constants.MAX_ARM_INTEGRAL), Constants.MAX_ARM_INTEGRAL);
-    rightArmIntegral = Math.min(Math.max((rightArmIntegral + rightArmVelocityError) * Constants.ARM_INTEGRAL_GAIN, -Constants.MAX_ARM_INTEGRAL), Constants.MAX_ARM_INTEGRAL);
-
-    double leftArmPower = leftArmProportional + leftArmIntegral;
-    double rightArmPower = rightArmProportional + rightArmIntegral;
+    double leftArmPower = leftArmPID.runVelocityPID(actualTarget, leftArmMotorPosition, leftArmMotorVelocity);
+    double rightArmPower = rightArmPID.runVelocityPID(actualTarget, rightArmMotorPosition, rightArmMotorVelocity);
 
     SmartDashboard.putNumber("Left Arm Power", leftArmPower);
-    SmartDashboard.putNumber("Left Arm Proportional", leftArmProportional);
-    SmartDashboard.putNumber("Left Arm Integral", leftArmIntegral);
-
     SmartDashboard.putNumber("Right Arm Power", rightArmPower);
-    SmartDashboard.putNumber("Right Arm Proportional", rightArmProportional);
-    SmartDashboard.putNumber("Right Arm Integral", rightArmIntegral);
 
     leftArmMotor.set(ControlMode.PercentOutput, leftArmPower);
     rightArmMotor.set(ControlMode.PercentOutput, rightArmPower);

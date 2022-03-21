@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.kauailabs.navx.frc.AHRS;
@@ -16,6 +17,7 @@ import org.opencv.core.Mat;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.ConfigurablePID;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.I2C;
@@ -27,6 +29,10 @@ public class DriveTrainNavigationSub extends SubsystemBase {
   public TalonFX rightMotorBack;
   public TalonFX leftMotorFront;
   public TalonFX leftMotorBack;
+
+  private ConfigurablePID drivetrainHeadingPID;
+  private ConfigurablePID drivetrainSpeedPID;
+  private SupplyCurrentLimitConfiguration drivetrainCurrentLimit;
 
   public AHRS navX;
 
@@ -55,6 +61,32 @@ public class DriveTrainNavigationSub extends SubsystemBase {
 
   public DriveTrainNavigationSub() {
 
+    drivetrainCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.DRIVETRAIN_CURRENT_LIMIT, 0, 0.1);
+
+    drivetrainHeadingPID = new ConfigurablePID(
+      Constants.DRIVETRAIN_HEADING_PROPORTIONAL_GAIN,
+      Constants.DRIVETRAIN_HEADING_INTEGRAL_GAIN,
+      Constants.DRIVETRAIN_HEADING_DERIVITIVE_GAIN,
+      Constants.DRIVETRAIN_HEADING_MAX_PROPORTIONAL,
+      Constants.DRIVETRAIN_HEADING_MAX_INTEGRAL,
+      Constants.DRIVETRAIN_HEADING_MAX_DERIVITIVE,
+      -Constants.DRIVETRAIN_HEADING_MAX_POWER,
+      Constants.DRIVETRAIN_HEADING_MAX_POWER,
+      Constants.DRIVETRAIN_HEADING_SPEED
+    );
+
+    drivetrainSpeedPID = new ConfigurablePID(
+      Constants.DRIVETRAIN_SPEED_PROPORTIONAL_GAIN,
+      Constants.DRIVETRAIN_SPEED_INTEGRAL_GAIN,
+      Constants.DRIVETRAIN_SPEED_DERIVITIVE_GAIN,
+      Constants.DRIVETRAIN_SPEED_MAX_PROPORTIONAL,
+      Constants.DRIVETRAIN_SPEED_MAX_INTEGRAL,
+      Constants.DRIVETRAIN_SPEED_MAX_DERIVITIVE,
+      -Constants.DRIVETRAIN_SPEED_MAX_POWER,
+      Constants.DRIVETRAIN_SPEED_MAX_POWER,
+      Constants.DRIVETRAIN_SPEED_SPEED
+    );
+
     navX = new AHRS(SPI.Port.kMXP);
 
     rightMotorFront = new TalonFX(Constants.RIGHT_DRIVE_MOTOR_FRONT);
@@ -76,6 +108,16 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     rightMotorBack.setInverted(TalonFXInvertType.Clockwise);
     leftMotorFront.setInverted(TalonFXInvertType.CounterClockwise);
     leftMotorBack.setInverted(TalonFXInvertType.CounterClockwise);
+
+    rightMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
+    rightMotorBack.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
+    leftMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
+    rightMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
+
+    rightMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
+    rightMotorBack.configSupplyCurrentLimit(drivetrainCurrentLimit);
+    leftMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
+    rightMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
 
     rightMotorBack.follow(rightMotorFront);
     leftMotorBack.follow(leftMotorFront);
@@ -137,21 +179,23 @@ public class DriveTrainNavigationSub extends SubsystemBase {
 
     double headingRate = compHeading - previousHeading;
     double headingError = targetHeading - compHeading;
-    double headingRateError = headingError - headingRate;
-    
+
+    double steeringPower = drivetrainHeadingPID.runVelocityPID(targetHeading, compHeading, headingRate);
+
     SmartDashboard.putNumber("Heading Error:", headingError);
 
-    double leftDrivePower = -Constants.DRIVING_HEADING_PROPORTIONAL_GAIN * headingRateError;
-    double rightDrivePower = Constants.DRIVING_HEADING_PROPORTIONAL_GAIN * headingRateError;
+    double leftDrivePower = -steeringPower;
+    double rightDrivePower = steeringPower;
 
     if(headingError < Constants.MAX_DRIVE_HEADING_ERROR)
     {
       double distanceError = Math.sqrt(Math.pow((targetY - robotY), 2)) + (Math.pow((targetX - robotX), 2));
+      double speedPower = drivetrainSpeedPID.runPID(0, distanceError);
 
       SmartDashboard.putNumber("Distance to Waypoint:", distanceError);
 
-      leftDrivePower = leftDrivePower + distanceError * Constants.DRIVE_SPEED_PROPORTIONAL_GAIN;
-      rightDrivePower = rightDrivePower + distanceError * Constants.DRIVE_SPEED_PROPORTIONAL_GAIN;
+      leftDrivePower = leftDrivePower + speedPower;
+      rightDrivePower = rightDrivePower + speedPower;
     }
 
     leftMotorFront.set(ControlMode.PercentOutput, leftDrivePower);
