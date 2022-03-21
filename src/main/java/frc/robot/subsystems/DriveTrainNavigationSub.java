@@ -61,6 +61,8 @@ public class DriveTrainNavigationSub extends SubsystemBase {
 
   public DriveTrainNavigationSub() {
 
+    robotY = 0;
+    robotX = 0;
     drivetrainCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.DRIVETRAIN_CURRENT_LIMIT, 0, 0.1);
 
     drivetrainHeadingPID = new ConfigurablePID(
@@ -138,7 +140,7 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     rightMotorVelocity = rightMotorFront.getSelectedSensorVelocity();
     leftMotorVelocity = leftMotorFront.getSelectedSensorVelocity();
 
-    compHeading = (double) navX.getCompassHeading();
+    compHeading = (double) navX.getYaw();
 
     SmartDashboard.putNumber("Robot Heading:", compHeading);
 
@@ -146,9 +148,12 @@ public class DriveTrainNavigationSub extends SubsystemBase {
 
     yaw = (double) navX.getYaw();
 
-    double distanceTravLeft = leftMotorPos - previousLeft;
-    double distanceTravRight = rightMotorPos - previousRight;
+    double distanceTravLeft = Constants.ROTATION_DISTANCE_RATIO * (leftMotorPos - previousLeft);
+    double distanceTravRight = Constants.ROTATION_DISTANCE_RATIO * (rightMotorPos - previousRight);
     double distanceTravel = (distanceTravLeft + distanceTravRight)/2;
+
+    previousRight = rightMotorPos;
+    previousLeft = leftMotorPos;
 
     robotX = robotX + (Math.cos(compHeading) * distanceTravel);
     robotY = robotY + (Math.sin(compHeading) * distanceTravel);
@@ -214,6 +219,12 @@ public class DriveTrainNavigationSub extends SubsystemBase {
       return true;
     }
     return false;
+  }
+
+  public void setPos(double x, double y)
+  {
+    robotX = x; 
+    robotY = y;
   }
 
   @Override

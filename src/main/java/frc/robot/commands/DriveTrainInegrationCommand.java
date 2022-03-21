@@ -7,7 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrainNavigationSub;
 
-public class TestAutoCommand extends CommandBase {
+public class DriveTrainInegrationCommand extends CommandBase {
   /** Creates a new IntakeCommand. */
   private DriveTrainNavigationSub m_nav;
   private double oldPosData [];
@@ -16,16 +16,21 @@ public class TestAutoCommand extends CommandBase {
   private double prevHeading;
 
 
-  public TestAutoCommand(DriveTrainNavigationSub navSub) {
+  public DriveTrainInegrationCommand(DriveTrainNavigationSub navSub) {
     m_nav = navSub;
+    
     oldPosData = new double [4];
     newPosData = new double [4];
     targetData = new double [5];
+
+    addRequirements(m_nav);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_nav.setPos(0, 0);
+
     oldPosData[0] = 0.0;
     oldPosData[1] = 0.0;
     oldPosData[2] = 0.0;
@@ -39,7 +44,6 @@ public class TestAutoCommand extends CommandBase {
     targetData[4] = prevHeading;    
 
     newPosData = m_nav.driveTrainPosIntegration(oldPosData);
-    m_nav.setDriveToWaypoint(targetData);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -52,8 +56,6 @@ public class TestAutoCommand extends CommandBase {
     targetData[1] = 5;
     targetData[2] = newPosData[2];
     targetData[3] = newPosData[3];
-
-    prevHeading = m_nav.setDriveToWaypoint(targetData);
 
     targetData[4] = prevHeading;
   }
