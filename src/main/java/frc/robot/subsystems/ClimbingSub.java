@@ -93,7 +93,7 @@ public class ClimbingSub extends SubsystemBase {
 
   /** Extends the climbing arms
    *  WARNING! This command has no automatic stop programmed into it and will break the robot if not used correctly
-   *  @deprecated
+   *  @Deprecated
    */
   public void ExtendArms(){
     leftArmMotor.set(ControlMode.PercentOutput, Constants.LIFT_ARM_SPEED);
@@ -103,7 +103,7 @@ public class ClimbingSub extends SubsystemBase {
 
   /** Retracts the climbing arms
    *  WARNING! This command has no automatic stop programmed into it and will break the robot if not used correctly
-   *  @deprecated
+   *  @Deprecated
    */
   public void RetractArms(){
     leftArmMotor.set(ControlMode.PercentOutput, Constants.LIFT_ARM_SPEED);
