@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.ConfigurablePID;
 import frc.robot.Constants;
 
 public class AzimuthSub extends SubsystemBase {
@@ -14,7 +15,7 @@ public class AzimuthSub extends SubsystemBase {
   private ConfigurablePID azimuthPID;
 
   public AzimuthSub() {
-    
+
     azimuthPID = new ConfigurablePID(
       Constants.AZIMUTH_PROPORTIONAL_GAIN,
       Constants.AZIMUTH_INTEGRAL_GAIN,

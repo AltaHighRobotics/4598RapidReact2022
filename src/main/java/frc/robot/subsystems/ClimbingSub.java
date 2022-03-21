@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.ConfigurablePID;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.*;
@@ -47,7 +48,7 @@ public class ClimbingSub extends SubsystemBase {
       Constants.MAX_ARM_INTEGRAL,
       Constants.MAX_ARM_DERIVITIVE
     );
-    
+
     rightArmPID = new ConfigurablePID(
       Constants.ARM_PROPORTIONAL_GAIN,
       Constants.ARM_INTEGRAL_GAIN,

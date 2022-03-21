@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.ConfigurablePID;
 import frc.robot.Constants;
 
 public class ShooterSub extends SubsystemBase {
@@ -22,7 +23,7 @@ public class ShooterSub extends SubsystemBase {
   private ConfigurablePID rightShooterPID;
 
   public ShooterSub() {
-    
+
     leftShooterPID = new ConfigurablePID(
       Constants.SHOOTER_PORPORTIONAL_GAIN,
       Constants.SHOOTER_INTERGRAL_GAIN,

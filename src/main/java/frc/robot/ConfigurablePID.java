@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot;
 public class ConfigurablePID {
     private double PROPORTIONAL_GAIN = 0;
     private double INTEGRAL_GAIN = 0;
