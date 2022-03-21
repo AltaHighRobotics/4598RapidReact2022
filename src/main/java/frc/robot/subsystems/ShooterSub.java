@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.ConfigurablePID;
@@ -34,7 +35,10 @@ public class ShooterSub extends SubsystemBase {
       Constants.SHOOTER_DERIVITIVE_GAIN,
       Constants.SHOOTER_MAX_PROPORTIONAL,
       Constants.SHOOTER_MAX_INTEGRAL,
-      Constants.SHOOTER_MAX_DERIVITIVE
+      Constants.SHOOTER_MAX_DERIVITIVE,
+      Constants.SHOOTER_POWER_OFFSET,
+      1,
+      1
     );
 
     rightShooterPID = new ConfigurablePID(
@@ -43,7 +47,10 @@ public class ShooterSub extends SubsystemBase {
       Constants.SHOOTER_DERIVITIVE_GAIN,
       Constants.SHOOTER_MAX_PROPORTIONAL,
       Constants.SHOOTER_MAX_INTEGRAL,
-      Constants.SHOOTER_MAX_DERIVITIVE
+      Constants.SHOOTER_MAX_DERIVITIVE,
+      Constants.SHOOTER_POWER_OFFSET,
+      1,
+      1
     );
 
     leftShooterMotor = new TalonFX(Constants.LEFT_SHOOTER_MOTOR);
@@ -86,10 +93,6 @@ public class ShooterSub extends SubsystemBase {
     // Runs the controllers
     double shooterLeftPower = leftShooterPID.runPID(targetShooterVelocity, shooterLeftVelocity);
     double shooterRightPower = rightShooterPID.runPID(targetShooterVelocity, shooterRightVelocity);
-
-    // Clamps the power output above the power offset value, which ensures the motors don't apply brakes, as that would cause instability and vibrations
-    shooterLeftPower = Math.max(shooterLeftPower, Constants.SHOOTER_POWER_OFFSET);
-    shooterRightPower = Math.max(shooterRightPower, Constants.SHOOTER_POWER_OFFSET);
 
     // Sets the motors to the computed power levels
     leftShooterMotor.set(ControlMode.PercentOutput, shooterLeftPower);

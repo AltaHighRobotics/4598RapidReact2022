@@ -69,7 +69,10 @@ public class DriveTrainNavigationSub extends SubsystemBase {
       Constants.DRIVETRAIN_HEADING_DERIVITIVE_GAIN,
       Constants.DRIVETRAIN_HEADING_MAX_PROPORTIONAL,
       Constants.DRIVETRAIN_HEADING_MAX_INTEGRAL,
-      Constants.DRIVETRAIN_HEADING_MAX_DERIVITIVE
+      Constants.DRIVETRAIN_HEADING_MAX_DERIVITIVE,
+      -Constants.DRIVETRAIN_HEADING_MAX_POWER,
+      Constants.DRIVETRAIN_HEADING_MAX_POWER,
+      Constants.DRIVETRAIN_HEADING_SPEED
     );
 
     drivetrainSpeedPID = new ConfigurablePID(
@@ -78,7 +81,10 @@ public class DriveTrainNavigationSub extends SubsystemBase {
       Constants.DRIVETRAIN_SPEED_DERIVITIVE_GAIN,
       Constants.DRIVETRAIN_SPEED_MAX_PROPORTIONAL,
       Constants.DRIVETRAIN_SPEED_MAX_INTEGRAL,
-      Constants.DRIVETRAIN_SPEED_MAX_DERIVITIVE
+      Constants.DRIVETRAIN_SPEED_MAX_DERIVITIVE,
+      -Constants.DRIVETRAIN_SPEED_MAX_POWER,
+      Constants.DRIVETRAIN_SPEED_MAX_POWER,
+      Constants.DRIVETRAIN_SPEED_SPEED
     );
 
     navX = new AHRS(SPI.Port.kMXP);
@@ -174,7 +180,7 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     double headingRate = compHeading - previousHeading;
     double headingError = targetHeading - compHeading;
 
-    double steeringPower = drivetrainHeadingPID.runPID(headingError, headingRate);
+    double steeringPower = drivetrainHeadingPID.runVelocityPID(targetHeading, compHeading, headingRate);
 
     SmartDashboard.putNumber("Heading Error:", headingError);
 

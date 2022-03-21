@@ -70,6 +70,7 @@ public final class Constants {
         public static final double MAX_ARM_PROPORTIONAL = 1;
         public static final double MAX_ARM_INTEGRAL = 0.25;
         public static final double MAX_ARM_DERIVITIVE = 0;
+        public static final double ARM_MAX_POWER = 1;
 
     // LIMELIGHT CONSTANTS
     public static final double A1 = 3;
@@ -108,6 +109,10 @@ public final class Constants {
         public static final double DRIVETRAIN_SPEED_MAX_INTEGRAL = 0;
         public static final double DRIVETRAIN_HEADING_MAX_DERIVITIVE = 0;
         public static final double DRIVETRAIN_SPEED_MAX_DERIVITIVE = 0;
+        public static final double DRIVETRAIN_HEADING_MAX_POWER = 0.5;
+        public static final double DRIVETRAIN_SPEED_MAX_POWER = 0.5;
+        public static final double DRIVETRAIN_HEADING_SPEED = 0.5;
+        public static final double DRIVETRAIN_SPEED_SPEED = 0.5;
     
 
     // Storage Constants
@@ -155,6 +160,8 @@ public final class Constants {
         public static final double AZIMUTH_MAX_PROPORTIONAL = 1;
         public static final double AZIMUTH_MAX_INTEGRAL = 0;
         public static final double AZIMUTH_MAX_DERIVITIVE = 0;
+        public static final double AZIMUTH_MAX_POWER = 0.5;
+        public static final double AZIMUTH_SPEED = 0.5;
 
 
 

@@ -21,7 +21,10 @@ public class ElevationAngleSub extends SubsystemBase{
       Constants.ELEVATION_ANGLE_DERIVITIVE_GAIN,
       Constants.ELEVATION_ANGLE_MAX_PROPORTIONAL,
       Constants.ELEVATION_ANGLE_MAX_INTEGRAL,
-      Constants.ELEVATION_ANGLE_MAX_DERIVITIVE
+      Constants.ELEVATION_ANGLE_MAX_DERIVITIVE,
+      -1,
+      1,
+      1
     );
 
     elevationAngleMotor = new TalonSRX(Constants.ELEVATION_ANGLE_MOTOR);

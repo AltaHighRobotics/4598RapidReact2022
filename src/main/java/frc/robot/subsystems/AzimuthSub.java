@@ -26,7 +26,10 @@ public class AzimuthSub extends SubsystemBase {
       Constants.AZIMUTH_DERIVITIVE_GAIN,
       Constants.AZIMUTH_MAX_PROPORTIONAL,
       Constants.AZIMUTH_MAX_INTEGRAL,
-      Constants.AZIMUTH_MAX_DERIVITIVE
+      Constants.AZIMUTH_MAX_DERIVITIVE,
+      -Constants.AZIMUTH_MAX_POWER,
+      Constants.AZIMUTH_MAX_POWER,
+      Constants.AZIMUTH_SPEED
     );
 
     azimuthMotor = new TalonFX(Constants.AZIMUTH_MOTOR);
@@ -43,9 +46,7 @@ public class AzimuthSub extends SubsystemBase {
     double azimuthEncoderPosition = azimuthMotor.getSelectedSensorPosition() / 4096 * 360;
     double azimuthEncoderVelocity = azimuthMotor.getSelectedSensorVelocity();
 
-    double azimuthPositionError = azimuthTargetAngle - azimuthEncoderPosition;
-
-    double azimuthMotorPower = azimuthPID.runPID(azimuthPositionError, azimuthEncoderVelocity);
+    double azimuthMotorPower = azimuthPID.runVelocityPID(azimuthTargetAngle, azimuthEncoderPosition, azimuthEncoderVelocity);
     azimuthMotor.set(ControlMode.PercentOutput, azimuthMotorPower);
   }
     

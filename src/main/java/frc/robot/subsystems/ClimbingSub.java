@@ -49,7 +49,10 @@ public class ClimbingSub extends SubsystemBase {
       Constants.ARM_DERIVITIVE_GAIN,
       Constants.MAX_ARM_PROPORTIONAL,
       Constants.MAX_ARM_INTEGRAL,
-      Constants.MAX_ARM_DERIVITIVE
+      Constants.MAX_ARM_DERIVITIVE,
+      -Constants.ARM_MAX_POWER,
+      Constants.ARM_MAX_POWER,
+      Constants.ARM_SLOW_SPEED
     );
 
     rightArmPID = new ConfigurablePID(
@@ -58,7 +61,10 @@ public class ClimbingSub extends SubsystemBase {
       Constants.ARM_DERIVITIVE_GAIN,
       Constants.MAX_ARM_PROPORTIONAL,
       Constants.MAX_ARM_INTEGRAL,
-      Constants.MAX_ARM_DERIVITIVE
+      Constants.MAX_ARM_DERIVITIVE,
+      -Constants.ARM_MAX_POWER,
+      Constants.ARM_MAX_POWER,
+      Constants.ARM_SLOW_SPEED
     );
 
     leftArmMotor.configFactoryDefault();
@@ -146,15 +152,13 @@ public class ClimbingSub extends SubsystemBase {
     double armMin = Math.min(targetPosition, averageArmPosition + Constants.MAX_ARM_ERROR);
     double actualTarget = Math.max(armMin, averageArmPosition - Constants.MAX_ARM_ERROR);
 
-    // Finds the difference between each arms position and the clamped target, then multiplies it by the max speed
-    double leftArmError = (actualTarget - leftArmMotorPosition) * targetVelocity;
-    double rightArmError = (actualTarget - rightArmMotorPosition) * targetVelocity;
+    leftArmPID.setSpeed(targetVelocity);
+    rightArmPID.setSpeed(targetVelocity);
 
-    double leftArmPower = leftArmPID.runPID(leftArmError, leftArmMotorVelocity);
-    double rightArmPower = rightArmPID.runPID(rightArmError, rightArmMotorVelocity);
+    double leftArmPower = leftArmPID.runVelocityPID(actualTarget, leftArmMotorPosition, leftArmMotorVelocity);
+    double rightArmPower = rightArmPID.runVelocityPID(actualTarget, rightArmMotorPosition, rightArmMotorVelocity);
 
     SmartDashboard.putNumber("Left Arm Power", leftArmPower);
-
     SmartDashboard.putNumber("Right Arm Power", rightArmPower);
 
     leftArmMotor.set(ControlMode.PercentOutput, leftArmPower);
