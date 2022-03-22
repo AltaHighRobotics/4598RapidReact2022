@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -24,10 +25,12 @@ public class FeedSub extends SubsystemBase {
 
   public void feedOn(){
     feedMotor.set(ControlMode.PercentOutput, Constants.FEED_POWER);
+    SmartDashboard.putString("Feeder Status:", "Feeding");
   }
 
   public void feedOff(){
     feedMotor.set(ControlMode.PercentOutput, 0);
+    SmartDashboard.putString("Feeder Status:", "Stopped");
   }
   @Override
   public void periodic() {

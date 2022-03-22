@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -48,6 +49,11 @@ public class DriveTrainSub extends SubsystemBase
     leftMotorFront.setInverted(TalonFXInvertType.CounterClockwise);
     leftMotorBack.setInverted(TalonFXInvertType.CounterClockwise);
 
+    rightMotorFront.setNeutralMode(NeutralMode.Brake);
+    rightMotorBack.setNeutralMode(NeutralMode.Brake);
+    leftMotorFront.setNeutralMode(NeutralMode.Brake);
+    leftMotorBack.setNeutralMode(NeutralMode.Brake);
+
     rightMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
     rightMotorBack.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
     leftMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
@@ -57,9 +63,6 @@ public class DriveTrainSub extends SubsystemBase
     rightMotorBack.configSupplyCurrentLimit(drivetrainCurrentLimit);
     leftMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
     rightMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
-
-    rightMotorBack.follow(rightMotorFront);
-    leftMotorBack.follow(leftMotorFront);
   }
 
   @Override
@@ -68,9 +71,25 @@ public class DriveTrainSub extends SubsystemBase
     // This method will be called once per scheduler run
   }
 
+  public void setBrake() {
+    rightMotorFront.setNeutralMode(NeutralMode.Brake);
+    rightMotorBack.setNeutralMode(NeutralMode.Brake);
+    leftMotorFront.setNeutralMode(NeutralMode.Brake);
+    leftMotorBack.setNeutralMode(NeutralMode.Brake);
+  }
+
+  public void setCoast() {
+    rightMotorFront.setNeutralMode(NeutralMode.Coast);
+    rightMotorBack.setNeutralMode(NeutralMode.Coast);
+    leftMotorFront.setNeutralMode(NeutralMode.Coast);
+    leftMotorBack.setNeutralMode(NeutralMode.Coast);
+  }
+
   public void setArcadeDrive(final double joyForward, final double joyTurn)
   {
     rightMotorFront.set(ControlMode.PercentOutput, joyForward * Constants.DRIVE_MAX_SPEED, DemandType.ArbitraryFeedForward, -joyTurn*(Constants.DRIVE_MAX_SPEED/2));
+    rightMotorBack.set(ControlMode.PercentOutput, joyForward * Constants.DRIVE_MAX_SPEED, DemandType.ArbitraryFeedForward, -joyTurn*(Constants.DRIVE_MAX_SPEED/2));
     leftMotorFront.set(ControlMode.PercentOutput, joyForward * Constants.DRIVE_MAX_SPEED, DemandType.ArbitraryFeedForward, joyTurn*(Constants.DRIVE_MAX_SPEED/2)); 
+    leftMotorBack.set(ControlMode.PercentOutput, joyForward * Constants.DRIVE_MAX_SPEED, DemandType.ArbitraryFeedForward, joyTurn*(Constants.DRIVE_MAX_SPEED/2)); 
   }
 }

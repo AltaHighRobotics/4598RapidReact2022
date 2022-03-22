@@ -16,8 +16,6 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.*;
 
-import java.lang.Math;
-
 public class ClimbingSub extends SubsystemBase {
   private Solenoid armSwingSolenoid;
   private TalonFX leftArmMotor;
@@ -159,8 +157,8 @@ public class ClimbingSub extends SubsystemBase {
     double leftArmPower = leftArmPID.runVelocityPID(actualTarget, leftArmMotorPosition, leftArmMotorVelocity);
     double rightArmPower = rightArmPID.runVelocityPID(actualTarget, rightArmMotorPosition, rightArmMotorVelocity);
 
-    SmartDashboard.putNumber("Left Arm Power", leftArmPower);
-    SmartDashboard.putNumber("Right Arm Power", rightArmPower);
+    SmartDashboard.putNumber("Left Arm Power:", leftArmPower);
+    SmartDashboard.putNumber("Right Arm Power:", rightArmPower);
 
     leftArmMotor.set(ControlMode.PercentOutput, leftArmPower);
     rightArmMotor.set(ControlMode.PercentOutput, rightArmPower);

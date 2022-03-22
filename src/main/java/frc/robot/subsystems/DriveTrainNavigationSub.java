@@ -109,6 +109,11 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     leftMotorFront.setInverted(TalonFXInvertType.CounterClockwise);
     leftMotorBack.setInverted(TalonFXInvertType.CounterClockwise);
 
+    rightMotorFront.setNeutralMode(NeutralMode.Brake);
+    rightMotorBack.setNeutralMode(NeutralMode.Brake);
+    leftMotorFront.setNeutralMode(NeutralMode.Brake);
+    leftMotorBack.setNeutralMode(NeutralMode.Brake);
+
     rightMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
     rightMotorBack.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
     leftMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);

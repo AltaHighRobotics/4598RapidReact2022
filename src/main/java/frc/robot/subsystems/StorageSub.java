@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -22,10 +23,12 @@ public class StorageSub extends SubsystemBase {
 
   public void storageOn(){
     storageMotor.set(ControlMode.PercentOutput, Constants.STORAGE_POWER);
+    SmartDashboard.putString("Storage Status:", "Running");
   }
 
   public void storageOff(){
     storageMotor.set(ControlMode.PercentOutput, 0);
+    SmartDashboard.putString("Storage Status:", "Stopped");
   }
 
   @Override

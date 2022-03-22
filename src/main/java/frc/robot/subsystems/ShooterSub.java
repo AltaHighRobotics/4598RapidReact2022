@@ -98,13 +98,20 @@ public class ShooterSub extends SubsystemBase {
     rightShooterMotor.set(ControlMode.PercentOutput, shooterRightPower);
 
     // Displays useful values in Smart Dashboard
-    SmartDashboard.putNumber("Shooter Left Power", shooterLeftPower);
-    SmartDashboard.putNumber("Shooter Right Power", shooterRightPower);
+    SmartDashboard.putNumber("Shooter Left Power:", shooterLeftPower);
+    SmartDashboard.putNumber("Shooter Right Power:", shooterRightPower);
+    SmartDashboard.putString("Shooter Status:", "Shooting");
   }
 
   public void setShooterMotorsPower(double Speed){
     leftShooterMotor.set(ControlMode.PercentOutput, Speed);
     rightShooterMotor.set(ControlMode.PercentOutput, Speed);
+  }
+
+  public void stopShooterMotors(){
+    leftShooterMotor.set(ControlMode.PercentOutput, 0);
+    rightShooterMotor.set(ControlMode.PercentOutput, 0);
+    SmartDashboard.putString("Shooter Status:", "Stopped");
   }
 
 }

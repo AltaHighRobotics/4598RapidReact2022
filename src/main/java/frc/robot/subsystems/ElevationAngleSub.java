@@ -49,12 +49,12 @@ public class ElevationAngleSub extends SubsystemBase{
     targetElevationAngle = MathUtil.clamp(targetElevationAngle, Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT, Constants.SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT);
     double currentElevationAngle = (elevationAngleMotor.getSelectedSensorPosition()*Constants.ELEVATION_ANGLE_GEAR_RATIO)/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT;
 
-    SmartDashboard.putNumber("Raw Encoder Angle Degrees",(elevationAngleMotor.getSelectedSensorPosition())/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT);
-    SmartDashboard.putNumber("Current Elevation Angle", currentElevationAngle);
+    //SmartDashboard.putNumber("Raw Encoder Angle Degrees",(elevationAngleMotor.getSelectedSensorPosition())/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT);
+    SmartDashboard.putNumber("Current Elevation Angle:", currentElevationAngle);
 
     double elevationMotorPower = elevationAnglePID.runPID(targetElevationAngle, currentElevationAngle);
 
-    SmartDashboard.putNumber("Elevation Angle Motor Power", elevationMotorPower);
+    SmartDashboard.putNumber("Elevation Angle Motor Power:", elevationMotorPower);
 
     elevationAngleMotor.set(ControlMode.PercentOutput, elevationMotorPower);
   }

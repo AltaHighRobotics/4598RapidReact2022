@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import javax.print.attribute.standard.JobHoldUntil;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
@@ -111,20 +109,46 @@ public class RobotContainer {
   }
 
   public void resetDashboard() {
-    SmartDashboard.putString("Climb Stage:", "Climb Stage has not been updated");
-    SmartDashboard.putString("Climb Target:", "Climb Target has not been updated");
-    SmartDashboard.putString("Intake Status:", "Intake Status has not been updated");
-    SmartDashboard.putString("Feeder Status:", "Feeder Status has not been updated");
-    SmartDashboard.putString("Shooter Status:", "Shooter Status has not been updated");
-    SmartDashboard.putString("RED:", "No Color Data");
-    SmartDashboard.putString("GREEN:", "No Color Data");
-    SmartDashboard.putString("BLUE:", "No Color Data");
-    SmartDashboard.putString("Robot X:", "No Navigation Data");
-    SmartDashboard.putString("Robot Y:", "No Navigation Data");
-    SmartDashboard.putString("Robot Heading:", "No Navigation Data");
-    SmartDashboard.putString("Heading Error:", "No Navigation Data");
-    SmartDashboard.putString("Distance to Waypoint:", "No Navigation Data");
+    // Climb display
+    SmartDashboard.putString("Climb Stage:", "NA");
+    SmartDashboard.putString("Climb Target:", "NA");
     SmartDashboard.putString("Climb Resetting?", "No");
+    SmartDashboard.putString("Left Arm Power:", "NA");
+    SmartDashboard.putString("Right Arm Power:", "NA");
+
+    // Shooter display
+    SmartDashboard.putString("Shooter Status:", "NA");
+    SmartDashboard.putString("Shooter Left Power:", "NA");
+    SmartDashboard.putString("Shooter Right Power:", "NA");
+    SmartDashboard.putString("Target Elevation Angle:", "NA");
+    SmartDashboard.putString("Current Elevation Angle:", "NA");
+    SmartDashboard.putString("Elevation Angle Motor Power:", "NA");
+
+    // Intake display
+    SmartDashboard.putString("Intake Piston Status:", "NA");
+    SmartDashboard.putString("Intake Motor Status:", "NA");
+
+    // Feed display
+    SmartDashboard.putString("Feeder Status:", "NA");
+    
+    // Storage display
+    SmartDashboard.putString("Storage Status:", "NA");
+
+    // Color display
+    SmartDashboard.putString("Color Match:", "NA");
+    SmartDashboard.putString("RED:", "NA");
+    SmartDashboard.putString("GREEN:", "NA");
+    SmartDashboard.putString("BLUE:", "NA");
+
+    // Nav + Auto display
+    SmartDashboard.putString("Robot X:", "NA");
+    SmartDashboard.putString("Robot Y:", "NA");
+    SmartDashboard.putString("Robot Heading:", "NA");
+    SmartDashboard.putString("Heading Error:", "NA");
+    SmartDashboard.putString("Distance to Waypoint:", "NA");
+    SmartDashboard.putString("Auto Throttle:", "NA");
+    SmartDashboard.putString("Auto Steering:", "NA");
+    
   }
 
 }

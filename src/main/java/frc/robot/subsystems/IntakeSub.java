@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class IntakeSub extends SubsystemBase {
@@ -28,17 +29,21 @@ public class IntakeSub extends SubsystemBase {
 
   public void IntakeExtend(){
     intakeSolenoid.set(true);
+    SmartDashboard.putString("Intake Piston Status:", "Deployed");
   }
 
   public void IntakeRetract(){
     intakeSolenoid.set(false);
+    SmartDashboard.putString("Intake Piston Status:", "Retracted");
   }
 
   public void IntakeOn(){
     intakeMotor.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
+    SmartDashboard.putString("Intake Motor Status:", "Running");
   }
 
   public void IntakeOff(){
     intakeMotor.set(ControlMode.PercentOutput, 0);
+    SmartDashboard.putString("Intake Motor Status:", "Stopped");
   }
 }

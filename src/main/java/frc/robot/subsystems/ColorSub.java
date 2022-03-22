@@ -36,9 +36,21 @@ public class ColorSub extends SubsystemBase {
   public boolean matchColorToAlliance(String alliance) {
     detectedColor = m_colorSensor.getColor();
     if(alliance == "Red Alliance") {
-      return matchColorToColor(Constants.RED_ALLIANCE_COLOR, detectedColor);
+      if(matchColorToColor(Constants.RED_ALLIANCE_COLOR, detectedColor)) {
+        SmartDashboard.putString("Color Match:", "Color Matches Red Alliance");
+        return true;
+      } else {
+        SmartDashboard.putString("Color Match:", "Color Does Not Match Red Alliance");
+        return false;
+      }
     } else if(alliance == "Blue Alliance") {
-      return matchColorToColor(Constants.BLUE_ALLIANCE_COLOR, detectedColor);
+      if(matchColorToColor(Constants.BLUE_ALLIANCE_COLOR, detectedColor)) {
+        SmartDashboard.putString("Color Match:", "Color Matches Blue Alliance");
+        return true;
+      } else {
+        SmartDashboard.putString("Color Match:", "Color Does Not Match Blue Alliance");
+        return false;
+      }
     } else {
       System.out.println("matchColorToAlliance() was used without a valid alliance. This will always return false!");
       return false;
