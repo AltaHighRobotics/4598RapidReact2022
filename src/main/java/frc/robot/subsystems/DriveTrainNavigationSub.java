@@ -125,8 +125,8 @@ public class DriveTrainNavigationSub extends SubsystemBase {
 
   public void driveTrainPosIntegration()
   {
-    this.currentLeftMotorPosition = leftMotorFront.getSelectedSensorPosition();
-    this.currentRightMotorPosition = rightMotorFront.getSelectedSensorPosition();
+    this.currentLeftMotorPosition = leftMotorFront.getSelectedSensorPosition() / Constants.ENCODER_ROTATION_UNITS;
+    this.currentRightMotorPosition = rightMotorFront.getSelectedSensorPosition() / Constants.ENCODER_ROTATION_UNITS;
 
     this.currentHeading = (double) navX.getYaw();
 
@@ -134,8 +134,8 @@ public class DriveTrainNavigationSub extends SubsystemBase {
 
     this.currentHeading = Math.toRadians(this.currentHeading);
 
-    this.distanceTraveledLeft = Constants.ROTATION_DISTANCE_RATIO * (this.currentLeftMotorPosition - this.previousLeftMotorPosition);
-    this.distanceTraveledRight = Constants.ROTATION_DISTANCE_RATIO * (this.currentRightMotorPosition - this.previousRightMotorPosition);
+    this.distanceTraveledLeft = Constants.DRIVETRAIN_ROTATION_DISTANCE_RATIO * Constants.DRIVETRAIN_GEAR_RATIO * (this.currentLeftMotorPosition - this.previousLeftMotorPosition);
+    this.distanceTraveledRight = Constants.DRIVETRAIN_ROTATION_DISTANCE_RATIO * Constants.DRIVETRAIN_GEAR_RATIO * (this.currentRightMotorPosition - this.previousRightMotorPosition);
     this.distanceTraveled = (this.distanceTraveledLeft + this.distanceTraveledRight)/2;
 
     this.previousLeftMotorPosition = this.currentLeftMotorPosition;
@@ -182,6 +182,7 @@ public class DriveTrainNavigationSub extends SubsystemBase {
 
     SmartDashboard.putNumber("Left Power:", leftDrivePower);
     SmartDashboard.putNumber("Right Power:", rightDrivePower);
+
     leftMotorFront.set(ControlMode.PercentOutput, leftDrivePower);
     leftMotorBack.set(ControlMode.PercentOutput, leftDrivePower);
     rightMotorFront.set(ControlMode.PercentOutput, rightDrivePower);
