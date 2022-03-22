@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -25,10 +26,34 @@ public class ColorSub extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void getColorlol(){
+  public void getColor() {
     detectedColor = m_colorSensor.getColor();
     SmartDashboard.putNumber("RED:", detectedColor.red);
     SmartDashboard.putNumber("GREEN:", detectedColor.green);
     SmartDashboard.putNumber("BLUE:", detectedColor.blue);
+  }
+
+  public boolean matchColorToAlliance(String alliance) {
+    detectedColor = m_colorSensor.getColor();
+    if(alliance == "Red Alliance") {
+      return matchColorToColor(Constants.RED_ALLIANCE_COLOR, detectedColor);
+    } else if(alliance == "Blue Alliance") {
+      return matchColorToColor(Constants.BLUE_ALLIANCE_COLOR, detectedColor);
+    } else {
+      System.out.println("matchColorToAlliance() was used without a valid alliance. This will always return false!");
+      return false;
+    }
+  }
+
+  public boolean matchColorToColor(Color colorA, Color colorB) {
+    boolean rMatch = matchColorChannel(colorA.red, colorB.red);
+    boolean bMatch = matchColorChannel(colorA.blue, colorB.blue);
+    boolean gMatch = matchColorChannel(colorA.green, colorB.green);
+
+    return rMatch && bMatch && gMatch;
+  }
+
+  private boolean matchColorChannel(double a, double b) {
+    return (a < b + Constants.COLOR_MATCH_THRESHOLD && a > b - Constants.COLOR_MATCH_THRESHOLD);
   }
 }

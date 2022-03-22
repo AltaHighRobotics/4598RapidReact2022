@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,7 +40,6 @@ public class RobotContainer {
   
   private final JackFrickedUpCommand m_jackFrickedUpCommand = new JackFrickedUpCommand(m_climbingSub);
   private final ClimbingCommand m_climbingCommand = new ClimbingCommand(m_climbingSub);
-  private final TestAutoCommand m_testAuto = new TestAutoCommand(m_navSub);
 
   private final DriveCommand m_driveCommand =  new DriveCommand(m_driveTrainSub, m_driverOne);
   private final ConstantShootCommand m_ConstantShootCommand = new ConstantShootCommand(m_ShooterSub);
@@ -50,15 +51,27 @@ public class RobotContainer {
   // private final IntakeCommand m_intakeCommand = new IntakeCommand(m_intakeSub);
   // private final ColorCommand m_colorCommand = new ColorCommand(m_colorSub);
 
+  private final Command m_testAuto = new TestAutoCommand(m_navSub);
+
+  SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
     
-     CommandScheduler.getInstance().setDefaultCommand(m_driveTrainSub, m_driveCommand);
-     CommandScheduler.getInstance().setDefaultCommand(m_navSub, m_dtIntegration);
-     //CommandScheduler.getInstance().setDefaultCommand(m_ElevationAngleSub, m_ElevationAngleCommand);
-  //   CommandScheduler.getInstance().setDefaultCommand(m_computerVisionSub, m_intakeVisionCommand);
+    CommandScheduler.getInstance().setDefaultCommand(m_driveTrainSub, m_driveCommand);
+    CommandScheduler.getInstance().setDefaultCommand(m_navSub, m_dtIntegration);
+    //CommandScheduler.getInstance().setDefaultCommand(m_ElevationAngleSub, m_ElevationAngleCommand);
+    //CommandScheduler.getInstance().setDefaultCommand(m_computerVisionSub, m_intakeVisionCommand);
+
+    // Adds all auto options to the selector
+    m_autoChooser.setDefaultOption("Test Auto", m_testAuto);
+    m_autoChooser.addOption("Auto 1", m_testAuto);
+
+    // Displays the auto selector on the dashboard
+    SmartDashboard.putData(m_autoChooser);
+
   }
 
   /**
@@ -94,8 +107,24 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    // Janky. Done to make robot work in tele-op. Will not actually work for autonomous.
-    return m_testAuto;
+    return m_autoChooser.getSelected();
   }
+
+  public void resetDashboard() {
+    SmartDashboard.putString("Climb Stage:", "Climb Stage has not been updated");
+    SmartDashboard.putString("Climb Target:", "Climb Target has not been updated");
+    SmartDashboard.putString("Intake Status:", "Intake Status has not been updated");
+    SmartDashboard.putString("Feeder Status:", "Feeder Status has not been updated");
+    SmartDashboard.putString("Shooter Status:", "Shooter Status has not been updated");
+    SmartDashboard.putString("RED:", "No Color Data");
+    SmartDashboard.putString("GREEN:", "No Color Data");
+    SmartDashboard.putString("BLUE:", "No Color Data");
+    SmartDashboard.putString("Robot X:", "No Navigation Data");
+    SmartDashboard.putString("Robot Y:", "No Navigation Data");
+    SmartDashboard.putString("Robot Heading:", "No Navigation Data");
+    SmartDashboard.putString("Heading Error:", "No Navigation Data");
+    SmartDashboard.putString("Distance to Waypoint:", "No Navigation Data");
+    SmartDashboard.putString("Climb Resetting?", "No");
+  }
+
 }
