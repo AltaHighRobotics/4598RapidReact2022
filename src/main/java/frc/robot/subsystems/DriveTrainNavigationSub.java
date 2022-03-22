@@ -156,7 +156,7 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     previousLeft = leftMotorPos;
 
     robotX = robotX + (Math.cos(compHeading) * distanceTravel);
-    robotY = robotY + (Math.sin(compHeading) * distanceTravel);
+    robotY = robotY + (Math.sin(compHeading) * -distanceTravel);
 
     SmartDashboard.putNumber("Robot X:", robotX);
     SmartDashboard.putNumber("Robot Y:", robotY);
@@ -171,31 +171,31 @@ public class DriveTrainNavigationSub extends SubsystemBase {
 
   public double setDriveToWaypoint(double [] newData)
   {
-    newData[0] = targetX;
-    newData[1] = targetY;
-    newData[2] = robotX;
-    newData[3] = robotY; 
-    newData[4] = previousHeading;  
+    targetX = newData[0];
+    targetY = newData[1];
+    robotX = newData[2];
+    robotY = newData[3]; 
+    previousHeading = newData[4];
 
-    double targetHeading = Math.atan2(targetY - robotY, targetX - robotX);
+    double targetHeading = Math.atan2(-(targetY - robotY), targetX - robotX);
 
-    compHeading = (double) navX.getCompassHeading();
+    compHeading = (double) navX.getYaw();
     compHeading = Math.toRadians(compHeading);
 
     double headingRate = compHeading - previousHeading;
     double headingError = targetHeading - compHeading;
 
-    double steeringPower = drivetrainHeadingPID.runVelocityPID(targetHeading, compHeading, headingRate);
+    double steeringPower = -drivetrainHeadingPID.runVelocityPID(targetHeading, compHeading, headingRate);
 
     SmartDashboard.putNumber("Heading Error:", headingError);
 
     double leftDrivePower = -steeringPower;
     double rightDrivePower = steeringPower;
 
-    if(headingError < Constants.MAX_DRIVE_HEADING_ERROR)
+    if(Math.abs(headingError) < Constants.MAX_DRIVE_HEADING_ERROR)
     {
-      double distanceError = Math.sqrt(Math.pow((targetY - robotY), 2)) + (Math.pow((targetX - robotX), 2));
-      double speedPower = drivetrainSpeedPID.runPID(0, distanceError);
+      double distanceError = Math.sqrt(Math.pow(targetY - robotY, 2) + Math.pow(targetX - robotX, 2));
+      double speedPower = drivetrainSpeedPID.runPID(0, -distanceError);
 
       SmartDashboard.putNumber("Distance to Waypoint:", distanceError);
 
@@ -203,6 +203,8 @@ public class DriveTrainNavigationSub extends SubsystemBase {
       rightDrivePower = rightDrivePower + speedPower;
     }
 
+    SmartDashboard.putNumber("Left Power:", leftDrivePower);
+    SmartDashboard.putNumber("Right Power:", rightDrivePower);
     leftMotorFront.set(ControlMode.PercentOutput, leftDrivePower);
     leftMotorBack.set(ControlMode.PercentOutput, leftDrivePower);
     rightMotorFront.set(ControlMode.PercentOutput, rightDrivePower);

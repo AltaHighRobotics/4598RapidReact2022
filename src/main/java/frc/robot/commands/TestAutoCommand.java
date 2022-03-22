@@ -49,7 +49,7 @@ public class TestAutoCommand extends CommandBase {
     oldPosData = newPosData;
 
     targetData[0] = 5;
-    targetData[1] = 5;
+    targetData[1] = 0;
     targetData[2] = newPosData[2];
     targetData[3] = newPosData[3];
 

@@ -38,6 +38,7 @@ public class RobotContainer {
   
   private final JackFrickedUpCommand m_jackFrickedUpCommand = new JackFrickedUpCommand(m_climbingSub);
   private final ClimbingCommand m_climbingCommand = new ClimbingCommand(m_climbingSub);
+  private final TestAutoCommand m_testAuto = new TestAutoCommand(m_navSub);
 
   private final DriveCommand m_driveCommand =  new DriveCommand(m_driveTrainSub, m_driverOne);
   private final ConstantShootCommand m_ConstantShootCommand = new ConstantShootCommand(m_ShooterSub);
@@ -95,6 +96,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     // Janky. Done to make robot work in tele-op. Will not actually work for autonomous.
-    return null;
+    return m_testAuto;
   }
 }

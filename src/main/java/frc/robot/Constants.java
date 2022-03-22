@@ -97,14 +97,14 @@ public final class Constants {
     public static final double DRIVETRAIN_POWER_RAMP_TIME = 0.5;
 
         // Drivetrain Controller Constants
-        public static final double DRIVETRAIN_HEADING_PROPORTIONAL_GAIN = 0;
-        public static final double DRIVETRAIN_SPEED_PROPORTIONAL_GAIN = 0;
+        public static final double DRIVETRAIN_HEADING_PROPORTIONAL_GAIN = 1;
+        public static final double DRIVETRAIN_SPEED_PROPORTIONAL_GAIN = 0.5;
         public static final double DRIVETRAIN_HEADING_INTEGRAL_GAIN = 0;
         public static final double DRIVETRAIN_SPEED_INTEGRAL_GAIN = 0;
         public static final double DRIVETRAIN_HEADING_DERIVITIVE_GAIN = 0;
         public static final double DRIVETRAIN_SPEED_DERIVITIVE_GAIN = 0;
-        public static final double DRIVETRAIN_HEADING_MAX_PROPORTIONAL = 0;
-        public static final double DRIVETRAIN_SPEED_MAX_PROPORTIONAL = 0;
+        public static final double DRIVETRAIN_HEADING_MAX_PROPORTIONAL = 1;
+        public static final double DRIVETRAIN_SPEED_MAX_PROPORTIONAL = 1;
         public static final double DRIVETRAIN_HEADING_MAX_INTEGRAL = 0;
         public static final double DRIVETRAIN_SPEED_MAX_INTEGRAL = 0;
         public static final double DRIVETRAIN_HEADING_MAX_DERIVITIVE = 0;
