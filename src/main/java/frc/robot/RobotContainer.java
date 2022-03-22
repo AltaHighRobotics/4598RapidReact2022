@@ -65,7 +65,7 @@ public class RobotContainer {
 
     // Adds all auto options to the selector
     m_autoChooser.setDefaultOption("Test Auto", m_testAuto);
-    m_autoChooser.addOption("Auto 1", m_testAuto);
+    //m_autoChooser.addOption("Auto 1", m_testAuto);
 
     // Displays the auto selector on the dashboard
     SmartDashboard.putData(m_autoChooser);

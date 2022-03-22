@@ -28,7 +28,7 @@ public class DriveTrainNavigationSub extends SubsystemBase {
   private ConfigurablePID drivetrainSpeedPID;
   private SupplyCurrentLimitConfiguration drivetrainCurrentLimit;
 
-  public AHRS navX;
+  private AHRS navX;
 
   private double rightMotorVelocity;
   private double leftMotorVelocity;
@@ -61,9 +61,9 @@ public class DriveTrainNavigationSub extends SubsystemBase {
 
     this.robotY = 0;
     this.robotX = 0;
-    drivetrainCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.DRIVETRAIN_CURRENT_LIMIT, 0, 0.1);
+    this.drivetrainCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.DRIVETRAIN_CURRENT_LIMIT, 0, 0.1);
 
-    drivetrainHeadingPID = new ConfigurablePID(
+    this.drivetrainHeadingPID = new ConfigurablePID(
       Constants.DRIVETRAIN_HEADING_PROPORTIONAL_GAIN,
       Constants.DRIVETRAIN_HEADING_INTEGRAL_GAIN,
       Constants.DRIVETRAIN_HEADING_DERIVITIVE_GAIN,
@@ -75,7 +75,7 @@ public class DriveTrainNavigationSub extends SubsystemBase {
       Constants.DRIVETRAIN_HEADING_SPEED
     );
 
-    drivetrainSpeedPID = new ConfigurablePID(
+    this.drivetrainSpeedPID = new ConfigurablePID(
       Constants.DRIVETRAIN_SPEED_PROPORTIONAL_GAIN,
       Constants.DRIVETRAIN_SPEED_INTEGRAL_GAIN,
       Constants.DRIVETRAIN_SPEED_DERIVITIVE_GAIN,
@@ -87,51 +87,54 @@ public class DriveTrainNavigationSub extends SubsystemBase {
       Constants.DRIVETRAIN_SPEED_SPEED
     );
 
-    navX = new AHRS(SPI.Port.kMXP);
+    this.navX = new AHRS(SPI.Port.kMXP);
 
-    rightMotorFront = new TalonFX(Constants.RIGHT_DRIVE_MOTOR_FRONT);
-    rightMotorBack = new TalonFX(Constants.RIGHT_DRIVE_MOTOR_BACK);
-    leftMotorFront = new TalonFX(Constants.LEFT_DRIVE_MOTOR_FRONT);
-    leftMotorBack = new TalonFX(Constants.LEFT_DRIVE_MOTOR_BACK);
+    this.rightMotorFront = new TalonFX(Constants.RIGHT_DRIVE_MOTOR_FRONT);
+    this.rightMotorBack = new TalonFX(Constants.RIGHT_DRIVE_MOTOR_BACK);
+    this.leftMotorFront = new TalonFX(Constants.LEFT_DRIVE_MOTOR_FRONT);
+    this.leftMotorBack = new TalonFX(Constants.LEFT_DRIVE_MOTOR_BACK);
 
-    rightMotorFront.configFactoryDefault();
-    rightMotorBack.configFactoryDefault();
-    leftMotorFront.configFactoryDefault();
-    rightMotorFront.configFactoryDefault();
+    this.rightMotorFront.configFactoryDefault();
+    this.rightMotorBack.configFactoryDefault();
+    this.leftMotorFront.configFactoryDefault();
+    this.rightMotorFront.configFactoryDefault();
 
-    rightMotorFront.setSensorPhase(false);
-    rightMotorBack.setSensorPhase(false);
-    leftMotorFront.setSensorPhase(true);
-    leftMotorBack.setSensorPhase(true);
+    this.rightMotorFront.setSensorPhase(false);
+    this.rightMotorBack.setSensorPhase(false);
+    this.leftMotorFront.setSensorPhase(true);
+    this.leftMotorBack.setSensorPhase(true);
 
-    rightMotorFront.setInverted(TalonFXInvertType.Clockwise);
-    rightMotorBack.setInverted(TalonFXInvertType.Clockwise);
-    leftMotorFront.setInverted(TalonFXInvertType.CounterClockwise);
-    leftMotorBack.setInverted(TalonFXInvertType.CounterClockwise);
+    this.rightMotorFront.setInverted(TalonFXInvertType.Clockwise);
+    this.rightMotorBack.setInverted(TalonFXInvertType.Clockwise);
+    this.leftMotorFront.setInverted(TalonFXInvertType.CounterClockwise);
+    this.leftMotorBack.setInverted(TalonFXInvertType.CounterClockwise);
 
-    rightMotorFront.setNeutralMode(NeutralMode.Brake);
-    rightMotorBack.setNeutralMode(NeutralMode.Brake);
-    leftMotorFront.setNeutralMode(NeutralMode.Brake);
-    leftMotorBack.setNeutralMode(NeutralMode.Brake);
+    this.rightMotorFront.setNeutralMode(NeutralMode.Brake);
+    this.rightMotorBack.setNeutralMode(NeutralMode.Brake);
+    this.leftMotorFront.setNeutralMode(NeutralMode.Brake);
+    this.leftMotorBack.setNeutralMode(NeutralMode.Brake);
 
-    rightMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
-    rightMotorBack.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
-    leftMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
-    rightMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
+    this.rightMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
+    this.rightMotorBack.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
+    this.leftMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
+    this.rightMotorFront.configOpenloopRamp(Constants.DRIVETRAIN_POWER_RAMP_TIME, 0);
 
-    rightMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
-    rightMotorBack.configSupplyCurrentLimit(drivetrainCurrentLimit);
-    leftMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
-    rightMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
+    this.rightMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
+    this.rightMotorBack.configSupplyCurrentLimit(drivetrainCurrentLimit);
+    this.leftMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
+    this.rightMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
+
+    this.rightMotorBack.follow(this.rightMotorFront);
+    this.leftMotorBack.follow(this.leftMotorFront);
 
   }
 
   public void driveTrainPosIntegration()
   {
-    this.currentLeftMotorPosition = leftMotorFront.getSelectedSensorPosition() / Constants.ENCODER_ROTATION_UNITS;
-    this.currentRightMotorPosition = rightMotorFront.getSelectedSensorPosition() / Constants.ENCODER_ROTATION_UNITS;
+    this.currentLeftMotorPosition = this.leftMotorFront.getSelectedSensorPosition() / Constants.ENCODER_ROTATION_UNITS;
+    this.currentRightMotorPosition = this.rightMotorFront.getSelectedSensorPosition() / Constants.ENCODER_ROTATION_UNITS;
 
-    this.currentHeading = (double) navX.getYaw();
+    this.currentHeading = (double) this.navX.getYaw();
 
     SmartDashboard.putNumber("Robot Heading:", this.currentHeading);
 
@@ -159,20 +162,20 @@ public class DriveTrainNavigationSub extends SubsystemBase {
 
     this.targetHeading = Math.toDegrees(Math.atan2(-(this.targetY - this.robotY), this.targetX - this.robotX));
 
-    this.currentHeading = (double) navX.getYaw();
+    this.currentHeading = (double) this.navX.getYaw();
 
     this.headingRate = this.currentHeading - this.previousHeading;
     this.headingError = this.targetHeading - this.currentHeading;
     this.previousHeading = this.currentHeading;
 
-    this.steeringPower = drivetrainHeadingPID.runVelocityPID(this.targetHeading, this.currentHeading, this.headingRate);
+    this.steeringPower = this.drivetrainHeadingPID.runVelocityPID(this.targetHeading, this.currentHeading, this.headingRate);
 
     SmartDashboard.putNumber("Heading Error:", this.headingError);
 
     if(Math.abs(this.headingError) < Constants.MAX_DRIVE_HEADING_ERROR)
     {
       this.distanceError = Math.sqrt(Math.pow(this.targetY - this.robotY, 2) + Math.pow(this.targetX - this.robotX, 2));
-      this.drivePower = drivetrainSpeedPID.runPID(0, -this.distanceError);
+      this.drivePower = this.drivetrainSpeedPID.runPID(0, -this.distanceError);
 
       SmartDashboard.putNumber("Distance to Waypoint:", this.distanceError);
     } else {
@@ -182,7 +185,11 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     SmartDashboard.putNumber("Auto Throttle:", this.drivePower);
     SmartDashboard.putNumber("Auto Steering:", this.steeringPower);
 
-    setMotorPower(this.drivePower, this.steeringPower);
+    //this.setMotorPower(this.drivePower, this.steeringPower);
+    this.leftMotorFront.set(ControlMode.PercentOutput, -this.steeringPower);
+    //this.leftMotorBack.set(ControlMode.PercentOutput, this.steeringPower);
+    this.rightMotorFront.set(ControlMode.PercentOutput, this.steeringPower);
+    //this.rightMotorBack.set(ControlMode.PercentOutput, this.steeringPower);
   }
 
   public boolean hasReachedWaypoint()
@@ -197,10 +204,10 @@ public class DriveTrainNavigationSub extends SubsystemBase {
   }
 
   private void setMotorPower(double throttle, double rotation) {
-    leftMotorFront.set(ControlMode.PercentOutput, throttle + rotation);
-    leftMotorBack.set(ControlMode.PercentOutput, throttle + rotation);
-    rightMotorFront.set(ControlMode.PercentOutput, throttle - rotation);
-    rightMotorBack.set(ControlMode.PercentOutput, throttle - rotation);
+    this.leftMotorFront.set(ControlMode.PercentOutput, throttle + rotation);
+    this.leftMotorBack.set(ControlMode.PercentOutput, throttle + rotation);
+    this.rightMotorFront.set(ControlMode.PercentOutput, throttle - rotation);
+    this.rightMotorBack.set(ControlMode.PercentOutput, throttle - rotation);
   }
 
   public void stop() {
