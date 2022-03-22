@@ -50,6 +50,32 @@ public final class Constants {
     public static final int PS4_RIGHT_STICK_Y_AXIS = 5;
     public static final int PS4_RIGHT_STICK_X_AXIS = 2;
 
+    // DriveTrain Navigation Constants
+    public static final double ENCODER_ROTATION_RATIO = 0.0000402114;
+    public static final double ROTATION_DISTANCE_RATIO = ENCODER_ROTATION_RATIO * Math.PI * (0.6667);
+    public static final double MAX_WAYPOINT_ERROR = 0;
+    public static final double MAX_DRIVE_HEADING_ERROR = 3;
+    public static final double DRIVETRAIN_CURRENT_LIMIT = 40;
+    public static final double DRIVETRAIN_POWER_RAMP_TIME = 0.5;
+
+    // Drivetrain Controller Constants
+    public static final double DRIVETRAIN_HEADING_PROPORTIONAL_GAIN = 1;
+    public static final double DRIVETRAIN_SPEED_PROPORTIONAL_GAIN = 0.5;
+    public static final double DRIVETRAIN_HEADING_INTEGRAL_GAIN = 0;
+    public static final double DRIVETRAIN_SPEED_INTEGRAL_GAIN = 0;
+    public static final double DRIVETRAIN_HEADING_DERIVITIVE_GAIN = 0;
+    public static final double DRIVETRAIN_SPEED_DERIVITIVE_GAIN = 0;
+    public static final double DRIVETRAIN_HEADING_MAX_PROPORTIONAL = 1;
+    public static final double DRIVETRAIN_SPEED_MAX_PROPORTIONAL = 1;
+    public static final double DRIVETRAIN_HEADING_MAX_INTEGRAL = 0;
+    public static final double DRIVETRAIN_SPEED_MAX_INTEGRAL = 0;
+    public static final double DRIVETRAIN_HEADING_MAX_DERIVITIVE = 0;
+    public static final double DRIVETRAIN_SPEED_MAX_DERIVITIVE = 0;
+    public static final double DRIVETRAIN_HEADING_MAX_POWER = 0.5;
+    public static final double DRIVETRAIN_SPEED_MAX_POWER = 0.5;
+    public static final double DRIVETRAIN_HEADING_SPEED = 0.5;
+    public static final double DRIVETRAIN_SPEED_SPEED = 0.5;
+    
     // ARM CONSTANTS
     public static final double MAX_ARM_ERROR = 40000;
     public static final double ARM_SLOW_SPEED = 1;
@@ -63,14 +89,62 @@ public final class Constants {
     public static final double ARM_CURRENT_LIMIT = 40;
     public static final double ARM_POWER_RAMP_TIME = 0.5;
 
-        // Arm Controller Constants
-        public static final double ARM_PROPORTIONAL_GAIN = 0.00001;
-        public static final double ARM_INTEGRAL_GAIN = 0.00000003;
-        public static final double ARM_DERIVITIVE_GAIN = 0;
-        public static final double MAX_ARM_PROPORTIONAL = 1;
-        public static final double MAX_ARM_INTEGRAL = 0.25;
-        public static final double MAX_ARM_DERIVITIVE = 0;
-        public static final double ARM_MAX_POWER = 1;
+    // Arm Controller Constants
+    public static final double ARM_PROPORTIONAL_GAIN = 0.00001;
+    public static final double ARM_INTEGRAL_GAIN = 0.00000003;
+    public static final double ARM_DERIVITIVE_GAIN = 0;
+    public static final double MAX_ARM_PROPORTIONAL = 1;
+    public static final double MAX_ARM_INTEGRAL = 0.25;
+    public static final double MAX_ARM_DERIVITIVE = 0;
+    public static final double ARM_MAX_POWER = 1;
+
+    // Storage Constants
+    public static final double FEED_POWER = 0.7;
+    public static final double STORAGE_POWER = 0.5;
+
+    // Shooter Constants
+    public static final int SLIDER_AXIS = 3;
+    public static final double SHOOTER_POWER_OFFSET = 0.1;
+    public static final double SHOOTER_CURRENT_LIMIT = 20;
+    public static final double SHOOTER_POWER_RAMP_TIME = 0.5;
+
+    // Shooter Controller Constants
+    public static final double SHOOTER_PORPORTIONAL_GAIN = 0.000006;
+    public static final double SHOOTER_INTERGRAL_GAIN = 0.000003;
+    public static final double SHOOTER_DERIVITIVE_GAIN = 0;
+    public static final double SHOOTER_MAX_PROPORTIONAL = 1;
+    public static final double SHOOTER_MAX_INTEGRAL = 1;
+    public static final double SHOOTER_MAX_DERIVITIVE = 0;
+
+    // Elevation Angle Constants
+    public static final double ELEVATION_ANGLE_GEAR_RATIO = 0.145;
+    public static final double SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT = 80; //Actually 86
+    public static final double SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT = 30;
+    public static final double ELEVATION_SPEED = 0.1;
+
+    //Elevation Angle Controller Constants
+    public static final double ELEVATION_ANGLE_PROPORTIONAL_GAIN = 0.5;
+    public static final double ELEVATION_ANGLE_INTEGRAL_GAIN = 0;
+    public static final double ELEVATION_ANGLE_DERIVITIVE_GAIN = 0;
+    public static final double ELEVATION_ANGLE_MAX_PROPORTIONAL = 1;
+    public static final double ELEVATION_ANGLE_MAX_INTEGRAL = 0;
+    public static final double ELEVATION_ANGLE_MAX_DERIVITIVE = 0;
+
+    // Azimuth Constants
+    public static final double AZIMUTH_LOWER_LIMIT = -45;
+    public static final double AZIMUTH_UPPER_LIMIT = 45;
+    public static final double AZIMUTH_CURRENT_LIMIT = 20;
+    public static final double AZIMUTH_POWER_RAMP_TIME = 0.5;
+
+    // Azimuth Controller Constants
+    public static final double AZIMUTH_PROPORTIONAL_GAIN = 0.001;
+    public static final double AZIMUTH_INTEGRAL_GAIN = 0;
+    public static final double AZIMUTH_DERIVITIVE_GAIN = 0;
+    public static final double AZIMUTH_MAX_PROPORTIONAL = 1;
+    public static final double AZIMUTH_MAX_INTEGRAL = 0;
+    public static final double AZIMUTH_MAX_DERIVITIVE = 0;
+    public static final double AZIMUTH_MAX_POWER = 0.5;
+    public static final double AZIMUTH_SPEED = 0.5;
 
     // LIMELIGHT CONSTANTS
     public static final double A1 = 3;
@@ -87,82 +161,5 @@ public final class Constants {
             { 240, 80, 0 },
             { 300, 95, 0 }
     };
-
-    // DriveTrain Navigation Constants
-    public static final double ENCODER_ROTATION_RATIO = 0.0000402114;
-    public static final double ROTATION_DISTANCE_RATIO = ENCODER_ROTATION_RATIO * Math.PI * (0.6667);
-    public static final double MAX_WAYPOINT_ERROR = 0;
-    public static final double MAX_DRIVE_HEADING_ERROR = 3;
-    public static final double DRIVETRAIN_CURRENT_LIMIT = 40;
-    public static final double DRIVETRAIN_POWER_RAMP_TIME = 0.5;
-
-        // Drivetrain Controller Constants
-        public static final double DRIVETRAIN_HEADING_PROPORTIONAL_GAIN = 1;
-        public static final double DRIVETRAIN_SPEED_PROPORTIONAL_GAIN = 0.5;
-        public static final double DRIVETRAIN_HEADING_INTEGRAL_GAIN = 0;
-        public static final double DRIVETRAIN_SPEED_INTEGRAL_GAIN = 0;
-        public static final double DRIVETRAIN_HEADING_DERIVITIVE_GAIN = 0;
-        public static final double DRIVETRAIN_SPEED_DERIVITIVE_GAIN = 0;
-        public static final double DRIVETRAIN_HEADING_MAX_PROPORTIONAL = 1;
-        public static final double DRIVETRAIN_SPEED_MAX_PROPORTIONAL = 1;
-        public static final double DRIVETRAIN_HEADING_MAX_INTEGRAL = 0;
-        public static final double DRIVETRAIN_SPEED_MAX_INTEGRAL = 0;
-        public static final double DRIVETRAIN_HEADING_MAX_DERIVITIVE = 0;
-        public static final double DRIVETRAIN_SPEED_MAX_DERIVITIVE = 0;
-        public static final double DRIVETRAIN_HEADING_MAX_POWER = 0.5;
-        public static final double DRIVETRAIN_SPEED_MAX_POWER = 0.5;
-        public static final double DRIVETRAIN_HEADING_SPEED = 0.5;
-        public static final double DRIVETRAIN_SPEED_SPEED = 0.5;
-    
-
-    // Storage Constants
-    public static final double FEED_POWER = 0.7;
-    public static final double STORAGE_POWER = 0.5;
-
-    // Shooter Constants
-    public static final int SLIDER_AXIS = 3;
-    public static final double SHOOTER_POWER_OFFSET = 0.1;
-    public static final double SHOOTER_CURRENT_LIMIT = 20;
-    public static final double SHOOTER_POWER_RAMP_TIME = 0.5;
-
-        // Shooter Controller Constants
-        public static final double SHOOTER_PORPORTIONAL_GAIN = 0.000006;
-        public static final double SHOOTER_INTERGRAL_GAIN = 0.000003;
-        public static final double SHOOTER_DERIVITIVE_GAIN = 0;
-        public static final double SHOOTER_MAX_PROPORTIONAL = 1;
-        public static final double SHOOTER_MAX_INTEGRAL = 1;
-        public static final double SHOOTER_MAX_DERIVITIVE = 0;
-    
-    // Elevation Angle Constants
-    public static final double ELEVATION_ANGLE_GEAR_RATIO = 0.145;
-    public static final double SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT = 80; //Actually 86
-    public static final double SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT = 30;
-    public static final double ELEVATION_SPEED = 0.1;
-
-        //Elevation Angle Controller Constants
-        public static final double ELEVATION_ANGLE_PROPORTIONAL_GAIN = 0.5;
-        public static final double ELEVATION_ANGLE_INTEGRAL_GAIN = 0;
-        public static final double ELEVATION_ANGLE_DERIVITIVE_GAIN = 0;
-        public static final double ELEVATION_ANGLE_MAX_PROPORTIONAL = 1;
-        public static final double ELEVATION_ANGLE_MAX_INTEGRAL = 0;
-        public static final double ELEVATION_ANGLE_MAX_DERIVITIVE = 0;
-
-    // Azimuth Constants
-    public static final double AZIMUTH_LOWER_LIMIT = -45;
-    public static final double AZIMUTH_UPPER_LIMIT = 45;
-    public static final double AZIMUTH_CURRENT_LIMIT = 20;
-    public static final double AZIMUTH_POWER_RAMP_TIME = 0.5;
-
-        // Azimuth Controller Constants
-        public static final double AZIMUTH_PROPORTIONAL_GAIN = 0.001;
-        public static final double AZIMUTH_INTEGRAL_GAIN = 0;
-        public static final double AZIMUTH_DERIVITIVE_GAIN = 0;
-        public static final double AZIMUTH_MAX_PROPORTIONAL = 1;
-        public static final double AZIMUTH_MAX_INTEGRAL = 0;
-        public static final double AZIMUTH_MAX_DERIVITIVE = 0;
-        public static final double AZIMUTH_MAX_POWER = 0.5;
-        public static final double AZIMUTH_SPEED = 0.5;
-
-
 
 }
