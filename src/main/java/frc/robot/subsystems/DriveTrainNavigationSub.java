@@ -36,9 +36,7 @@ public class DriveTrainNavigationSub extends SubsystemBase {
   private double currentRightMotorPosition;
   private double currentLeftMotorPosition;
 
-  private double leftDrivePower;
-  private double rightDrivePower;
-  private double speedPower;
+  private double drivePower;
   private double steeringPower;
 
   private double currentHeading;
@@ -162,31 +160,24 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     this.headingError = this.targetHeading - this.currentHeading;
     this.previousHeading = this.currentHeading;
 
-    this.steeringPower = -drivetrainHeadingPID.runVelocityPID(this.targetHeading, this.currentHeading, this.headingRate);
+    this.steeringPower = drivetrainHeadingPID.runVelocityPID(this.targetHeading, this.currentHeading, this.headingRate);
 
     SmartDashboard.putNumber("Heading Error:", this.headingError);
-
-    this.leftDrivePower = -this.steeringPower;
-    this.rightDrivePower = this.steeringPower;
 
     if(Math.abs(this.headingError) < Constants.MAX_DRIVE_HEADING_ERROR)
     {
       this.distanceError = Math.sqrt(Math.pow(this.targetY - this.robotY, 2) + Math.pow(this.targetX - this.robotX, 2));
-      this.speedPower = drivetrainSpeedPID.runPID(0, -this.distanceError);
+      this.drivePower = drivetrainSpeedPID.runPID(0, -this.distanceError);
 
       SmartDashboard.putNumber("Distance to Waypoint:", this.distanceError);
-
-      this.leftDrivePower = this.leftDrivePower + this.speedPower;
-      this.rightDrivePower = this.rightDrivePower + this.speedPower;
+    } else {
+      this.drivePower = 0;
     }
 
-    SmartDashboard.putNumber("Left Power:", leftDrivePower);
-    SmartDashboard.putNumber("Right Power:", rightDrivePower);
+    SmartDashboard.putNumber("Auto Throttle:", this.drivePower);
+    SmartDashboard.putNumber("Auto Steering:", this.steeringPower);
 
-    leftMotorFront.set(ControlMode.PercentOutput, leftDrivePower);
-    leftMotorBack.set(ControlMode.PercentOutput, leftDrivePower);
-    rightMotorFront.set(ControlMode.PercentOutput, rightDrivePower);
-    rightMotorBack.set(ControlMode.PercentOutput, rightDrivePower);
+    setMotorPower(this.drivePower, this.steeringPower);
   }
 
   public boolean hasReachedWaypoint()
@@ -198,6 +189,17 @@ public class DriveTrainNavigationSub extends SubsystemBase {
   {
     this.robotX = x; 
     this.robotY = y;
+  }
+
+  private void setMotorPower(double throttle, double rotation) {
+    leftMotorFront.set(ControlMode.PercentOutput, throttle + rotation);
+    leftMotorBack.set(ControlMode.PercentOutput, throttle + rotation);
+    rightMotorFront.set(ControlMode.PercentOutput, throttle - rotation);
+    rightMotorBack.set(ControlMode.PercentOutput, throttle - rotation);
+  }
+
+  public void stop() {
+    setMotorPower(0, 0);
   }
 
   @Override
