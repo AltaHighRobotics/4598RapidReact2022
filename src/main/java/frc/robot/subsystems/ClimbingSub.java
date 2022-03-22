@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -149,8 +151,7 @@ public class ClimbingSub extends SubsystemBase {
      * This ensures the arms do not get out of sync, as that would tip the robot
      */
     double averageArmPosition = (leftArmMotorPosition + rightArmMotorPosition)/2;
-    double armMin = Math.min(targetPosition, averageArmPosition + Constants.MAX_ARM_ERROR);
-    double actualTarget = Math.max(armMin, averageArmPosition - Constants.MAX_ARM_ERROR);
+    double actualTarget = MathUtil.clamp(targetPosition, averageArmPosition - Constants.MAX_ARM_ERROR, averageArmPosition + Constants.MAX_ARM_ERROR);
 
     leftArmPID.setSpeed(targetVelocity);
     rightArmPID.setSpeed(targetVelocity);

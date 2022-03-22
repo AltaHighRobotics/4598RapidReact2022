@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.ConfigurablePID;
 import frc.robot.Constants;
@@ -42,7 +43,7 @@ public class AzimuthSub extends SubsystemBase {
   }
 
   public void moveAzimuthMotorToAngle(double azimuthTargetAngle) {
-    azimuthTargetAngle = Math.min(Math.max(azimuthTargetAngle,Constants.AZIMUTH_LOWER_LIMIT),Constants.AZIMUTH_UPPER_LIMIT);
+    azimuthTargetAngle = MathUtil.clamp(azimuthTargetAngle, Constants.AZIMUTH_LOWER_LIMIT, Constants.AZIMUTH_UPPER_LIMIT);
     double azimuthEncoderPosition = azimuthMotor.getSelectedSensorPosition() / 4096 * 360;
     double azimuthEncoderVelocity = azimuthMotor.getSelectedSensorVelocity();
 
