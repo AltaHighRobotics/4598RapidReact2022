@@ -10,52 +10,23 @@ import frc.robot.subsystems.DriveTrainNavigationSub;
 public class TestAutoCommand extends CommandBase {
   /** Creates a new IntakeCommand. */
   private DriveTrainNavigationSub m_nav;
-  private double oldPosData [];
-  private double newPosData [];
-  private double targetData [];
-  private double prevHeading;
 
 
   public TestAutoCommand(DriveTrainNavigationSub navSub) {
     m_nav = navSub;
-    oldPosData = new double [4];
-    newPosData = new double [4];
-    targetData = new double [5];
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    oldPosData[0] = 0.0;
-    oldPosData[1] = 0.0;
-    oldPosData[2] = 0.0;
-    oldPosData[3] = 0.0;
-
-    prevHeading = 0.0;
-    targetData[0] = 0.0;
-    targetData[1] = 0.0;
-    targetData[2] = 0.0;
-    targetData[3] = 0.0;
-    targetData[4] = prevHeading;    
-
-    newPosData = m_nav.driveTrainPosIntegration(oldPosData);
-    m_nav.setDriveToWaypoint(targetData);
+    m_nav.setPos(0, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    newPosData = m_nav.driveTrainPosIntegration(oldPosData);
-    oldPosData = newPosData;
-
-    targetData[0] = 5;
-    targetData[1] = 0;
-    targetData[2] = newPosData[2];
-    targetData[3] = newPosData[3];
-
-    prevHeading = m_nav.setDriveToWaypoint(targetData);
-
-    targetData[4] = prevHeading;
+    m_nav.driveTrainPosIntegration();
+    m_nav.setDriveToWaypoint(5,0);
   }
 
   // Called once the command ends or is interrupted.

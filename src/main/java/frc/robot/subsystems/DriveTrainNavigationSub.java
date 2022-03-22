@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.List;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -13,22 +11,18 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
-import org.opencv.core.Mat;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.ConfigurablePID;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.SerialPort;
 
 public class DriveTrainNavigationSub extends SubsystemBase {
   /** Creates a new DriveTrainPIDSub. */
-  public TalonFX rightMotorFront;
-  public TalonFX rightMotorBack;
-  public TalonFX leftMotorFront;
-  public TalonFX leftMotorBack;
+  private TalonFX rightMotorFront;
+  private TalonFX rightMotorBack;
+  private TalonFX leftMotorFront;
+  private TalonFX leftMotorBack;
 
   private ConfigurablePID drivetrainHeadingPID;
   private ConfigurablePID drivetrainSpeedPID;
@@ -36,33 +30,39 @@ public class DriveTrainNavigationSub extends SubsystemBase {
 
   public AHRS navX;
 
-  public double rightMotorVelocity;
-  public double leftMotorVelocity;
+  private double rightMotorVelocity;
+  private double leftMotorVelocity;
 
-  public double rightMotorPos;
-  public double leftMotorPos;
+  private double currentRightMotorPosition;
+  private double currentLeftMotorPosition;
 
-  public double rightMotorIntegral;
-  public double leftMotorIntegral;
+  private double leftDrivePower;
+  private double rightDrivePower;
+  private double speedPower;
+  private double steeringPower;
 
-  public double compHeading;
-  public double yaw;
+  private double currentHeading;
+  private double previousHeading;
+  private double headingError;
+  private double headingRate;
 
-  public double previousRight;
-  public double previousLeft;
-  public double robotX;
-  public double robotY;
+  private double previousRightMotorPosition;
+  private double previousLeftMotorPosition;
+  private double distanceTraveledLeft;
+  private double distanceTraveledRight;
+  private double distanceTraveled;
+  private double distanceError;
+  private double robotX;
+  private double robotY;
 
-  public double targetX;
-  public double targetY;
-  public double previousHeading;
-
-  public double robotNavData [];
+  private double targetX;
+  private double targetY;
+  private double targetHeading;
 
   public DriveTrainNavigationSub() {
 
-    robotY = 0;
-    robotX = 0;
+    this.robotY = 0;
+    this.robotX = 0;
     drivetrainCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.DRIVETRAIN_CURRENT_LIMIT, 0, 0.1);
 
     drivetrainHeadingPID = new ConfigurablePID(
@@ -121,86 +121,63 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     leftMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
     rightMotorFront.configSupplyCurrentLimit(drivetrainCurrentLimit);
 
-    rightMotorBack.follow(rightMotorFront);
-    leftMotorBack.follow(leftMotorFront);
-
-    robotNavData = new double [4];
   }
 
-  public double[] driveTrainPosIntegration(double [] oldData)
+  public void driveTrainPosIntegration()
   {
-    oldData[0] = previousRight;
-    oldData[1] = previousLeft;
-    oldData[2] = robotX;
-    oldData[3] = robotY;      
+    this.currentLeftMotorPosition = leftMotorFront.getSelectedSensorPosition();
+    this.currentRightMotorPosition = rightMotorFront.getSelectedSensorPosition();
 
-    rightMotorPos = rightMotorFront.getSelectedSensorPosition();
-    leftMotorPos = leftMotorFront.getSelectedSensorPosition();
+    this.currentHeading = (double) navX.getYaw();
 
-    rightMotorVelocity = rightMotorFront.getSelectedSensorVelocity();
-    leftMotorVelocity = leftMotorFront.getSelectedSensorVelocity();
+    SmartDashboard.putNumber("Robot Heading:", this.currentHeading);
 
-    compHeading = (double) navX.getYaw();
+    this.currentHeading = Math.toRadians(this.currentHeading);
 
-    SmartDashboard.putNumber("Robot Heading:", compHeading);
+    this.distanceTraveledLeft = Constants.ROTATION_DISTANCE_RATIO * (this.currentLeftMotorPosition - this.previousLeftMotorPosition);
+    this.distanceTraveledRight = Constants.ROTATION_DISTANCE_RATIO * (this.currentRightMotorPosition - this.previousRightMotorPosition);
+    this.distanceTraveled = (this.distanceTraveledLeft + this.distanceTraveledRight)/2;
 
-    compHeading = Math.toRadians(compHeading);
+    this.previousLeftMotorPosition = this.currentLeftMotorPosition;
+    this.previousRightMotorPosition = this.currentRightMotorPosition;
 
-    yaw = (double) navX.getYaw();
+    this.robotX = this.robotX + (Math.cos(this.currentHeading) * this.distanceTraveled);
+    this.robotY = this.robotY + (Math.sin(this.currentHeading) * -this.distanceTraveled);
 
-    double distanceTravLeft = Constants.ROTATION_DISTANCE_RATIO * (leftMotorPos - previousLeft);
-    double distanceTravRight = Constants.ROTATION_DISTANCE_RATIO * (rightMotorPos - previousRight);
-    double distanceTravel = (distanceTravLeft + distanceTravRight)/2;
+    SmartDashboard.putNumber("Robot X:", this.robotX);
+    SmartDashboard.putNumber("Robot Y:", this.robotY);
 
-    previousRight = rightMotorPos;
-    previousLeft = leftMotorPos;
-
-    robotX = robotX + (Math.cos(compHeading) * distanceTravel);
-    robotY = robotY + (Math.sin(compHeading) * -distanceTravel);
-
-    SmartDashboard.putNumber("Robot X:", robotX);
-    SmartDashboard.putNumber("Robot Y:", robotY);
-
-    robotNavData[0] = rightMotorPos;
-    robotNavData[1] = leftMotorPos;
-    robotNavData[2] = robotX;
-    robotNavData[3] = robotY;
-
-    return robotNavData;
   }
 
-  public double setDriveToWaypoint(double [] newData)
+  public void setDriveToWaypoint(double waypointX, double waypointY)
   {
-    targetX = newData[0];
-    targetY = newData[1];
-    robotX = newData[2];
-    robotY = newData[3]; 
-    previousHeading = newData[4];
+    this.targetX = waypointX;
+    this.targetY = waypointY;
 
-    double targetHeading = Math.atan2(-(targetY - robotY), targetX - robotX);
+    this.targetHeading = Math.toDegrees(Math.atan2(-(this.targetY - this.robotY), this.targetX - this.robotX));
 
-    compHeading = (double) navX.getYaw();
-    compHeading = Math.toRadians(compHeading);
+    this.currentHeading = (double) navX.getYaw();
 
-    double headingRate = compHeading - previousHeading;
-    double headingError = targetHeading - compHeading;
+    this.headingRate = this.currentHeading - this.previousHeading;
+    this.headingError = this.targetHeading - this.currentHeading;
+    this.previousHeading = this.currentHeading;
 
-    double steeringPower = -drivetrainHeadingPID.runVelocityPID(targetHeading, compHeading, headingRate);
+    this.steeringPower = -drivetrainHeadingPID.runVelocityPID(this.targetHeading, this.currentHeading, this.headingRate);
 
-    SmartDashboard.putNumber("Heading Error:", headingError);
+    SmartDashboard.putNumber("Heading Error:", this.headingError);
 
-    double leftDrivePower = -steeringPower;
-    double rightDrivePower = steeringPower;
+    this.leftDrivePower = -this.steeringPower;
+    this.rightDrivePower = this.steeringPower;
 
-    if(Math.abs(headingError) < Constants.MAX_DRIVE_HEADING_ERROR)
+    if(Math.abs(this.headingError) < Constants.MAX_DRIVE_HEADING_ERROR)
     {
-      double distanceError = Math.sqrt(Math.pow(targetY - robotY, 2) + Math.pow(targetX - robotX, 2));
-      double speedPower = drivetrainSpeedPID.runPID(0, -distanceError);
+      this.distanceError = Math.sqrt(Math.pow(this.targetY - this.robotY, 2) + Math.pow(this.targetX - this.robotX, 2));
+      this.speedPower = drivetrainSpeedPID.runPID(0, -this.distanceError);
 
-      SmartDashboard.putNumber("Distance to Waypoint:", distanceError);
+      SmartDashboard.putNumber("Distance to Waypoint:", this.distanceError);
 
-      leftDrivePower = leftDrivePower + speedPower;
-      rightDrivePower = rightDrivePower + speedPower;
+      this.leftDrivePower = this.leftDrivePower + this.speedPower;
+      this.rightDrivePower = this.rightDrivePower + this.speedPower;
     }
 
     SmartDashboard.putNumber("Left Power:", leftDrivePower);
@@ -209,24 +186,17 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     leftMotorBack.set(ControlMode.PercentOutput, leftDrivePower);
     rightMotorFront.set(ControlMode.PercentOutput, rightDrivePower);
     rightMotorBack.set(ControlMode.PercentOutput, rightDrivePower);
-
-    return compHeading;
   }
 
-  public boolean hasReachedWaypoint(double dist)
+  public boolean hasReachedWaypoint()
   {
-    if(dist > dist - Constants.MAX_WAYPOINT_ERROR &&
-    dist < dist + Constants.MAX_WAYPOINT_ERROR)
-    {
-      return true;
-    }
-    return false;
+    return Math.abs(this.distanceError) < Constants.MAX_WAYPOINT_ERROR;
   }
 
   public void setPos(double x, double y)
   {
-    robotX = x; 
-    robotY = y;
+    this.robotX = x; 
+    this.robotY = y;
   }
 
   @Override

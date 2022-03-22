@@ -54,7 +54,7 @@ public final class Constants {
     public static final double ENCODER_ROTATION_RATIO = 0.0000402114;
     public static final double ROTATION_DISTANCE_RATIO = ENCODER_ROTATION_RATIO * Math.PI * (0.6667);
     public static final double MAX_WAYPOINT_ERROR = 0;
-    public static final double MAX_DRIVE_HEADING_ERROR = 3;
+    public static final double MAX_DRIVE_HEADING_ERROR = 0.03;
     public static final double DRIVETRAIN_CURRENT_LIMIT = 40;
     public static final double DRIVETRAIN_POWER_RAMP_TIME = 0.5;
 

@@ -233,4 +233,15 @@ public class ConfigurablePID {
   public void setDerivitiveGain(double newDerivitiveGain) {
     this.derivitiveGain = newDerivitiveGain;
   }
+
+  /**
+   * Reset values to 0.
+   */
+  public void resetValues() {
+    this.proportional = 0;
+    this.integral = 0;
+    this.derivitive = 0;
+    this.currentError = 0;
+    this.pastError = 0;
+  }
 }
