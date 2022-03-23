@@ -177,7 +177,7 @@ public class DrivetrainSub extends SubsystemBase
     this.targetX = waypointX;
     this.targetY = waypointY;
 
-    this.targetHeading = Math.toDegrees(Math.atan2(-(this.targetY - this.robotY), this.targetX - this.robotX));
+    this.targetHeading = Math.toDegrees(Math.atan2(this.targetY - this.robotY, this.targetX - this.robotX));
 
     this.currentHeading = (double) this.navX.getYaw();
 
@@ -215,5 +215,9 @@ public class DrivetrainSub extends SubsystemBase
   public void setPos(double x, double y) {
     this.robotX = x; 
     this.robotY = y;
+  }
+
+  public void resetYaw() {
+    this.navX.zeroYaw();
   }
 }

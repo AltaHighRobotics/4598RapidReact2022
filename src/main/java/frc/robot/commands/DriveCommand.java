@@ -28,7 +28,8 @@ public class DriveCommand extends CommandBase
   @Override
   public void initialize() 
   {
-
+    m_drivetrain.setPos(0, 0);
+    m_drivetrain.resetYaw();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -38,6 +39,7 @@ public class DriveCommand extends CommandBase
     double speed = -m_controller.getRawAxis(Constants.PS4_RIGHT_STICK_Y_AXIS);
     double turn = m_controller.getRawAxis(Constants.PS4_RIGHT_STICK_X_AXIS);
     m_drivetrain.setArcadeDrive(speed, turn);
+    m_drivetrain.drivetrainPositionIntegration();
     //System.out.println("Moving");
   }
 
