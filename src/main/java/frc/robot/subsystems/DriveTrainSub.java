@@ -166,7 +166,7 @@ public class DrivetrainSub extends SubsystemBase
     this.previousRightMotorPosition = this.currentRightMotorPosition;
 
     this.robotX = this.robotX + (Math.cos(this.currentHeading) * this.distanceTraveled);
-    this.robotY = this.robotY + (Math.sin(this.currentHeading) * -this.distanceTraveled);
+    this.robotY = this.robotY + (Math.sin(this.currentHeading) * this.distanceTraveled);
 
     SmartDashboard.putNumber("Robot X:", this.robotX);
     SmartDashboard.putNumber("Robot Y:", this.robotY);
