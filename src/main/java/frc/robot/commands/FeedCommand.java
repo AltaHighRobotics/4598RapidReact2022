@@ -5,9 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.FeedSub;
-import frc.robot.subsystems.StorageSub;
 
 public class FeedCommand extends CommandBase {
   /** Creates a new ElevatorOnCommand. */
@@ -26,11 +24,10 @@ public class FeedCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {;
+  public void execute() {
     if (t > 150)
     {
-      m_feedSub.feedOn(); 
-      SmartDashboard.putString("Feeder Status:", "Feeding");
+      m_feedSub.feedOn();
     }
     t++;
   }
@@ -39,7 +36,6 @@ public class FeedCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_feedSub.feedOff();
-    SmartDashboard.putString("Feeder Status:", "Stopped");
   }
 
   // Returns true when the command should end.

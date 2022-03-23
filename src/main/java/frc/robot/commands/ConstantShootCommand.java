@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSub;
 
@@ -28,14 +27,12 @@ public class ConstantShootCommand extends CommandBase {
   public void execute() {
     //Insert Test Velocity here
     m_ShooterSub.setShooterMotorsVelocity(10000);
-    SmartDashboard.putString("Shooter Status:", "Shooting");
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_ShooterSub.setShooterMotorsPower(0);
-    SmartDashboard.putString("Shooter Status:", "Stopped");
+    m_ShooterSub.stopShooterMotors();
   }
 
   // Returns true when the command should end.

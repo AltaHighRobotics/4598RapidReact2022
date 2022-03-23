@@ -6,6 +6,8 @@ package frc.robot;
 
 import java.lang.Math;
 
+import edu.wpi.first.wpilibj.util.Color;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -53,14 +55,14 @@ public final class Constants {
     // DriveTrain Navigation Constants
     public static final double ENCODER_ROTATION_UNITS = 4096;
     public static final double DRIVETRAIN_GEAR_RATIO = 0.1647058823;
-    public static final double DRIVETRAIN_ROTATION_DISTANCE_RATIO = Math.PI * 0.3333333333;
-    public static final double MAX_WAYPOINT_ERROR = 0.2;
-    public static final double MAX_DRIVE_HEADING_ERROR = 3;
+    public static final double DRIVETRAIN_ROTATION_DISTANCE_RATIO = Math.PI * 0.666666666;
+    public static final double MAX_WAYPOINT_ERROR = 0.5;
+    public static final double MAX_DRIVE_HEADING_ERROR = 10;
     public static final double DRIVETRAIN_CURRENT_LIMIT = 40;
-    public static final double DRIVETRAIN_POWER_RAMP_TIME = 0.5;
+    public static final double DRIVETRAIN_POWER_RAMP_TIME = 0.1;
 
     // Drivetrain Controller Constants
-    public static final double DRIVETRAIN_HEADING_PROPORTIONAL_GAIN = 1;
+    public static final double DRIVETRAIN_HEADING_PROPORTIONAL_GAIN = 0.1;
     public static final double DRIVETRAIN_SPEED_PROPORTIONAL_GAIN = 0.5;
     public static final double DRIVETRAIN_HEADING_INTEGRAL_GAIN = 0;
     public static final double DRIVETRAIN_SPEED_INTEGRAL_GAIN = 0;
@@ -123,7 +125,7 @@ public final class Constants {
     public static final double SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT = 30;
     public static final double ELEVATION_SPEED = 0.1;
 
-    //Elevation Angle Controller Constants
+    // Elevation Angle Controller Constants
     public static final double ELEVATION_ANGLE_PROPORTIONAL_GAIN = 0.5;
     public static final double ELEVATION_ANGLE_INTEGRAL_GAIN = 0;
     public static final double ELEVATION_ANGLE_DERIVITIVE_GAIN = 0;
@@ -146,6 +148,11 @@ public final class Constants {
     public static final double AZIMUTH_MAX_DERIVITIVE = 0;
     public static final double AZIMUTH_MAX_POWER = 0.5;
     public static final double AZIMUTH_SPEED = 0.5;
+
+    // Color Constants
+    public static final Color RED_ALLIANCE_COLOR = new Color(1,0,0);
+    public static final Color BLUE_ALLIANCE_COLOR = new Color(0,0,1);
+    public static final double COLOR_MATCH_THRESHOLD = 0.1;
 
     // LIMELIGHT CONSTANTS
     public static final double A1 = 3;

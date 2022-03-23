@@ -5,37 +5,40 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveTrainNavigationSub;
+import frc.robot.subsystems.DrivetrainSub;
 
 public class TestAutoCommand extends CommandBase {
   /** Creates a new IntakeCommand. */
-  private DriveTrainNavigationSub m_nav;
+  private final DrivetrainSub m_drivetrain;
 
-
-  public TestAutoCommand(DriveTrainNavigationSub navSub) {
-    m_nav = navSub;
+  public TestAutoCommand(DrivetrainSub drivetrainSub) {
+    m_drivetrain = drivetrainSub;
+    addRequirements(drivetrainSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_nav.setPos(0, 0);
+    m_drivetrain.setPos(0, 0);
+    m_drivetrain.resetYaw();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_nav.driveTrainPosIntegration();
-    m_nav.setDriveToWaypoint(5,0);
+    m_drivetrain.drivetrainPositionIntegration();
+    m_drivetrain.setDriveToWaypoint(5,0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_drivetrain.stopMotors();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_drivetrain.hasReachedWaypoint();
   }
 }

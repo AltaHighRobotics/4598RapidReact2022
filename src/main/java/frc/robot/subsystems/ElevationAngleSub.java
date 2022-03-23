@@ -2,17 +2,17 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.ConfigurablePID;
 import frc.robot.Constants;
+import frc.robot.Utilities.ConfigurablePID;
 
 public class ElevationAngleSub extends SubsystemBase{
-  private TalonSRX elevationAngleMotor;
-  private ConfigurablePID elevationAnglePID;
+  private final WPI_TalonSRX elevationAngleMotor;
+  private final ConfigurablePID elevationAnglePID;
   
   public ElevationAngleSub() {
 
@@ -28,7 +28,7 @@ public class ElevationAngleSub extends SubsystemBase{
       1
     );
 
-    elevationAngleMotor = new TalonSRX(Constants.ELEVATION_ANGLE_MOTOR);
+    elevationAngleMotor = new WPI_TalonSRX(Constants.ELEVATION_ANGLE_MOTOR);
 
     elevationAngleMotor.configFactoryDefault();
 
@@ -49,12 +49,12 @@ public class ElevationAngleSub extends SubsystemBase{
     targetElevationAngle = MathUtil.clamp(targetElevationAngle, Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT, Constants.SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT);
     double currentElevationAngle = (elevationAngleMotor.getSelectedSensorPosition()*Constants.ELEVATION_ANGLE_GEAR_RATIO)/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT;
 
-    SmartDashboard.putNumber("Raw Encoder Angle Degrees",(elevationAngleMotor.getSelectedSensorPosition())/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT);
-    SmartDashboard.putNumber("Current Elevation Angle", currentElevationAngle);
+    //SmartDashboard.putNumber("Raw Encoder Angle Degrees",(elevationAngleMotor.getSelectedSensorPosition())/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT);
+    SmartDashboard.putNumber("Current Elevation Angle:", currentElevationAngle);
 
     double elevationMotorPower = elevationAnglePID.runPID(targetElevationAngle, currentElevationAngle);
 
-    SmartDashboard.putNumber("Elevation Angle Motor Power", elevationMotorPower);
+    SmartDashboard.putNumber("Elevation Angle Motor Power:", elevationMotorPower);
 
     elevationAngleMotor.set(ControlMode.PercentOutput, elevationMotorPower);
   }

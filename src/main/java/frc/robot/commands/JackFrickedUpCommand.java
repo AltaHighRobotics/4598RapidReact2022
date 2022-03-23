@@ -19,12 +19,12 @@ public class JackFrickedUpCommand extends CommandBase {
 
   @Override
   public void initialize() {
-    SmartDashboard.putString("Has Jack goofed up yet?", "Yes");
-    }
+  }
 
   @Override
   public void execute() {
     m_climbingSub.SetArmsWithClamp(Constants.MIN_ARM_POSITION, Constants.ARM_SLOW_SPEED);
+    SmartDashboard.putString("Climb Resetting?", "Yes");
       //Sets arm position to its retracted position
   }
 
@@ -36,7 +36,7 @@ public class JackFrickedUpCommand extends CommandBase {
     m_climbingSub.setHasRun(false);
       //Sets arm variables to their original state 
     m_climbingSub.ArmsStationary();
-    SmartDashboard.putString("Has Jack goofed up yet?", "No");
+    SmartDashboard.putString("Climb Resetting?", "No");
   }
 
   @Override
