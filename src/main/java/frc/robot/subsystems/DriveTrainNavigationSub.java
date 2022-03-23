@@ -30,8 +30,8 @@ public class DriveTrainNavigationSub extends SubsystemBase {
 
   private AHRS navX;
 
-  private double rightMotorVelocity;
-  private double leftMotorVelocity;
+  //private double rightMotorVelocity;
+  //private double leftMotorVelocity;
 
   private double currentRightMotorPosition;
   private double currentLeftMotorPosition;
@@ -185,11 +185,7 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     SmartDashboard.putNumber("Auto Throttle:", this.drivePower);
     SmartDashboard.putNumber("Auto Steering:", this.steeringPower);
 
-    //this.setMotorPower(this.drivePower, this.steeringPower);
-    this.leftMotorFront.set(ControlMode.PercentOutput, -this.steeringPower);
-    //this.leftMotorBack.set(ControlMode.PercentOutput, this.steeringPower);
-    this.rightMotorFront.set(ControlMode.PercentOutput, this.steeringPower);
-    //this.rightMotorBack.set(ControlMode.PercentOutput, this.steeringPower);
+    this.setMotorPower(this.drivePower, this.steeringPower);
   }
 
   public boolean hasReachedWaypoint()
@@ -203,14 +199,14 @@ public class DriveTrainNavigationSub extends SubsystemBase {
     this.robotY = y;
   }
 
-  private void setMotorPower(double throttle, double rotation) {
+  public void setMotorPower(double throttle, double rotation) {
     this.leftMotorFront.set(ControlMode.PercentOutput, throttle + rotation);
     this.leftMotorBack.set(ControlMode.PercentOutput, throttle + rotation);
     this.rightMotorFront.set(ControlMode.PercentOutput, throttle - rotation);
     this.rightMotorBack.set(ControlMode.PercentOutput, throttle - rotation);
   }
 
-  public void stop() {
+  public void stopMotors() {
     setMotorPower(0, 0);
   }
 

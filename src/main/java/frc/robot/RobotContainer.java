@@ -44,12 +44,12 @@ public class RobotContainer {
   private final FeedCommand m_FeedCommand = new FeedCommand(m_feedSub);
   private final ElevationAngleCommand m_ElevationAngleCommand = new ElevationAngleCommand(m_ElevationAngleSub, m_driverOne);
   private final StorageCommand m_StorageCommand = new StorageCommand(m_StorageSub);
-  private final DriveTrainInegrationCommand m_dtIntegration = new DriveTrainInegrationCommand(m_navSub);
+  //private final DriveTrainInegrationCommand m_dtIntegration = new DriveTrainInegrationCommand(m_navSub);
   //private final IntakeCommand m_IntakeCommand = new IntakeCommand(m_intakeSub);
   // private final IntakeCommand m_intakeCommand = new IntakeCommand(m_intakeSub);
   // private final ColorCommand m_colorCommand = new ColorCommand(m_colorSub);
 
-  private final Command m_testAuto = new TestAutoCommand(m_navSub);
+  private final TestAutoCommand m_testAuto = new TestAutoCommand(m_navSub);
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
@@ -59,7 +59,7 @@ public class RobotContainer {
     configureButtonBindings();
     
     CommandScheduler.getInstance().setDefaultCommand(m_driveTrainSub, m_driveCommand);
-    CommandScheduler.getInstance().setDefaultCommand(m_navSub, m_dtIntegration);
+    //CommandScheduler.getInstance().setDefaultCommand(m_navSub, m_dtIntegration);
     //CommandScheduler.getInstance().setDefaultCommand(m_ElevationAngleSub, m_ElevationAngleCommand);
     //CommandScheduler.getInstance().setDefaultCommand(m_computerVisionSub, m_intakeVisionCommand);
 
