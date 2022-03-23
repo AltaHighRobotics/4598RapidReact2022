@@ -59,7 +59,7 @@ public final class Constants {
     public static final double MAX_WAYPOINT_ERROR = 0.5;
     public static final double MAX_DRIVE_HEADING_ERROR = 10;
     public static final double DRIVETRAIN_CURRENT_LIMIT = 40;
-    public static final double DRIVETRAIN_POWER_RAMP_TIME = 0.5;
+    public static final double DRIVETRAIN_POWER_RAMP_TIME = 0.1;
 
     // Drivetrain Controller Constants
     public static final double DRIVETRAIN_HEADING_PROPORTIONAL_GAIN = 0.1;
