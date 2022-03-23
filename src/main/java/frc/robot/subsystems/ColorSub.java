@@ -16,8 +16,7 @@ public class ColorSub extends SubsystemBase {
   /** Creates a new ColorSub. */
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
-  Color detectedColor = m_colorSensor.getColor();
-  double IR = m_colorSensor.getIR();
+  private Color detectedColor;
   public ColorSub() {
   }
 

@@ -4,18 +4,18 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.ConfigurablePID;
 import frc.robot.Constants;
+import frc.robot.Utilities.ConfigurablePID;
 
 public class AzimuthSub extends SubsystemBase {
 
-  private TalonFX azimuthMotor;
-  private ConfigurablePID azimuthPID;
-  private SupplyCurrentLimitConfiguration azimuthCurrentLimit;
+  private final WPI_TalonFX azimuthMotor;
+  private final ConfigurablePID azimuthPID;
+  private final SupplyCurrentLimitConfiguration azimuthCurrentLimit;
 
   public AzimuthSub() {
 
@@ -33,7 +33,7 @@ public class AzimuthSub extends SubsystemBase {
       Constants.AZIMUTH_SPEED
     );
 
-    azimuthMotor = new TalonFX(Constants.AZIMUTH_MOTOR);
+    azimuthMotor = new WPI_TalonFX(Constants.AZIMUTH_MOTOR);
     azimuthMotor.configFactoryDefault();
     azimuthMotor.setNeutralMode(NeutralMode.Brake);
     azimuthMotor.setSensorPhase(false);

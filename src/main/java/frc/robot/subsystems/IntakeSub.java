@@ -6,7 +6,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,12 +15,12 @@ import frc.robot.Constants;
 
 public class IntakeSub extends SubsystemBase {
   /** Creates a new IntakeSub. */
-  private Solenoid intakeSolenoid;
-  private TalonFX intakeMotor;
+  private final Solenoid intakeSolenoid;
+  private final WPI_VictorSPX intakeMotor;
 
   public IntakeSub() {
     intakeSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_SOLENOID);
-    intakeMotor = new TalonFX(Constants.INTAKE_MOTOR);
+    intakeMotor = new WPI_VictorSPX(Constants.INTAKE_MOTOR);
   }
 
   @Override

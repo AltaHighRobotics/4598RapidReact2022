@@ -8,21 +8,21 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.ConfigurablePID;
 import frc.robot.Constants;
+import frc.robot.Utilities.ConfigurablePID;
 
 public class ShooterSub extends SubsystemBase {
   /** Creates a new ShooterSub. */
 
-  private TalonFX leftShooterMotor;
-  private TalonFX rightShooterMotor;
-  private ConfigurablePID leftShooterPID;
-  private ConfigurablePID rightShooterPID;
-  private SupplyCurrentLimitConfiguration shooterCurrentLimit;
+  private final WPI_TalonFX leftShooterMotor;
+  private final WPI_TalonFX rightShooterMotor;
+  private final ConfigurablePID leftShooterPID;
+  private final ConfigurablePID rightShooterPID;
+  private final SupplyCurrentLimitConfiguration shooterCurrentLimit;
 
   public ShooterSub() {
 
@@ -52,8 +52,8 @@ public class ShooterSub extends SubsystemBase {
       1
     );
 
-    leftShooterMotor = new TalonFX(Constants.LEFT_SHOOTER_MOTOR);
-    rightShooterMotor = new TalonFX(Constants.RIGHT_SHOOTER_MOTOR);
+    leftShooterMotor = new WPI_TalonFX(Constants.LEFT_SHOOTER_MOTOR);
+    rightShooterMotor = new WPI_TalonFX(Constants.RIGHT_SHOOTER_MOTOR);
 
     leftShooterMotor.configFactoryDefault();
     rightShooterMotor.configFactoryDefault();

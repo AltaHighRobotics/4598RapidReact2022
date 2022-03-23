@@ -5,24 +5,24 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.ConfigurablePID;
 import frc.robot.Constants;
+import frc.robot.Utilities.ConfigurablePID;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.*;
 
 public class ClimbingSub extends SubsystemBase {
-  private Solenoid armSwingSolenoid;
-  private TalonFX leftArmMotor;
-  private TalonFX rightArmMotor;
-  private ConfigurablePID leftArmPID;
-  private ConfigurablePID rightArmPID;
-  private SupplyCurrentLimitConfiguration armCurrentLimit;
+  private final Solenoid armSwingSolenoid;
+  private final WPI_TalonFX leftArmMotor;
+  private final WPI_TalonFX rightArmMotor;
+  private final ConfigurablePID leftArmPID;
+  private final ConfigurablePID rightArmPID;
+  private final SupplyCurrentLimitConfiguration armCurrentLimit;
 
   private double rightArmMotorVelocity;
   private double leftArmMotorVelocity;
@@ -38,8 +38,8 @@ public class ClimbingSub extends SubsystemBase {
   public ClimbingSub() {
 
     armSwingSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.ARM_SWING_SOLENOID);
-    leftArmMotor = new TalonFX(Constants.LEFT_ARM_MOTOR);
-    rightArmMotor = new TalonFX(Constants.RIGHT_ARM_MOTOR);
+    leftArmMotor = new WPI_TalonFX(Constants.LEFT_ARM_MOTOR);
+    rightArmMotor = new WPI_TalonFX(Constants.RIGHT_ARM_MOTOR);
 
     armCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.ARM_CURRENT_LIMIT, 0, 0.1);
     

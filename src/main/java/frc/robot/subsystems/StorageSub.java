@@ -5,7 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,10 +14,10 @@ import frc.robot.Constants;
 public class StorageSub extends SubsystemBase {
   /** Creates a new StorageSub. */
 
-  private VictorSPX storageMotor;
+  private final WPI_VictorSPX storageMotor;
 
   public StorageSub() {
-    storageMotor = new VictorSPX(Constants.STORAGE_MOTOR);
+    storageMotor = new WPI_VictorSPX(Constants.STORAGE_MOTOR);
     storageMotor.configFactoryDefault();
   }
 
