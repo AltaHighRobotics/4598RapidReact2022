@@ -88,7 +88,7 @@ public class RobotContainer {
     feedButton = new JoystickButton(m_driverOne, 5); // Left bumper
     shootButton = new JoystickButton(m_driverOne, 5); // Right bumper
     storageButton = new JoystickButton(m_driverOne, 3); // Circle button
-    aimButton = new JoystickButton(m_driverOne, 1); // TODO this is not a real button!
+    aimButton = new JoystickButton(m_driverOne, 4); // Triangle Button
 
     climbButton.toggleWhenPressed(m_climbingCommand);
     frickButton.toggleWhenPressed(m_jackFrickedUpCommand);

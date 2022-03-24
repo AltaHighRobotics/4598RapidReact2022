@@ -171,6 +171,6 @@ public final class Constants {
             { 240, 80, 0 },
             { 300, 95, 0 }
     };
-    public static final double LIMELIGHT_ELEVATION_ANGLE = 20;
+    public static final double LIMELIGHT_ELEVATION_ANGLE = 60;
 
 }
