@@ -88,6 +88,7 @@ public class LimeLight {
     public double getdegRotationToTarget() {
         NetworkTableEntry tx = m_table.getEntry("tx");
         double x = tx.getDouble(0.0);
+        System.out.println(x);
         return x;
     }
     /**
