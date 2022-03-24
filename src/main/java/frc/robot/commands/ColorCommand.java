@@ -18,6 +18,7 @@ public class ColorCommand extends CommandBase {
   public ColorCommand(ColorSub colorSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_colorSub = colorSub;
+    addRequirements(m_colorSub);
 
     // Adds both alliance options to the selector
     m_allianceChooser.setDefaultOption("Red Alliance", "Red Alliance");
@@ -35,6 +36,7 @@ public class ColorCommand extends CommandBase {
   @Override
   public void execute() {
     m_colorSub.getColor();
+    m_colorSub.matchColorToAlliance(m_allianceChooser.getSelected());
   }
 
   // Called once the command ends or is interrupted.

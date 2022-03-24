@@ -134,24 +134,26 @@ public final class Constants {
     public static final double ELEVATION_ANGLE_MAX_DERIVITIVE = 0;
 
     // Azimuth Constants
-    public static final double AZIMUTH_LOWER_LIMIT = -45;
-    public static final double AZIMUTH_UPPER_LIMIT = 45;
-    public static final double AZIMUTH_CURRENT_LIMIT = 20;
+    public static final double AZIMUTH_LOWER_LIMIT = -90;
+    public static final double AZIMUTH_UPPER_LIMIT = 90;
+    public static final double AZIMUTH_CURRENT_LIMIT = 40;
     public static final double AZIMUTH_POWER_RAMP_TIME = 0.5;
+    public static final double AZIMUTH_GEAR_RATIO = 0.140;
+    public static final double AZIMUTH_MAX_ERROR = 4;
 
     // Azimuth Controller Constants
-    public static final double AZIMUTH_PROPORTIONAL_GAIN = 0.001;
-    public static final double AZIMUTH_INTEGRAL_GAIN = 0;
-    public static final double AZIMUTH_DERIVITIVE_GAIN = 0;
+    public static final double AZIMUTH_PROPORTIONAL_GAIN = 0.009;
+    public static final double AZIMUTH_INTEGRAL_GAIN = 0.0007;
+    public static final double AZIMUTH_DERIVITIVE_GAIN = 0.03;
     public static final double AZIMUTH_MAX_PROPORTIONAL = 1;
-    public static final double AZIMUTH_MAX_INTEGRAL = 0;
-    public static final double AZIMUTH_MAX_DERIVITIVE = 0;
-    public static final double AZIMUTH_MAX_POWER = 0.5;
-    public static final double AZIMUTH_SPEED = 0.5;
+    public static final double AZIMUTH_MAX_INTEGRAL = 0.1;
+    public static final double AZIMUTH_MAX_DERIVITIVE = 0.75;
+    public static final double AZIMUTH_MAX_POWER = 1;
+    public static final double AZIMUTH_SPEED = 1;
 
     // Color Constants
-    public static final Color RED_ALLIANCE_COLOR = new Color(1,0,0);
-    public static final Color BLUE_ALLIANCE_COLOR = new Color(0,0,1);
+    public static final Color RED_ALLIANCE_COLOR = new Color(0.6,0.3,0.1);
+    public static final Color BLUE_ALLIANCE_COLOR = new Color(0.2,0.4,0.4);
     public static final double COLOR_MATCH_THRESHOLD = 0.1;
 
     // LIMELIGHT CONSTANTS
@@ -169,6 +171,7 @@ public final class Constants {
             { 240, 80, 0 },
             { 300, 95, 0 }
     };
-    public static final double[] WAYPOINT_BALL_1 = {5,5};
-
+    public static final double LIMELIGHT_ELEVATION_ANGLE = 70;
+    public static final double LIMELIGHT_YAW_OFFSET = 2.5;
+    public static final double[] WAYPOIN_BALL_1 = {5,5};
 }
