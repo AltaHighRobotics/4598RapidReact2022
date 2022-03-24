@@ -42,7 +42,7 @@ public class RobotContainer {
   private final ConstantShootCommand m_ConstantShootCommand = new ConstantShootCommand(m_ShooterSub);
   private final FeedCommand m_FeedCommand = new FeedCommand(m_feedSub);
   private final StorageCommand m_StorageCommand = new StorageCommand(m_StorageSub);
-  private final AimCommand m_aimCommand = new AimCommand(m_aimingSub, m_driverOne);
+  private final AimCommand m_aimCommand = new AimCommand(m_aimingSub, m_driverOne, m_limeLightSub);
   //private final IntakeCommand m_IntakeCommand = new IntakeCommand(m_intakeSub);
   private final ColorCommand m_colorCommand = new ColorCommand(m_colorSub);
 

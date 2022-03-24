@@ -9,38 +9,43 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.AimingSub;
+import frc.robot.subsystems.LimeLightSub;
 
 public class AimCommand extends CommandBase {
   
-  private AimingSub m_aimingSub;
-  private PS4Controller m_Ps4Controller;
+  private final AimingSub m_aimingSub;
+  private final PS4Controller m_Ps4Controller;
+  private final LimeLightSub m_limeLightSub;
   private double leftXAxis;
   
   /** Creates a new ElveationAngleCommand. */
-  public AimCommand(AimingSub aimingSub, PS4Controller ps4Controller) {
+  public AimCommand(AimingSub aimingSub, PS4Controller ps4Controller, LimeLightSub limeLightSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_aimingSub = aimingSub;
     m_Ps4Controller = ps4Controller;
-    addRequirements(m_aimingSub);
+    m_limeLightSub = limeLightSub;
+    addRequirements(m_aimingSub, m_limeLightSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_aimingSub.enableLimeLight();
+    m_limeLightSub.enableLimeLight();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_aimingSub.moveAzimuthMotorToLimeLight();
-    m_aimingSub.MoveElevationMotorToLimeLight();
+    double limeLightYaw = m_limeLightSub.getLimeLightYaw();
+    double limeLightElevation = m_limeLightSub.getLimeLightElevation();
+    m_aimingSub.moveAzimuthMotorToLimeLight(limeLightYaw);
+    m_aimingSub.moveElevationMotorToLimeLight(limeLightElevation);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_aimingSub.disableLimeLight();
+    m_limeLightSub.disableLimeLight();
     m_aimingSub.stopAimingMotors();
   }
 

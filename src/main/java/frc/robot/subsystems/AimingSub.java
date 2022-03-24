@@ -14,16 +14,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Utilities.ConfigurablePID;
 import edu.wpi.first.wpilibj.SPI;
-import limelightvision.limelight.frc.LimeLight;
-import limelightvision.limelight.frc.ControlMode.LedMode;
-
 public class AimingSub extends SubsystemBase {
 
   private final WPI_TalonFX azimuthMotor;
   private final ConfigurablePID azimuthPID;
   private final SupplyCurrentLimitConfiguration azimuthCurrentLimit;
   private final AHRS navX;
-  private final LimeLight limeLight;
   private double absoluteAzimuthToTarget;
   private double azimuthEncoderPosition;
   private double azimuthEncoderVelocity;
@@ -34,8 +30,6 @@ public class AimingSub extends SubsystemBase {
   private double elevationTargetAngle;
   private double elevationEncoderPosition;
   private double elevationMotorPower;
-  private final int targetPipeline = 0;
-  private final int lookPipeline = 1;
   private final WPI_TalonSRX elevationAngleMotor;
   private final ConfigurablePID elevationAnglePID;
 
@@ -56,7 +50,6 @@ public class AimingSub extends SubsystemBase {
     );
 
     navX = new AHRS(SPI.Port.kMXP);
-    limeLight = new LimeLight();
 
     azimuthMotor = new WPI_TalonFX(Constants.AZIMUTH_MOTOR);
     azimuthMotor.configFactoryDefault();
@@ -91,12 +84,13 @@ public class AimingSub extends SubsystemBase {
 
   /** PID Controller used to set the azimuth angle for the shooter
    *  Adjusts the motor power to aim with the limeLight.
+   *  @param limeLightYaw the rotation angle to the target, as measured by the limelight
    */
-  public void moveAzimuthMotorToLimeLight() {
+  public void moveAzimuthMotorToLimeLight(double limeLightYaw) {
     azimuthEncoderPosition = (azimuthMotor.getSelectedSensorPosition() / 4096 * 360) * Constants.AZIMUTH_GEAR_RATIO;
     azimuthEncoderVelocity = (azimuthMotor.getSelectedSensorVelocity() / 4096 * 360) * Constants.AZIMUTH_GEAR_RATIO;
     absoluteNavYaw = navX.getYaw();
-    relativeLimeLightYaw = limeLight.getdegRotationToTarget();
+    relativeLimeLightYaw = limeLightYaw;
     if(relativeLimeLightYaw != 0) {
       absoluteAzimuthToTarget = relativeLimeLightYaw + azimuthEncoderPosition + absoluteNavYaw;
     }
@@ -107,6 +101,29 @@ public class AimingSub extends SubsystemBase {
     SmartDashboard.putNumber("Azimuth Angle", azimuthEncoderPosition);
     SmartDashboard.putNumber("Azimuth Power", azimuthMotorPower);
     azimuthMotor.set(ControlMode.PercentOutput, azimuthMotorPower);
+  }
+
+  /** PI Controller used to set the elevation angle for the shooter
+   *  Adjusts the motor power to aim with the limeLight.
+   *  @param limeLightElevation the vertical angle to the target, as measured by the limelight
+   */
+  public void moveElevationMotorToLimeLight(double limeLightElevation) {
+    if(limeLightElevation != 0) {
+      elevationTargetAngle = limeLightElevation + Constants.LIMELIGHT_ELEVATION_ANGLE;
+    }
+    SmartDashboard.putNumber("Target Elevation Angle:", elevationTargetAngle);
+
+    elevationTargetAngle = MathUtil.clamp(elevationTargetAngle, Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT, Constants.SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT);
+    elevationEncoderPosition = (elevationAngleMotor.getSelectedSensorPosition()*Constants.ELEVATION_ANGLE_GEAR_RATIO)/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT;
+
+    //SmartDashboard.putNumber("Raw Encoder Angle Degrees",(elevationAngleMotor.getSelectedSensorPosition())/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT);
+    SmartDashboard.putNumber("Current Elevation Angle:", elevationEncoderPosition);
+
+    elevationMotorPower = elevationAnglePID.runPID(elevationTargetAngle, elevationEncoderPosition);
+
+    SmartDashboard.putNumber("Elevation Angle Motor Power:", elevationMotorPower);
+
+    elevationAngleMotor.set(ControlMode.PercentOutput, elevationMotorPower);
   }
 
   /** PID Controller used to set the azimuth angle for the shooter
@@ -127,7 +144,7 @@ public class AimingSub extends SubsystemBase {
    *  Adjusts the motor power to go to a target angle, in degrees.
    *  @param targetElevationAngle A double representing the target angle that the elevation angle motor should attempt to reach
    */
-  public void MoveElevationMotorToAngle(double targetElevationAngle) {
+  public void moveElevationMotorToAngle(double targetElevationAngle) {
 
     SmartDashboard.putNumber("Target Elevation Angle:", targetElevationAngle);
 
@@ -142,38 +159,6 @@ public class AimingSub extends SubsystemBase {
     SmartDashboard.putNumber("Elevation Angle Motor Power:", elevationMotorPower);
 
     elevationAngleMotor.set(ControlMode.PercentOutput, elevationMotorPower);
-  }
-
-  /** PI Controller used to set the elevation angle for the shooter
-   *  Adjusts the motor power to aim with the limeLight.
-   */
-  public void MoveElevationMotorToLimeLight() {
-
-    elevationTargetAngle = limeLight.getdegVerticalToTarget() + Constants.LIMELIGHT_ELEVATION_ANGLE;
-
-    SmartDashboard.putNumber("Target Elevation Angle:", elevationTargetAngle);
-
-    elevationTargetAngle = MathUtil.clamp(elevationTargetAngle, Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT, Constants.SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT);
-    elevationEncoderPosition = (elevationAngleMotor.getSelectedSensorPosition()*Constants.ELEVATION_ANGLE_GEAR_RATIO)/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT;
-
-    //SmartDashboard.putNumber("Raw Encoder Angle Degrees",(elevationAngleMotor.getSelectedSensorPosition())/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT);
-    SmartDashboard.putNumber("Current Elevation Angle:", elevationEncoderPosition);
-
-    elevationMotorPower = elevationAnglePID.runPID(elevationTargetAngle, elevationEncoderPosition);
-
-    SmartDashboard.putNumber("Elevation Angle Motor Power:", elevationMotorPower);
-
-    elevationAngleMotor.set(ControlMode.PercentOutput, elevationMotorPower);
-  }
-
-  public void enableLimeLight() {
-    limeLight.setPipeline(targetPipeline);
-    limeLight.setLEDMode(LedMode.kforceOn);
-  }
-
-  public void disableLimeLight() {
-    limeLight.setPipeline(targetPipeline);
-    limeLight.setLEDMode(LedMode.kforceOff);
   }
 
   public void stopAimingMotors() {
