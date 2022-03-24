@@ -169,5 +169,6 @@ public final class Constants {
             { 240, 80, 0 },
             { 300, 95, 0 }
     };
+    public static final double[] WAYPOINT_BALL_1 = {5,5};
 
 }
