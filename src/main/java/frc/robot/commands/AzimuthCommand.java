@@ -21,6 +21,10 @@ public class AzimuthCommand extends CommandBase {
   private final int lookPipeline = 1;
   private double leftXAxis;
   private double targetAzimuth;
+  private double absoluteAzimuthToTarget;
+  private double relativeLimeLightYaw;
+  private double relativeAzimuth;
+  private double absoluteNavYaw;
   
   /** Creates a new ElveationAngleCommand. */
   public AzimuthCommand(AzimuthSub azimuthSub, PS4Controller ps4Controller, LimeLightSub limelight) {
@@ -47,10 +51,15 @@ public class AzimuthCommand extends CommandBase {
     //   leftXAxis = 0;
     // }
     // targetAzimuth = targetAzimuth + leftXAxis * 0.5;
-    targetAzimuth = targetAzimuth + m_limeLightSub.limeLight.getdegRotationToTarget()/20;
+    absoluteNavYaw = m_azimuthSub.getNavYaw();
+    relativeAzimuth = m_azimuthSub.getAzimuth();
+    relativeLimeLightYaw = m_limeLightSub.limeLight.getdegRotationToTarget();
+    if(relativeLimeLightYaw != 0) {
+      absoluteAzimuthToTarget = relativeLimeLightYaw + relativeAzimuth + absoluteNavYaw;
+    }
     // SmartDashboard.putNumber("Limelight Angle", m_limeLightSub.limeLight.getdegRotationToTarget());
-    SmartDashboard.putNumber("Target Angle", targetAzimuth);
-    m_azimuthSub.moveAzimuthMotorToAngle(targetAzimuth);
+    SmartDashboard.putNumber("Target Angle", absoluteAzimuthToTarget);
+    m_azimuthSub.moveAzimuthMotorToAngle(absoluteAzimuthToTarget);
 
   }
 

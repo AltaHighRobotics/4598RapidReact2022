@@ -59,5 +59,13 @@ public class AzimuthSub extends SubsystemBase {
     SmartDashboard.putNumber("Azimuth Power", azimuthMotorPower);
     azimuthMotor.set(ControlMode.PercentOutput, azimuthMotorPower);
   }
-    
+
+  public double getNavYaw() {
+    return navX.getYaw();
+  }
+
+  public double getAzimuth() {
+    return (azimuthMotor.getSelectedSensorPosition() / 4096 * 360) * Constants.AZIMUTH_GEAR_RATIO;
+  }
+
 }
