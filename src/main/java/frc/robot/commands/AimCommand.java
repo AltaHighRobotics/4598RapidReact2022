@@ -40,7 +40,7 @@ public class AimCommand extends CommandBase {
     leftYAxis = m_Ps4Controller.getRawAxis(Constants.PS4_LEFT_STICK_Y_AXIS);
     double limeLightYaw = m_limeLightSub.getLimeLightYaw();
     double limeLightElevation = m_limeLightSub.getLimeLightElevation();
-    m_aimingSub.moveAzimuthMotorToLimeLight(limeLightYaw);
+    m_aimingSub.moveAzimuthMotorToLimeLight(limeLightYaw+Constants.LIMELIGHT_YAW_OFFSET);
     m_aimingSub.moveElevationMotorToLimeLight(limeLightElevation);
   }
 

@@ -171,6 +171,7 @@ public final class Constants {
             { 240, 80, 0 },
             { 300, 95, 0 }
     };
-    public static final double LIMELIGHT_ELEVATION_ANGLE = 60;
+    public static final double LIMELIGHT_ELEVATION_ANGLE = 70;
+    public static final double LIMELIGHT_YAW_OFFSET = 2.5;
 
 }

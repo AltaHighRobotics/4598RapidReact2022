@@ -26,7 +26,7 @@ public class RobotContainer {
   private final PS4Controller m_driverOne = new PS4Controller(Constants.DRIVER_ONE);
 
   private final ClimbingSub m_climbingSub = new ClimbingSub();
-  //private final IntakeSub m_intakeSub = new IntakeSub();
+  private final IntakeSub m_intakeSub = new IntakeSub();
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
   private final ColorSub m_colorSub = new ColorSub();
   private final ShooterSub m_ShooterSub = new ShooterSub();
@@ -43,7 +43,7 @@ public class RobotContainer {
   private final FeedCommand m_FeedCommand = new FeedCommand(m_feedSub);
   private final StorageCommand m_StorageCommand = new StorageCommand(m_StorageSub);
   private final AimCommand m_aimCommand = new AimCommand(m_aimingSub, m_driverOne, m_limeLightSub);
-  //private final IntakeCommand m_IntakeCommand = new IntakeCommand(m_intakeSub);
+  private final IntakeCommand m_IntakeCommand = new IntakeCommand(m_intakeSub);
   private final ColorCommand m_colorCommand = new ColorCommand(m_colorSub);
 
   private final TestAutoCommand m_testAuto = new TestAutoCommand(m_drivetrainSub);
@@ -82,6 +82,7 @@ public class RobotContainer {
     final JoystickButton shootButton;
     final JoystickButton storageButton;
     final JoystickButton aimButton;
+    final JoystickButton intakeButton;
 
     climbButton = new JoystickButton(m_driverOne, 2); // X button
     frickButton = new JoystickButton(m_driverOne, 9); // Share button
@@ -89,6 +90,7 @@ public class RobotContainer {
     shootButton = new JoystickButton(m_driverOne, 5); // Right bumper
     storageButton = new JoystickButton(m_driverOne, 3); // Circle button
     aimButton = new JoystickButton(m_driverOne, 4); // Triangle Button
+    intakeButton = new JoystickButton(m_driverOne, 1); // Square Button
 
     climbButton.toggleWhenPressed(m_climbingCommand);
     frickButton.toggleWhenPressed(m_jackFrickedUpCommand);
@@ -96,6 +98,7 @@ public class RobotContainer {
     shootButton.toggleWhenPressed(m_FeedCommand);
     storageButton.toggleWhenPressed(m_StorageCommand);
     aimButton.toggleWhenPressed(m_aimCommand);
+    intakeButton.toggleWhenPressed(m_IntakeCommand);
     
   }
 

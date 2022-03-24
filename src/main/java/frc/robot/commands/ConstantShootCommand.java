@@ -26,7 +26,7 @@ public class ConstantShootCommand extends CommandBase {
   @Override
   public void execute() {
     //Insert Test Velocity here
-    m_ShooterSub.setShooterMotorsVelocity(10000);
+    m_ShooterSub.setShooterMotorsVelocity(4500);
   }
 
   // Called once the command ends or is interrupted.
