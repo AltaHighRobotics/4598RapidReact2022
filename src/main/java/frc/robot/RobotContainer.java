@@ -46,9 +46,13 @@ public class RobotContainer {
   private final IntakeCommand m_IntakeCommand = new IntakeCommand(m_intakeSub);
   private final ColorCommand m_colorCommand = new ColorCommand(m_colorSub);
 
-  private final TestAutoCommand m_testAuto = new TestAutoCommand(m_drivetrainSub);
+  //private final TestAutoCommand m_testAuto = new TestAutoCommand(m_drivetrainSub);
 
-  SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+  private final RapidReactAutoCommand m_rapidReactAutoCommand;
+  private SendableChooser<Boolean> m_condition1 = new SendableChooser<>();
+  private SendableChooser<Boolean> m_condition2 = new SendableChooser<>();
+  private SendableChooser<Boolean> m_condition3 = new SendableChooser<>();
+  private SendableChooser<Boolean> m_condition4 = new SendableChooser<>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -60,13 +64,24 @@ public class RobotContainer {
     //CommandScheduler.getInstance().setDefaultCommand(m_aimingSub, m_aimCommand);
     //CommandScheduler.getInstance().setDefaultCommand(m_computerVisionSub, m_intakeVisionCommand);
 
-    // Adds all auto options to the selector
-    m_autoChooser.setDefaultOption("Test Auto", m_testAuto);
-    //m_autoChooser.addOption("Auto 1", m_testAuto);
+    m_condition1.setDefaultOption("Exclude Ball 1", false);
+    m_condition1.addOption("Include Ball 1", true);
 
-    // Displays the auto selector on the dashboard
-    SmartDashboard.putData(m_autoChooser);
+    m_condition2.setDefaultOption("Exclude Ball 2", false);
+    m_condition2.addOption("Include Ball 2", true);
 
+    m_condition3.setDefaultOption("Exclude Ball 3", false);
+    m_condition3.addOption("Include Ball 3", true);
+
+    m_condition4.setDefaultOption("Exclude Ball 4", false);
+    m_condition4.addOption("Include Ball 4", true);
+
+    SmartDashboard.putData(m_condition1);
+    SmartDashboard.putData(m_condition2);
+    SmartDashboard.putData(m_condition3);
+    SmartDashboard.putData(m_condition4);
+    //m_rapidReactAutoCommand = new RapidReactAutoCommand(m_drivetrainSub, m_condition1.getSelected(), m_condition2.getSelected(), m_condition3.getSelected(), m_condition4.getSelected());
+    m_rapidReactAutoCommand = new RapidReactAutoCommand(m_drivetrainSub, true, false, true, false);
   }
 
   /**
@@ -108,7 +123,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_autoChooser.getSelected();
+    return m_rapidReactAutoCommand;
   }
 
   public void resetDashboard() {
