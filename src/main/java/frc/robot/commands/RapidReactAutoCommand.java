@@ -55,14 +55,15 @@ public class RapidReactAutoCommand extends CommandBase {
       case 1:
         if (!includeBall1)
         {
-          stage++;
+          System.out.println("doesnt work");
+          stage = 2;
         }
         else
         {
           waypoint = Constants.WAYPOINT_BALL_1;
           if (m_drivetrain.hasReachedWaypoint())
           {
-            stage++;
+            stage = 2;
           }
         }
         break;
@@ -70,7 +71,7 @@ public class RapidReactAutoCommand extends CommandBase {
       case 2:
         if(!includeBall2)
         {
-          stage++;
+          stage = 3;
         }
         //ball 2 code
         break;
@@ -78,16 +79,15 @@ public class RapidReactAutoCommand extends CommandBase {
       case 3:
         if(!includeBall3)
         {
-          stage++;
+          stage = 4;
         }
-        System.out.println("LOGIC WORKS BITCHES");
         //ball 3 code
         break;
 
       case 4:
         if(!includeBall4)
         {
-          stage++;
+          stage = 5;
         }
         //ball 4 code
         break;

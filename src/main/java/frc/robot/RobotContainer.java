@@ -48,7 +48,6 @@ public class RobotContainer {
 
   //private final TestAutoCommand m_testAuto = new TestAutoCommand(m_drivetrainSub);
 
-  private final RapidReactAutoCommand m_rapidReactAutoCommand;
   private SendableChooser<Boolean> m_condition1 = new SendableChooser<>();
   private SendableChooser<Boolean> m_condition2 = new SendableChooser<>();
   private SendableChooser<Boolean> m_condition3 = new SendableChooser<>();
@@ -80,8 +79,6 @@ public class RobotContainer {
     SmartDashboard.putData(m_condition2);
     SmartDashboard.putData(m_condition3);
     SmartDashboard.putData(m_condition4);
-    //m_rapidReactAutoCommand = new RapidReactAutoCommand(m_drivetrainSub, m_condition1.getSelected(), m_condition2.getSelected(), m_condition3.getSelected(), m_condition4.getSelected());
-    m_rapidReactAutoCommand = new RapidReactAutoCommand(m_drivetrainSub, true, false, true, false);
   }
 
   /**
@@ -123,6 +120,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    RapidReactAutoCommand m_rapidReactAutoCommand = new RapidReactAutoCommand(m_drivetrainSub, m_condition1.getSelected(), m_condition2.getSelected(), m_condition3.getSelected(), m_condition4.getSelected());
     return m_rapidReactAutoCommand;
   }
 
