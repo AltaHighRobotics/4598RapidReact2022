@@ -139,6 +139,7 @@ public final class Constants {
     public static final double AZIMUTH_CURRENT_LIMIT = 40;
     public static final double AZIMUTH_POWER_RAMP_TIME = 0.5;
     public static final double AZIMUTH_GEAR_RATIO = 0.140;
+    public static final double AZIMUTH_MAX_ERROR = 4;
 
     // Azimuth Controller Constants
     public static final double AZIMUTH_PROPORTIONAL_GAIN = 0.009;
@@ -170,5 +171,6 @@ public final class Constants {
             { 240, 80, 0 },
             { 300, 95, 0 }
     };
+    public static final double LIMELIGHT_ELEVATION_ANGLE = 20;
 
 }

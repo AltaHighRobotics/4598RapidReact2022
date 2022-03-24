@@ -32,8 +32,7 @@ public class RobotContainer {
   private final ShooterSub m_ShooterSub = new ShooterSub();
   private final StorageSub m_StorageSub = new StorageSub();
   private final FeedSub m_feedSub = new FeedSub();
-  private final ElevationAngleSub m_ElevationAngleSub = new ElevationAngleSub();
-  private final AzimuthSub m_azimuthSub = new AzimuthSub();
+  private final AimingSub m_aimingSub = new AimingSub();
   private final LimeLightSub m_limeLightSub = new LimeLightSub();
   
   private final JackFrickedUpCommand m_jackFrickedUpCommand = new JackFrickedUpCommand(m_climbingSub);
@@ -42,9 +41,8 @@ public class RobotContainer {
   private final DriveCommand m_driveCommand =  new DriveCommand(m_drivetrainSub, m_driverOne);
   private final ConstantShootCommand m_ConstantShootCommand = new ConstantShootCommand(m_ShooterSub);
   private final FeedCommand m_FeedCommand = new FeedCommand(m_feedSub);
-  private final ElevationAngleCommand m_ElevationAngleCommand = new ElevationAngleCommand(m_ElevationAngleSub, m_driverOne);
   private final StorageCommand m_StorageCommand = new StorageCommand(m_StorageSub);
-  private final AzimuthCommand m_azimuthCommand = new AzimuthCommand(m_azimuthSub, m_driverOne, m_limeLightSub);
+  private final AimCommand m_aimCommand = new AimCommand(m_aimingSub, m_driverOne);
   //private final IntakeCommand m_IntakeCommand = new IntakeCommand(m_intakeSub);
   private final ColorCommand m_colorCommand = new ColorCommand(m_colorSub);
 
@@ -58,9 +56,8 @@ public class RobotContainer {
     configureButtonBindings();
     
     CommandScheduler.getInstance().setDefaultCommand(m_drivetrainSub, m_driveCommand);
-    CommandScheduler.getInstance().setDefaultCommand(m_ElevationAngleSub, m_ElevationAngleCommand);
     CommandScheduler.getInstance().setDefaultCommand(m_colorSub, m_colorCommand);
-    CommandScheduler.getInstance().setDefaultCommand(m_azimuthSub, m_azimuthCommand);
+    //CommandScheduler.getInstance().setDefaultCommand(m_aimingSub, m_aimCommand);
     //CommandScheduler.getInstance().setDefaultCommand(m_computerVisionSub, m_intakeVisionCommand);
 
     // Adds all auto options to the selector
@@ -84,18 +81,21 @@ public class RobotContainer {
     final JoystickButton feedButton;
     final JoystickButton shootButton;
     final JoystickButton storageButton;
+    final JoystickButton aimButton;
 
     climbButton = new JoystickButton(m_driverOne, 2); // X button
     frickButton = new JoystickButton(m_driverOne, 9); // Share button
     feedButton = new JoystickButton(m_driverOne, 5); // Left bumper
     shootButton = new JoystickButton(m_driverOne, 5); // Right bumper
     storageButton = new JoystickButton(m_driverOne, 3); // Circle button
+    aimButton = new JoystickButton(m_driverOne, 1); // TODO this is not a real button!
 
     climbButton.toggleWhenPressed(m_climbingCommand);
     frickButton.toggleWhenPressed(m_jackFrickedUpCommand);
     feedButton.toggleWhenPressed(m_ConstantShootCommand);
     shootButton.toggleWhenPressed(m_FeedCommand);
     storageButton.toggleWhenPressed(m_StorageCommand);
+    aimButton.toggleWhenPressed(m_aimCommand);
     
   }
 
