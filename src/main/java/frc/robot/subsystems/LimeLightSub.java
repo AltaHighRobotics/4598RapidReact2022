@@ -14,7 +14,6 @@ public class LimeLightSub extends SubsystemBase {
   public final LimeLight limeLight;
   public double RPM;
   private final int targetPipeline = 0;
-  private final int lookPipeline = 1;
 
   public LimeLightSub() {
 

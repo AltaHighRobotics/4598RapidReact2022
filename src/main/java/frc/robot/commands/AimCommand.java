@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.AimingSub;
@@ -17,6 +16,7 @@ public class AimCommand extends CommandBase {
   private final PS4Controller m_Ps4Controller;
   private final LimeLightSub m_limeLightSub;
   private double leftXAxis;
+  private double leftYAxis;
   
   /** Creates a new ElveationAngleCommand. */
   public AimCommand(AimingSub aimingSub, PS4Controller ps4Controller, LimeLightSub limeLightSub) {
@@ -36,6 +36,8 @@ public class AimCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    leftXAxis = m_Ps4Controller.getRawAxis(Constants.PS4_LEFT_STICK_X_AXIS);
+    leftYAxis = m_Ps4Controller.getRawAxis(Constants.PS4_LEFT_STICK_Y_AXIS);
     double limeLightYaw = m_limeLightSub.getLimeLightYaw();
     double limeLightElevation = m_limeLightSub.getLimeLightElevation();
     m_aimingSub.moveAzimuthMotorToLimeLight(limeLightYaw);
