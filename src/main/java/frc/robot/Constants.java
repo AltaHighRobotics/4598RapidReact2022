@@ -173,5 +173,5 @@ public final class Constants {
     };
     public static final double LIMELIGHT_ELEVATION_ANGLE = 70;
     public static final double LIMELIGHT_YAW_OFFSET = 2.5;
-    public static final double[] WAYPOIN_BALL_1 = {5,5};
+    public static final double[] WAYPOINT_BALL_1 = {5,5};
 }
