@@ -5,40 +5,37 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DrivetrainSub;
+import frc.robot.subsystems.IntakeSub;
 
-public class TestAutoCommand extends CommandBase {
+public class IntakeReverseCommand extends CommandBase {
   /** Creates a new IntakeCommand. */
-  private final DrivetrainSub m_drivetrain;
+  private IntakeSub m_intakeSub;
 
-  public TestAutoCommand(DrivetrainSub drivetrainSub) {
-    m_drivetrain = drivetrainSub;
-    addRequirements(drivetrainSub);
+  public IntakeReverseCommand(IntakeSub intakeSub) {
+    m_intakeSub = intakeSub;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_drivetrain.setPos(0, 0);
-    m_drivetrain.resetYaw();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.drivetrainPositionIntegration();
-    m_drivetrain.setDriveToWaypoint(5,5);
+    m_intakeSub.IntakeExtend();
+    m_intakeSub.IntakeReverse();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.stopMotors();
+    m_intakeSub.IntakeRetract();
+    m_intakeSub.IntakeOff();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_drivetrain.hasReachedWaypoint();
+    return false;
   }
 }

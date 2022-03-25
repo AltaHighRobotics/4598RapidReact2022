@@ -180,7 +180,7 @@ public class DrivetrainSub extends SubsystemBase
     this.targetHeading = Math.toDegrees(Math.atan2(this.targetY - this.robotY, this.targetX - this.robotX));
 
     this.currentHeading = (double) this.navX.getYaw();
-
+    SmartDashboard.putNumber("Target Heading", this.targetHeading);
     this.headingRate = this.currentHeading - this.previousHeading;
     this.headingError = this.targetHeading - this.currentHeading;
     this.previousHeading = this.currentHeading;
