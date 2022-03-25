@@ -97,7 +97,11 @@ public class AimCommand extends CommandBase {
     double limeLightYaw = m_limeLightSub.getLimeLightYaw();
     double limeLightElevation = m_limeLightSub.getLimeLightElevation();
     m_aimingSub.moveAzimuthMotorToLimeLight(limeLightYaw+Constants.LIMELIGHT_YAW_OFFSET);
-    m_aimingSub.moveElevationMotorToAngle(finalAngle);//limeLightElevation);
+    if(limeLightElevation != 0) {
+      m_aimingSub.moveElevationMotorToAngle(finalAngle);
+    } else {
+      m_aimingSub.moveElevationMotorToAngle(0);
+    }
     m_aimingSub.setShooterMotorsVelocity(finalPower);
   }
 
