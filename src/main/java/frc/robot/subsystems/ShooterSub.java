@@ -114,4 +114,9 @@ public class ShooterSub extends SubsystemBase {
     SmartDashboard.putString("Shooter Status:", "Stopped");
   }
 
+  public boolean autoShootBall()
+  {
+    return true;
+  }
+
 }

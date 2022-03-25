@@ -120,7 +120,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    RapidReactAutoCommand m_rapidReactAutoCommand = new RapidReactAutoCommand(m_drivetrainSub, m_condition1.getSelected(), m_condition2.getSelected(), m_condition3.getSelected(), m_condition4.getSelected());
+    RapidReactAutoCommand m_rapidReactAutoCommand = new RapidReactAutoCommand(m_drivetrainSub, m_ShooterSub, m_intakeSub, m_condition1.getSelected(), m_condition2.getSelected(), m_condition3.getSelected(), m_condition4.getSelected());
     return m_rapidReactAutoCommand;
   }
 

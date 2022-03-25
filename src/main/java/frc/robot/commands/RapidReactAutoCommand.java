@@ -10,9 +10,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.DrivetrainSub;
+import frc.robot.subsystems.IntakeSub;
+import frc.robot.subsystems.ShooterSub;
 
 public class RapidReactAutoCommand extends CommandBase {
   private final DrivetrainSub m_drivetrain;
+  private final IntakeSub m_intakeSub;
+  private final ShooterSub m_shooterSub;
   private boolean includeBall1;
   private boolean includeBall2;
   private boolean includeBall3;
@@ -20,8 +24,10 @@ public class RapidReactAutoCommand extends CommandBase {
   private int stage;
   private double [] waypoint;
 
-  public RapidReactAutoCommand(DrivetrainSub drivetrainSub, Boolean ball1, Boolean ball2, Boolean ball3, Boolean ball4) {
+  public RapidReactAutoCommand(DrivetrainSub drivetrainSub, ShooterSub shooterSub, IntakeSub intakeSub, Boolean ball1, Boolean ball2, Boolean ball3, Boolean ball4) {
     m_drivetrain = drivetrainSub;
+    m_shooterSub = shooterSub;
+    m_intakeSub = intakeSub;
     includeBall1 = ball1;
     includeBall2 = ball2;
     includeBall3 = ball3;
@@ -30,7 +36,7 @@ public class RapidReactAutoCommand extends CommandBase {
     waypoint = new double[2];
     stage = 1;
     
-    addRequirements(drivetrainSub);
+    addRequirements(shooterSub, intakeSub, drivetrainSub);
   }
 
   // Called when the command is initially scheduled.
@@ -46,6 +52,7 @@ public class RapidReactAutoCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_intakeSub.IntakeOn();
     m_drivetrain.drivetrainPositionIntegration();
     m_drivetrain.setDriveToWaypoint(waypoint[0],waypoint[1]);
     //System.out.println(!includeBall1);
@@ -63,7 +70,10 @@ public class RapidReactAutoCommand extends CommandBase {
           waypoint = Constants.WAYPOINT_BALL_1;
           if (m_drivetrain.hasReachedWaypoint())
           {
-            stage = 2;
+            if(m_shooterSub.autoShootBall())
+            {
+              stage = 2;
+            }
           }
         }
         break;
