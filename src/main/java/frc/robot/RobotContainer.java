@@ -46,10 +46,8 @@ public class RobotContainer {
   private final IntakeCommand m_IntakeCommand = new IntakeCommand(m_intakeSub);
   private final ColorCommand m_colorCommand = new ColorCommand(m_colorSub);
 
-  private final IntakeReverseCommand m_intakeReverseCommand = new IntakeReverseCommand(m_intakeSub);
-  private final TestAutoCommand m_testAuto = new TestAutoCommand(m_drivetrainSub);
+  //private final TestAutoCommand m_testAuto = new TestAutoCommand(m_drivetrainSub);
 
-  //private final RapidReactAutoCommand m_rapidReactAutoCommand;
   private SendableChooser<Boolean> m_condition1 = new SendableChooser<>();
   private SendableChooser<Boolean> m_condition2 = new SendableChooser<>();
   private SendableChooser<Boolean> m_condition3 = new SendableChooser<>();
@@ -81,8 +79,6 @@ public class RobotContainer {
     SmartDashboard.putData(m_condition2);
     SmartDashboard.putData(m_condition3);
     SmartDashboard.putData(m_condition4);
-    //m_rapidReactAutoCommand = new RapidReactAutoCommand(m_drivetrainSub, m_condition1.getSelected(), m_condition2.getSelected(), m_condition3.getSelected(), m_condition4.getSelected());
-    //m_rapidReactAutoCommand = new RapidReactAutoCommand(m_drivetrainSub, true, false, true, false);
   }
 
   /**
@@ -99,26 +95,22 @@ public class RobotContainer {
     final JoystickButton storageButton;
     final JoystickButton aimButton;
     final JoystickButton intakeButton;
-    final JoystickButton reverseIntakeButton;
 
     climbButton = new JoystickButton(m_driverOne, 2); // X button
     frickButton = new JoystickButton(m_driverOne, 9); // Share button
-    reverseIntakeButton = new JoystickButton(m_driverOne, 5);
-    feedButton = new JoystickButton(m_driverOne, 6); // Left bumper
-    shootButton = new JoystickButton(m_driverOne, 6); // Right bumper
+    feedButton = new JoystickButton(m_driverOne, 5); // Left bumper
+    shootButton = new JoystickButton(m_driverOne, 5); // Right bumper
     storageButton = new JoystickButton(m_driverOne, 3); // Circle button
     aimButton = new JoystickButton(m_driverOne, 4); // Triangle Button
     intakeButton = new JoystickButton(m_driverOne, 1); // Square Button
 
-   // climbButton.toggleWhenPressed(m_climbingCommand);
-   reverseIntakeButton.toggleWhenPressed(m_intakeReverseCommand);
+    climbButton.toggleWhenPressed(m_climbingCommand);
     frickButton.toggleWhenPressed(m_jackFrickedUpCommand);
     feedButton.toggleWhenPressed(m_ConstantShootCommand);
     shootButton.toggleWhenPressed(m_FeedCommand);
     storageButton.toggleWhenPressed(m_StorageCommand);
     aimButton.toggleWhenPressed(m_aimCommand);
     intakeButton.toggleWhenPressed(m_IntakeCommand);
-
     
   }
 
@@ -128,7 +120,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_testAuto;
+    RapidReactAutoCommand m_rapidReactAutoCommand = new RapidReactAutoCommand(m_drivetrainSub, m_condition1.getSelected(), m_condition2.getSelected(), m_condition3.getSelected(), m_condition4.getSelected());
+    return m_rapidReactAutoCommand;
   }
 
   public void resetDashboard() {
