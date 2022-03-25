@@ -25,7 +25,7 @@ public class FeedCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (t > 75)
+    if (t > 25)
     {
       m_feedSub.feedOn();
     }

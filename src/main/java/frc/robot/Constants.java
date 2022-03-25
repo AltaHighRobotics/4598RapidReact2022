@@ -157,21 +157,18 @@ public final class Constants {
     public static final double COLOR_MATCH_THRESHOLD = 0.1;
 
     // LIMELIGHT CONSTANTS
-    public static final double A1 = 3;
-    public static final double H1 = 8;
-    public static final double H2 = 38;
+    public static final double A1 = 30;
+    public static final double H1 = 32;
+    public static final double H2 = 100;
     public static final double RADIAN_CONVERSION = 3.14159 / 180.0; // Math.toDegrees(angrad) and Math.toRadians(angdeg) are cool too
     public static final double[][] SHOOTER_DATA = new double[][] {
             // Distance, Velocity, Angle
-            { 72.5, 4200, 70},
-            { 36, 25, 0 },
-            { 60, 30, 0 },
-            { 120, 40, 0 },
-            { 180, 60, 0 },
-            { 240, 80, 0 },
-            { 300, 95, 0 }
+            { 75, 4750, 70},
+            { 100, 5000, 66.5 },
+            { 150, 5500, 61 },
+            { 200, 10000, 55 }
     };
-    public static final double LIMELIGHT_ELEVATION_ANGLE = 60;
-    public static final double LIMELIGHT_YAW_OFFSET = 2.5;
+    public static final double LIMELIGHT_ELEVATION_ANGLE = 32;
+    public static final double LIMELIGHT_YAW_OFFSET = 0;
     public static final double[] WAYPOINT_BALL_1 = {5,5};
 }

@@ -91,23 +91,26 @@ public class RobotContainer {
     final JoystickButton climbButton;
     final JoystickButton frickButton;
     final JoystickButton feedButton;
-    final JoystickButton shootButton;
+    //final JoystickButton shootButton;
     final JoystickButton storageButton;
     final JoystickButton aimButton;
     final JoystickButton intakeButton;
+    final JoystickButton intakeReverseButton;
 
     climbButton = new JoystickButton(m_driverOne, 2); // X button
     frickButton = new JoystickButton(m_driverOne, 9); // Share button
-    feedButton = new JoystickButton(m_driverOne, 5); // Left bumper
-    shootButton = new JoystickButton(m_driverOne, 5); // Right bumper
+    feedButton = new JoystickButton(m_driverOne, 6); // Right bumper
+    //shootButton = new JoystickButton(m_driverOne, 6); // Right bumper
     storageButton = new JoystickButton(m_driverOne, 3); // Circle button
     aimButton = new JoystickButton(m_driverOne, 4); // Triangle Button
     intakeButton = new JoystickButton(m_driverOne, 1); // Square Button
+    intakeReverseButton = new JoystickButton(m_driverOne, 5); // Left Bumper
+
 
     climbButton.toggleWhenPressed(m_climbingCommand);
     frickButton.toggleWhenPressed(m_jackFrickedUpCommand);
-    feedButton.toggleWhenPressed(m_ConstantShootCommand);
-    shootButton.toggleWhenPressed(m_FeedCommand);
+    //feedButton.toggleWhenPressed(m_ConstantShootCommand);
+    feedButton.toggleWhenPressed(m_FeedCommand);
     storageButton.toggleWhenPressed(m_StorageCommand);
     aimButton.toggleWhenPressed(m_aimCommand);
     intakeButton.toggleWhenPressed(m_IntakeCommand);
