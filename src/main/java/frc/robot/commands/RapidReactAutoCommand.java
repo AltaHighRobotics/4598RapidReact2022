@@ -66,6 +66,7 @@ public class RapidReactAutoCommand extends CommandBase {
         }
         else
         {
+          SmartDashboard.putString("Auto Process", "HEADING WAYPOINT 1");
           waypoint = Constants.WAYPOINT_BALL_1;
           if (m_drivetrain.hasReachedWaypoint())
           {
@@ -85,6 +86,7 @@ public class RapidReactAutoCommand extends CommandBase {
         }
         else
         {
+          SmartDashboard.putString("Auto Process", "HEADING WAYPOINT 2");
           waypoint = Constants.WAYPOINT_BALL_2;
           if (m_drivetrain.hasReachedWaypoint())
           {
@@ -103,6 +105,7 @@ public class RapidReactAutoCommand extends CommandBase {
         }
         else
         {
+          SmartDashboard.putString("Auto Process", "HEADING WAYPOINT 3");
           waypoint = Constants.WAYPOINT_BALL_3;
           if (m_drivetrain.hasReachedWaypoint())
           {
@@ -121,6 +124,7 @@ public class RapidReactAutoCommand extends CommandBase {
         }
         else
         {
+          SmartDashboard.putString("Auto Process", "HEADING WAYPOINT 4");
           waypoint = Constants.WAYPOINT_BALL_4;
           if (m_drivetrain.hasReachedWaypoint())
           {
