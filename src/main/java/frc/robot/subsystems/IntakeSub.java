@@ -43,11 +43,6 @@ public class IntakeSub extends SubsystemBase {
     SmartDashboard.putString("Intake Motor Status:", "Running");
   }
 
-  public void IntakeReverse(){
-    intakeMotor.set(ControlMode.PercentOutput, -Constants.INTAKE_SPEED);
-    SmartDashboard.putString("Intake Motor Status:", "Reverse");
-  }
-
   public void IntakeOff(){
     intakeMotor.set(ControlMode.PercentOutput, 0);
     SmartDashboard.putString("Intake Motor Status:", "Stopped");

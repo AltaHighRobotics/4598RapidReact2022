@@ -42,7 +42,7 @@ public final class Constants {
 
     // MOTOR SPEEDS
     public static final double LIFT_ARM_SPEED = 0;
-    public static final double INTAKE_SPEED = 0.3;
+    public static final double INTAKE_SPEED = 0;
     public static final double DRIVE_MAX_SPEED = 0.5;
 
     // DRIVER CONTROLS
@@ -168,7 +168,15 @@ public final class Constants {
             { 150, 5500, 61 },
             { 200, 10000, 55 }
     };
+<<<<<<< Updated upstream
     public static final double LIMELIGHT_ELEVATION_ANGLE = 32;
     public static final double LIMELIGHT_YAW_OFFSET = 0;
+=======
+    public static final double LIMELIGHT_ELEVATION_ANGLE = 70;
+    public static final double LIMELIGHT_YAW_OFFSET = 2.5;
+>>>>>>> Stashed changes
     public static final double[] WAYPOINT_BALL_1 = {5,5};
+    public static final double[] WAYPOINT_BALL_2 = null;
+    public static final double[] WAYPOINT_BALL_3 = null;
+    public static final double[] WAYPOINT_BALL_4 = null;
 }
