@@ -163,6 +163,9 @@ public class AimingSub extends SubsystemBase {
     if(limeLightElevation != 0) {
       elevationTargetAngle = limeLightElevation + Constants.LIMELIGHT_ELEVATION_ANGLE;
     }
+    else {
+      elevationTargetAngle = 0;
+    }
     SmartDashboard.putNumber("Target Elevation Angle:", elevationTargetAngle);
 
     elevationTargetAngle = MathUtil.clamp(elevationTargetAngle, Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT, Constants.SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT);

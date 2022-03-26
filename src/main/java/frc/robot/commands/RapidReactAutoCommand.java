@@ -52,16 +52,17 @@ public class RapidReactAutoCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intakeSub.IntakeExtend();
     m_intakeSub.IntakeOn();
     m_drivetrain.drivetrainPositionIntegration();
     m_drivetrain.setDriveToWaypoint(waypoint[0],waypoint[1]);
+    //System.out.println(!includeBall1);
 
     switch (stage)
     {
       case 1:
         if (!includeBall1)
         {
+          System.out.println("doesnt work");
           stage = 2;
         }
         else
@@ -73,17 +74,17 @@ public class RapidReactAutoCommand extends CommandBase {
             if(m_shooterSub.autoShootBall())
             {
               stage = 2;
-              System.out.println("1");
             }
           }
         }
         break;
 
-        case 2:
-        if (!includeBall2)
+      case 2:
+        if(!includeBall2)
         {
           stage = 3;
         }
+<<<<<<< HEAD
         else
         {
           SmartDashboard.putString("Auto Process", "HEADING WAYPOINT 2");
@@ -96,13 +97,17 @@ public class RapidReactAutoCommand extends CommandBase {
             }
           }
         }
+=======
+        //ball 2 code
+>>>>>>> parent of 21aa37a (update auto to work)
         break;
 
-        case 3:
-        if (!includeBall3)
+      case 3:
+        if(!includeBall3)
         {
           stage = 4;
         }
+<<<<<<< HEAD
         else
         {
           SmartDashboard.putString("Auto Process", "HEADING WAYPOINT 3");
@@ -115,13 +120,17 @@ public class RapidReactAutoCommand extends CommandBase {
             }
           }
         }
+=======
+        //ball 3 code
+>>>>>>> parent of 21aa37a (update auto to work)
         break;
 
-        case 4:
-        if (!includeBall4)
+      case 4:
+        if(!includeBall4)
         {
           stage = 5;
         }
+<<<<<<< HEAD
         else
         {
           SmartDashboard.putString("Auto Process", "HEADING WAYPOINT 4");
@@ -134,6 +143,9 @@ public class RapidReactAutoCommand extends CommandBase {
             }
           }
         }
+=======
+        //ball 4 code
+>>>>>>> parent of 21aa37a (update auto to work)
         break;
 
       case 5:
@@ -144,14 +156,12 @@ public class RapidReactAutoCommand extends CommandBase {
         SmartDashboard.putString("Auto Process", "ERROR BAD LOGIC");
         break;
     }
+    //System.out.println(waypoint[0]+ " " + waypoint[1]);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) 
-  {
-    m_drivetrain.stopMotors();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

@@ -5,37 +5,32 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.FeedSub;
+import frc.robot.subsystems.IntakeSub;
 
-public class FeedCommand extends CommandBase {
-  /** Creates a new ElevatorOnCommand. */
-  private FeedSub m_feedSub;
-  private int t;
-  public FeedCommand(FeedSub feedSub) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    m_feedSub = feedSub  ;
+public class IntakeReverseCommand extends CommandBase {
+  /** Creates a new IntakeCommand. */
+  private IntakeSub m_intakeSub;
+
+  public IntakeReverseCommand(IntakeSub intakeSub) {
+    m_intakeSub = intakeSub;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    t = 0;
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (t > 25)
-    {
-      m_feedSub.feedOn();
-    }
-    t++;
+    m_intakeSub.IntakeExtend();
+    m_intakeSub.IntakeReverse();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_feedSub.feedOff();
+    m_intakeSub.IntakeRetract();
+    m_intakeSub.IntakeOff();
   }
 
   // Returns true when the command should end.

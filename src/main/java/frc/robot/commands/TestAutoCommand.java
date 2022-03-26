@@ -27,7 +27,7 @@ public class TestAutoCommand extends CommandBase {
   @Override
   public void execute() {
     m_drivetrain.drivetrainPositionIntegration();
-    m_drivetrain.setDriveToWaypoint(5,3);
+    m_drivetrain.setDriveToWaypoint(5,5);
   }
 
   // Called once the command ends or is interrupted.
