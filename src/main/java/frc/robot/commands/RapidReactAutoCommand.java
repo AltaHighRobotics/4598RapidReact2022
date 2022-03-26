@@ -85,6 +85,7 @@ public class RapidReactAutoCommand extends CommandBase {
           stage = 3;
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
         else
         {
           SmartDashboard.putString("Auto Process", "HEADING WAYPOINT 2");
@@ -100,6 +101,9 @@ public class RapidReactAutoCommand extends CommandBase {
 =======
         //ball 2 code
 >>>>>>> parent of 21aa37a (update auto to work)
+=======
+        //ball 2 code
+>>>>>>> parent of 21aa37a (update auto to work)
         break;
 
       case 3:
@@ -107,6 +111,7 @@ public class RapidReactAutoCommand extends CommandBase {
         {
           stage = 4;
         }
+<<<<<<< HEAD
 <<<<<<< HEAD
         else
         {
@@ -123,6 +128,9 @@ public class RapidReactAutoCommand extends CommandBase {
 =======
         //ball 3 code
 >>>>>>> parent of 21aa37a (update auto to work)
+=======
+        //ball 3 code
+>>>>>>> parent of 21aa37a (update auto to work)
         break;
 
       case 4:
@@ -130,6 +138,7 @@ public class RapidReactAutoCommand extends CommandBase {
         {
           stage = 5;
         }
+<<<<<<< HEAD
 <<<<<<< HEAD
         else
         {
@@ -143,6 +152,9 @@ public class RapidReactAutoCommand extends CommandBase {
             }
           }
         }
+=======
+        //ball 4 code
+>>>>>>> parent of 21aa37a (update auto to work)
 =======
         //ball 4 code
 >>>>>>> parent of 21aa37a (update auto to work)
