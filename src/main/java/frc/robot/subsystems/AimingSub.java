@@ -239,7 +239,8 @@ public class AimingSub extends SubsystemBase {
 
     // Sets the motors to the computed power levels
     leftShooterMotor.set(ControlMode.PercentOutput, shooterLeftPower);
-    rightShooterMotor.set(ControlMode.PercentOutput, shooterRightPower);
+    //rightShooterMotor.set(ControlMode.PercentOutput, shooterRightPower);
+    rightShooterMotor.set(ControlMode.PercentOutput, shooterLeftPower);
 
     // Displays useful values in Smart Dashboard
     SmartDashboard.putNumber("Shooter Left Power:", shooterLeftPower);
