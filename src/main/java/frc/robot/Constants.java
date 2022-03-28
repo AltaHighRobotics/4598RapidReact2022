@@ -125,6 +125,7 @@ public final class Constants {
     public static final double SHOOTER_CURRENT_LIMIT = 20;
     public static final double SHOOTER_POWER_RAMP_TIME = 0.5;
     public static final double SHOOTER_MAX_ERROR = 50;
+    public static final double SHOOTER_BARF_SPEED = 3500;
 
     // Shooter Controller Constants
     public static final double SHOOTER_PORPORTIONAL_GAIN = 0.000006;
@@ -140,6 +141,7 @@ public final class Constants {
     public static final double SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT = 30;
     public static final double ELEVATION_SPEED = 0.1;
     public static final double ELEVATION_MAX_ERROR = 1.5;
+    public static final double ELEVATION_BARF_ANGLE = 40;
 
     // Elevation Angle Controller Constants
     public static final double ELEVATION_ANGLE_PROPORTIONAL_GAIN = 0.5;
@@ -156,6 +158,7 @@ public final class Constants {
     public static final double AZIMUTH_POWER_RAMP_TIME = 0.5;
     public static final double AZIMUTH_GEAR_RATIO = 0.140;
     public static final double AZIMUTH_MAX_ERROR = 4;
+    public static final double AZIMUTH_BARF_ANGLE = 80;
 
     // Azimuth Controller Constants
     public static final double AZIMUTH_PROPORTIONAL_GAIN = 0.009;

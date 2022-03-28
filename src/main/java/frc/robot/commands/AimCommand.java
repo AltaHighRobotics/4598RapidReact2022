@@ -80,9 +80,9 @@ public class AimCommand extends CommandBase {
         m_feedSub.feedOff();
       }
     } else {
-      m_aimingSub.moveAzimuthMotorToAngle(80);
-      m_aimingSub.setShooterMotorsVelocity(2000);
-      m_aimingSub.moveElevationMotorToAngle(40);
+      m_aimingSub.moveAzimuthMotorToAngle(Constants.AZIMUTH_BARF_ANGLE);
+      m_aimingSub.setShooterMotorsVelocity(Constants.SHOOTER_BARF_SPEED);
+      m_aimingSub.moveElevationMotorToAngle(Constants.ELEVATION_BARF_ANGLE);
       if(m_aimingSub.getIsAimReady()) {
         m_feedSub.feedOn();
       } else {
