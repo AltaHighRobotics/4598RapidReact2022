@@ -39,11 +39,13 @@ public final class Constants {
     public static final int LEFT_SHOOTER_MOTOR = 11;
     public static final int ELEVATION_ANGLE_MOTOR = 12;
     public static final int AZIMUTH_MOTOR = 13;
+    public static final int ARM_WINCH_MOTOR = 14;
 
     // MOTOR SPEEDS
     public static final double LIFT_ARM_SPEED = 0;
     public static final double INTAKE_SPEED = 0.3;
     public static final double DRIVE_MAX_SPEED = 0.5;
+    public static final double ARM_WINCH_SPEED = 1;
 
     // DRIVER CONTROLS
     public static final int DRIVER_ONE = 0;
@@ -91,6 +93,9 @@ public final class Constants {
     public static final double ACCEPTABLE_ERROR = 8000;
     public static final double ARM_CURRENT_LIMIT = 40;
     public static final double ARM_POWER_RAMP_TIME = 0.5;
+    public static final double ARM_WINCH_MIN_POSITION = 0;
+    public static final double ARM_WINCH_MID_POSITION = 2000;
+    public static final double ARM_WINCH_MAX_POSITION = 4000;
 
     // Arm Controller Constants
     public static final double ARM_PROPORTIONAL_GAIN = 0.00001;
@@ -100,6 +105,15 @@ public final class Constants {
     public static final double MAX_ARM_INTEGRAL = 0.25;
     public static final double MAX_ARM_DERIVITIVE = 0;
     public static final double ARM_MAX_POWER = 1;
+
+    // Arm Winch Controller Constants
+    public static final double ARM_WINCH_PROPORTIONAL_GAIN = 0.00001;
+    public static final double ARM_WINCH_INTEGRAL_GAIN = 0.00000003;
+    public static final double ARM_WINCH_DERIVITIVE_GAIN = 0;
+    public static final double MAX_ARM_WINCH_PROPORTIONAL = 1;
+    public static final double MAX_ARM_WINCH_INTEGRAL = 0.25;
+    public static final double MAX_ARM_WINCH_DERIVITIVE = 0;
+    public static final double ARM_WINCH_MAX_POWER = 1;
 
     // Storage Constants
     public static final double FEED_POWER = 0.7;
@@ -170,7 +184,7 @@ public final class Constants {
     };
     public static final double LIMELIGHT_ELEVATION_ANGLE = 32;
     public static final double LIMELIGHT_YAW_OFFSET = 0;
-    public static final double[] WAYPOINT_BALL_1 = {5,5};\
+    public static final double[] WAYPOINT_BALL_1 = {5,5};
     public static final double[] WAYPOINT_BALL_2 = null;
     public static final double[] WAYPOINT_BALL_3 = null;
     public static final double[] WAYPOINT_BALL_4 = null;
