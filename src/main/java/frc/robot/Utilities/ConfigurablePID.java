@@ -235,6 +235,15 @@ public class ConfigurablePID {
   }
 
   /**
+   * Get the last computed error value
+   * 
+   * @return last computed error
+   */
+  public double getError() {
+    return this.currentError;
+  }
+
+  /**
    * Reset values to 0.
    */
   public void resetValues() {

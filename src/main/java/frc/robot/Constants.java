@@ -124,6 +124,7 @@ public final class Constants {
     public static final double SHOOTER_POWER_OFFSET = 0.1;
     public static final double SHOOTER_CURRENT_LIMIT = 20;
     public static final double SHOOTER_POWER_RAMP_TIME = 0.5;
+    public static final double SHOOTER_MAX_ERROR = 50;
 
     // Shooter Controller Constants
     public static final double SHOOTER_PORPORTIONAL_GAIN = 0.000006;
@@ -138,6 +139,7 @@ public final class Constants {
     public static final double SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT = 80; //Actually 86
     public static final double SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT = 30;
     public static final double ELEVATION_SPEED = 0.1;
+    public static final double ELEVATION_MAX_ERROR = 1.5;
 
     // Elevation Angle Controller Constants
     public static final double ELEVATION_ANGLE_PROPORTIONAL_GAIN = 0.5;
@@ -172,8 +174,8 @@ public final class Constants {
 
     // LIMELIGHT CONSTANTS
     public static final double A1 = 30;
-    public static final double H1 = 32;
-    public static final double H2 = 100;
+    public static final double LIMELIGHT_HEIGHT = 32;
+    public static final double GOAL_HEIGHT = 100;
     public static final double RADIAN_CONVERSION = 3.14159 / 180.0; // Math.toDegrees(angrad) and Math.toRadians(angdeg) are cool too
     public static final double[][] SHOOTER_DATA = new double[][] {
             // Distance, Velocity, Angle

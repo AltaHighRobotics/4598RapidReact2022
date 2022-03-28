@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
@@ -17,7 +18,16 @@ public class ColorSub extends SubsystemBase {
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
   private Color detectedColor;
+
+  SendableChooser<String> m_allianceChooser = new SendableChooser<>();
+
   public ColorSub() {
+    // Adds both alliance options to the selector
+    m_allianceChooser.setDefaultOption("Red Alliance", "Red Alliance");
+    m_allianceChooser.addOption("Blue Alliance", "Blue Alliance");
+
+    // Displays the alliance selector on the dashboard
+    SmartDashboard.putData(m_allianceChooser);
   }
 
   @Override
@@ -30,6 +40,10 @@ public class ColorSub extends SubsystemBase {
     SmartDashboard.putNumber("RED:", detectedColor.red);
     SmartDashboard.putNumber("GREEN:", detectedColor.green);
     SmartDashboard.putNumber("BLUE:", detectedColor.blue);
+  }
+
+  public boolean ballDetected() {
+    return (matchColorToAlliance("Red Alliance") || matchColorToAlliance("Blue Alliance"));
   }
 
   public boolean matchColorToAlliance(String alliance) {
@@ -66,5 +80,14 @@ public class ColorSub extends SubsystemBase {
 
   private boolean matchColorChannel(double a, double b) {
     return (a < b + Constants.COLOR_MATCH_THRESHOLD && a > b - Constants.COLOR_MATCH_THRESHOLD);
+  }
+
+  /**
+   * Use this to get the selected alliance
+   *
+   * @return the selected alliance
+   */
+  public String getAlliance() {
+    return m_allianceChooser.getSelected();
   }
 }

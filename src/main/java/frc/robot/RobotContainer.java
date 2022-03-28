@@ -36,13 +36,13 @@ public class RobotContainer {
   private final LimeLightSub m_limeLightSub = new LimeLightSub();
   
   private final JackFrickedUpCommand m_jackFrickedUpCommand = new JackFrickedUpCommand(m_climbingSub);
-  private final ClimbingCommand m_climbingCommand = new ClimbingCommand(m_climbingSub);
+  private final ClimbingCommand m_climbingCommand = new ClimbingCommand(m_climbingSub, m_aimingSub);
 
   private final DriveCommand m_driveCommand =  new DriveCommand(m_drivetrainSub, m_driverOne);
   private final ConstantShootCommand m_ConstantShootCommand = new ConstantShootCommand(m_ShooterSub);
   private final FeedCommand m_FeedCommand = new FeedCommand(m_feedSub);
   private final StorageCommand m_StorageCommand = new StorageCommand(m_StorageSub);
-  private final AimCommand m_aimCommand = new AimCommand(m_aimingSub, m_driverOne, m_limeLightSub);
+  private final AimCommand m_aimCommand = new AimCommand(m_aimingSub, m_driverOne, m_limeLightSub, m_feedSub, m_colorSub);
   private final IntakeCommand m_IntakeCommand = new IntakeCommand(m_intakeSub);
   private final ColorCommand m_colorCommand = new ColorCommand(m_colorSub);
 
@@ -59,7 +59,7 @@ public class RobotContainer {
     configureButtonBindings();
     
     CommandScheduler.getInstance().setDefaultCommand(m_drivetrainSub, m_driveCommand);
-    CommandScheduler.getInstance().setDefaultCommand(m_colorSub, m_colorCommand);
+    //CommandScheduler.getInstance().setDefaultCommand(m_colorSub, m_colorCommand);
     //CommandScheduler.getInstance().setDefaultCommand(m_aimingSub, m_aimCommand);
     //CommandScheduler.getInstance().setDefaultCommand(m_computerVisionSub, m_intakeVisionCommand);
 
