@@ -79,12 +79,12 @@ public class AimCommand extends CommandBase {
       m_aimingSub.stopShooterMotors();
       m_aimingSub.moveElevationMotorToAngle(0);
     }
-    if(true) {
+    if(shouldScore) {
       m_aimingSub.moveAzimuthMotorToLimeLight(limeLightYaw+Constants.LIMELIGHT_YAW_OFFSET);
       
     } else {
       m_aimingSub.moveAzimuthMotorToAngle(Constants.AZIMUTH_BARF_ANGLE);
-      m_aimingSub.setShooterMotorsVelocity(Constants.SHOOTER_BARF_SPEED);
+      //m_aimingSub.setShooterMotorsVelocity(Constants.SHOOTER_BARF_SPEED);
     }
     if(m_aimingSub.getIsAimReady()) {
       m_feedSub.feedOn();

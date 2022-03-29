@@ -125,7 +125,7 @@ public final class Constants {
     public static final double SHOOTER_CURRENT_LIMIT = 20;
     public static final double SHOOTER_POWER_RAMP_TIME = 0.5;
     public static final double SHOOTER_MAX_ERROR = 500;
-    public static final double SHOOTER_BARF_SPEED = 3500;
+    public static final double SHOOTER_BARF_SPEED = 7000;
 
     // Shooter Controller Constants
     public static final double SHOOTER_PORPORTIONAL_GAIN = 0.000007;
@@ -187,8 +187,9 @@ public final class Constants {
             // Distance, Velocity, Angle
             { 5, 8000, 90},
             { 76, 8100, 82},
-            { 150, 8700, 72 },
-            { 175, 9000, 60 },
+            { 115, 8352, 77.5},
+            { 150, 9000, 72 },
+            { 175, 9000, 68 },
             { 500, 9000, 60}
     };
     public static final double LIMELIGHT_ELEVATION_ANGLE = 40;
