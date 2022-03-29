@@ -15,7 +15,6 @@ import frc.robot.Constants;
 import frc.robot.Utilities.ConfigurablePID;
 import edu.wpi.first.wpilibj.SPI;
 public class AimingSub extends SubsystemBase {
-
   private final WPI_TalonFX azimuthMotor;
   private final ConfigurablePID azimuthPID;
   private final SupplyCurrentLimitConfiguration azimuthCurrentLimit;
@@ -83,8 +82,8 @@ public class AimingSub extends SubsystemBase {
       Constants.ELEVATION_ANGLE_MAX_PROPORTIONAL,
       Constants.ELEVATION_ANGLE_MAX_INTEGRAL,
       Constants.ELEVATION_ANGLE_MAX_DERIVITIVE,
-      -1,
-      1,
+      -0.25,
+      0.25,
       1
     );
 
@@ -94,9 +93,9 @@ public class AimingSub extends SubsystemBase {
 
     elevationAngleMotor.setNeutralMode(NeutralMode.Brake);
 
-    elevationAngleMotor.setSensorPhase(false);
+    elevationAngleMotor.setSensorPhase(true);
 
-    elevationAngleMotor.setInverted(true);
+    elevationAngleMotor.setInverted(false);
 
     shooterCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.SHOOTER_CURRENT_LIMIT, 0, 0.1);
 
@@ -136,8 +135,8 @@ public class AimingSub extends SubsystemBase {
     leftShooterMotor.setSensorPhase(false);
     rightShooterMotor.setSensorPhase(false);
 
-    leftShooterMotor.setInverted(TalonFXInvertType.CounterClockwise);
-    rightShooterMotor.setInverted(TalonFXInvertType.Clockwise);
+    leftShooterMotor.setInverted(TalonFXInvertType.Clockwise);
+    rightShooterMotor.setInverted(TalonFXInvertType.CounterClockwise);
 
     leftShooterMotor.configOpenloopRamp(Constants.SHOOTER_POWER_RAMP_TIME, 0);
     rightShooterMotor.configOpenloopRamp(Constants.SHOOTER_POWER_RAMP_TIME, 0);
@@ -210,7 +209,7 @@ public class AimingSub extends SubsystemBase {
   }
 
   public boolean getIsAimReady() {
-    return azimuthReady && elevationReady && shooterReady;
+    return shooterReady && azimuthReady && elevationReady;
   }
 
   public double getNavYaw() {
@@ -261,7 +260,7 @@ public class AimingSub extends SubsystemBase {
   }
 
   public void lerpShooter(double limeLightElevationAngle) {
-    angleToGoalDegrees = limeLightElevationAngle = Constants.LIMELIGHT_ELEVATION_ANGLE;
+    angleToGoalDegrees = limeLightElevationAngle + Constants.LIMELIGHT_ELEVATION_ANGLE;
     angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
     distanceToGoal = (Constants.GOAL_HEIGHT-Constants.LIMELIGHT_HEIGHT)/(Math.tan(angleToGoalRadians));
     SmartDashboard.putNumber("Distance", distanceToGoal);

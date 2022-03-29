@@ -65,15 +65,9 @@ public class AimCommand extends CommandBase {
     }
     double limeLightYaw = m_limeLightSub.getLimeLightYaw();
     double limeLightElevation = m_limeLightSub.getLimeLightElevation();
-    if(shouldScore) {
+    if(true) {
       m_aimingSub.moveAzimuthMotorToLimeLight(limeLightYaw+Constants.LIMELIGHT_YAW_OFFSET);
-    
-      if(limeLightElevation != 0) {
-        m_aimingSub.lerpShooter(limeLightElevation);
-      } else {
-        m_aimingSub.stopShooterMotors();
-        m_aimingSub.moveElevationMotorToAngle(0);
-      }
+      m_aimingSub.lerpShooter(limeLightElevation);
       if(m_aimingSub.getIsAimReady()) {
         m_feedSub.feedOn();
       } else {
@@ -89,6 +83,9 @@ public class AimCommand extends CommandBase {
         m_feedSub.feedOff();
       }
     }
+    // m_aimingSub.moveAzimuthMotorToLimeLight(limeLightYaw+Constants.LIMELIGHT_YAW_OFFSET);
+    // m_aimingSub.moveElevationMotorToAngle(Constants.ELEVATION_BARF_ANGLE);
+    // m_aimingSub.setShooterMotorsVelocity(10000);
   }
 
   // Called once the command ends or is interrupted.

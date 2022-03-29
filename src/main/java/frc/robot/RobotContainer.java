@@ -40,7 +40,7 @@ public class RobotContainer {
 
   private final DriveCommand m_driveCommand =  new DriveCommand(m_drivetrainSub, m_driverOne);
   private final ConstantShootCommand m_ConstantShootCommand = new ConstantShootCommand(m_ShooterSub);
-  private final FeedCommand m_FeedCommand = new FeedCommand(m_feedSub);
+  //private final FeedCommand m_FeedCommand = new FeedCommand(m_feedSub);
   private final StorageCommand m_StorageCommand = new StorageCommand(m_StorageSub);
   private final AimCommand m_aimCommand = new AimCommand(m_aimingSub, m_driverOne, m_limeLightSub, m_feedSub, m_colorSub);
   private final IntakeCommand m_IntakeCommand = new IntakeCommand(m_intakeSub);
@@ -99,7 +99,7 @@ public class RobotContainer {
 
     climbButton = new JoystickButton(m_driverOne, 2); // X button
     frickButton = new JoystickButton(m_driverOne, 9); // Share button
-    feedButton = new JoystickButton(m_driverOne, 6); // Right bumper
+    //feedButton = new JoystickButton(m_driverOne, 6); // Right bumper
     //shootButton = new JoystickButton(m_driverOne, 6); // Right bumper
     storageButton = new JoystickButton(m_driverOne, 3); // Circle button
     aimButton = new JoystickButton(m_driverOne, 4); // Triangle Button
@@ -110,7 +110,7 @@ public class RobotContainer {
     climbButton.toggleWhenPressed(m_climbingCommand);
     frickButton.toggleWhenPressed(m_jackFrickedUpCommand);
     //feedButton.toggleWhenPressed(m_ConstantShootCommand);
-    feedButton.toggleWhenPressed(m_FeedCommand);
+    //feedButton.toggleWhenPressed(m_FeedCommand);
     storageButton.toggleWhenPressed(m_StorageCommand);
     aimButton.toggleWhenPressed(m_aimCommand);
     intakeButton.toggleWhenPressed(m_IntakeCommand);
