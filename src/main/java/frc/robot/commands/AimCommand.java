@@ -25,6 +25,7 @@ public class AimCommand extends CommandBase {
   private double targetShooterVelocity = 5000;
   private double targetShooterElevation = 45;
   private boolean shouldScore = false;
+  private int count = 0;
   
   
   /** Creates a new ElveationAngleCommand. */
@@ -62,26 +63,33 @@ public class AimCommand extends CommandBase {
       } else {
         shouldScore = false;
       }
+      count = 0;
+    } else {
+      count = count + 1;
+      if(count > 100) {
+        shouldScore = true;
+      }
     }
+    SmartDashboard.putBoolean("Should Shoot?", shouldScore);
     double limeLightYaw = m_limeLightSub.getLimeLightYaw();
     double limeLightElevation = m_limeLightSub.getLimeLightElevation();
+    if(limeLightElevation != 0) {
+      m_aimingSub.lerpShooter(limeLightElevation);
+    } else {
+      m_aimingSub.stopShooterMotors();
+      m_aimingSub.moveElevationMotorToAngle(0);
+    }
     if(true) {
       m_aimingSub.moveAzimuthMotorToLimeLight(limeLightYaw+Constants.LIMELIGHT_YAW_OFFSET);
-      m_aimingSub.lerpShooter(limeLightElevation);
-      if(m_aimingSub.getIsAimReady()) {
-        m_feedSub.feedOn();
-      } else {
-        m_feedSub.feedOff();
-      }
+      
     } else {
       m_aimingSub.moveAzimuthMotorToAngle(Constants.AZIMUTH_BARF_ANGLE);
       m_aimingSub.setShooterMotorsVelocity(Constants.SHOOTER_BARF_SPEED);
-      m_aimingSub.moveElevationMotorToAngle(Constants.ELEVATION_BARF_ANGLE);
-      if(m_aimingSub.getIsAimReady()) {
-        m_feedSub.feedOn();
-      } else {
-        m_feedSub.feedOff();
-      }
+    }
+    if(m_aimingSub.getIsAimReady()) {
+      m_feedSub.feedOn();
+    } else {
+      m_feedSub.feedOff();
     }
     // m_aimingSub.moveAzimuthMotorToLimeLight(limeLightYaw+Constants.LIMELIGHT_YAW_OFFSET);
     // m_aimingSub.moveElevationMotorToAngle(Constants.ELEVATION_BARF_ANGLE);

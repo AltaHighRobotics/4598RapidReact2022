@@ -29,9 +29,10 @@ public class FeedSub extends SubsystemBase {
   }
 
   public void feedOff(){
-    feedMotor.set(ControlMode.PercentOutput, 0);
+    feedMotor.set(ControlMode.PercentOutput, -0.15);
     SmartDashboard.putString("Feeder Status:", "Stopped");
   }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

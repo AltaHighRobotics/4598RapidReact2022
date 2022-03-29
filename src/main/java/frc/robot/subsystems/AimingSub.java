@@ -26,6 +26,7 @@ public class AimingSub extends SubsystemBase {
   private final ConfigurablePID leftShooterPID;
   private final ConfigurablePID rightShooterPID;
   private final SupplyCurrentLimitConfiguration shooterCurrentLimit;
+  private final SupplyCurrentLimitConfiguration elevationAngleCurrentLimit;
   private double absoluteAzimuthToTarget;
   private double azimuthEncoderPosition;
   private double azimuthEncoderVelocity;
@@ -82,10 +83,12 @@ public class AimingSub extends SubsystemBase {
       Constants.ELEVATION_ANGLE_MAX_PROPORTIONAL,
       Constants.ELEVATION_ANGLE_MAX_INTEGRAL,
       Constants.ELEVATION_ANGLE_MAX_DERIVITIVE,
-      -0.25,
-      0.25,
-      1
+      -Constants.ELEVATION_ANGLE_MAX_POWER,
+      Constants.ELEVATION_ANGLE_MAX_POWER,
+      0.5
     );
+
+    elevationAngleCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.ELEVATION_ANGLE_CURRENT_LIMIT, 0, 0.1);
 
     elevationAngleMotor = new WPI_TalonSRX(Constants.ELEVATION_ANGLE_MOTOR);
 
@@ -93,9 +96,13 @@ public class AimingSub extends SubsystemBase {
 
     elevationAngleMotor.setNeutralMode(NeutralMode.Brake);
 
-    elevationAngleMotor.setSensorPhase(true);
+    elevationAngleMotor.setSensorPhase(false);
 
     elevationAngleMotor.setInverted(false);
+
+    elevationAngleMotor.configSupplyCurrentLimit(elevationAngleCurrentLimit);
+
+    elevationAngleMotor.configOpenloopRamp(Constants.ELEVATION_ANGLE_RAMP_TIME);
 
     shooterCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.SHOOTER_CURRENT_LIMIT, 0, 0.1);
 
@@ -172,7 +179,7 @@ public class AimingSub extends SubsystemBase {
    *  @param targetAngle A double representing the target angle that the azimuth angle motor should attempt to reach
    */
   public void moveAzimuthMotorToAngle(double targetAngle) {
-    clampedAzimuthTargetAngle = MathUtil.clamp(azimuthTargetAngle, Constants.AZIMUTH_LOWER_LIMIT, Constants.AZIMUTH_UPPER_LIMIT);
+    clampedAzimuthTargetAngle = MathUtil.clamp(targetAngle, Constants.AZIMUTH_LOWER_LIMIT, Constants.AZIMUTH_UPPER_LIMIT);
     azimuthEncoderPosition = (azimuthMotor.getSelectedSensorPosition() / 4096 * 360) * Constants.AZIMUTH_GEAR_RATIO;
     azimuthEncoderVelocity = (azimuthMotor.getSelectedSensorVelocity() / 4096 * 360) * Constants.AZIMUTH_GEAR_RATIO;
 
@@ -190,7 +197,7 @@ public class AimingSub extends SubsystemBase {
     SmartDashboard.putNumber("Target Elevation Angle:", targetElevationAngle);
 
     clampedElevationTargetAngle = MathUtil.clamp(targetElevationAngle, Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT, Constants.SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT);
-    elevationEncoderPosition = (elevationAngleMotor.getSelectedSensorPosition()*Constants.ELEVATION_ANGLE_GEAR_RATIO)/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT;
+    elevationEncoderPosition = ((elevationAngleMotor.getSelectedSensorPosition()*Constants.ELEVATION_ANGLE_GEAR_RATIO)/4096 * 360) + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT;
 
     //SmartDashboard.putNumber("Raw Encoder Angle Degrees",(elevationAngleMotor.getSelectedSensorPosition())/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT);
     SmartDashboard.putNumber("Current Elevation Angle:", elevationEncoderPosition);
@@ -209,7 +216,7 @@ public class AimingSub extends SubsystemBase {
   }
 
   public boolean getIsAimReady() {
-    return shooterReady && azimuthReady && elevationReady;
+    return shooterReady && azimuthReady;
   }
 
   public double getNavYaw() {
@@ -246,6 +253,8 @@ public class AimingSub extends SubsystemBase {
     SmartDashboard.putNumber("Shooter Right Power:", shooterRightPower);
     SmartDashboard.putString("Shooter Status:", "Shooting");
     SmartDashboard.putNumber("Target Speed", targetShooterVelocity);
+    SmartDashboard.putNumber("Left Speed", shooterLeftVelocity);
+    SmartDashboard.putNumber("Right Speed", shooterRightVelocity);
   }
 
   public void setShooterMotorsPower(double Speed) {

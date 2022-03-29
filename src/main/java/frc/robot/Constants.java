@@ -116,7 +116,7 @@ public final class Constants {
     public static final double ARM_WINCH_MAX_POWER = 1;
 
     // Storage Constants
-    public static final double FEED_POWER = 0.7;
+    public static final double FEED_POWER = 0.6;
     public static final double STORAGE_POWER = 0.5;
 
     // Shooter Constants
@@ -124,12 +124,12 @@ public final class Constants {
     public static final double SHOOTER_POWER_OFFSET = 0.1;
     public static final double SHOOTER_CURRENT_LIMIT = 20;
     public static final double SHOOTER_POWER_RAMP_TIME = 0.5;
-    public static final double SHOOTER_MAX_ERROR = 7;
+    public static final double SHOOTER_MAX_ERROR = 500;
     public static final double SHOOTER_BARF_SPEED = 3500;
 
     // Shooter Controller Constants
-    public static final double SHOOTER_PORPORTIONAL_GAIN = 0.000006;
-    public static final double SHOOTER_INTERGRAL_GAIN = 0.000003;
+    public static final double SHOOTER_PORPORTIONAL_GAIN = 0.000007;
+    public static final double SHOOTER_INTERGRAL_GAIN = 0.000004;
     public static final double SHOOTER_DERIVITIVE_GAIN = 0;
     public static final double SHOOTER_MAX_PROPORTIONAL = 1;
     public static final double SHOOTER_MAX_INTEGRAL = 1;
@@ -137,19 +137,22 @@ public final class Constants {
 
     // Elevation Angle Constants
     public static final double ELEVATION_ANGLE_GEAR_RATIO = 0.001;
-    public static final double SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT = 80; //Actually 86
-    public static final double SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT = 52.6;
+    public static final double SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT = 85; //Actually 86
+    public static final double SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT = 30;
     public static final double ELEVATION_SPEED = 0.1;
-    public static final double ELEVATION_MAX_ERROR = 1.5;
-    public static final double ELEVATION_BARF_ANGLE = 60;
+    public static final double ELEVATION_MAX_ERROR = 2;
+    public static final double ELEVATION_BARF_ANGLE = 30;
+    public static final double ELEVATION_ANGLE_CURRENT_LIMIT = 5;
+    public static final double ELEVATION_ANGLE_RAMP_TIME = 0.5;
 
     // Elevation Angle Controller Constants
-    public static final double ELEVATION_ANGLE_PROPORTIONAL_GAIN = 0.08;
-    public static final double ELEVATION_ANGLE_INTEGRAL_GAIN = 0.0001;
+    public static final double ELEVATION_ANGLE_PROPORTIONAL_GAIN = 0.1;
+    public static final double ELEVATION_ANGLE_INTEGRAL_GAIN = 0.02;
     public static final double ELEVATION_ANGLE_DERIVITIVE_GAIN = 0;
     public static final double ELEVATION_ANGLE_MAX_PROPORTIONAL = 1;
-    public static final double ELEVATION_ANGLE_MAX_INTEGRAL = 0.1;
+    public static final double ELEVATION_ANGLE_MAX_INTEGRAL = 0.3;
     public static final double ELEVATION_ANGLE_MAX_DERIVITIVE = 0;
+    public static final double ELEVATION_ANGLE_MAX_POWER = 0.5;
 
     // Azimuth Constants
     public static final double AZIMUTH_LOWER_LIMIT = -45;
@@ -158,7 +161,7 @@ public final class Constants {
     public static final double AZIMUTH_POWER_RAMP_TIME = 0.5;
     public static final double AZIMUTH_GEAR_RATIO = 0.140;
     public static final double AZIMUTH_MAX_ERROR = 4;
-    public static final double AZIMUTH_BARF_ANGLE = 80;
+    public static final double AZIMUTH_BARF_ANGLE = 40;
 
     // Azimuth Controller Constants
     public static final double AZIMUTH_PROPORTIONAL_GAIN = 0.009;
@@ -177,17 +180,18 @@ public final class Constants {
 
     // LIMELIGHT CONSTANTS
     public static final double A1 = 30;
-    public static final double LIMELIGHT_HEIGHT = 35;
+    public static final double LIMELIGHT_HEIGHT = 43;
     public static final double GOAL_HEIGHT = 100;
     public static final double RADIAN_CONVERSION = 3.14159 / 180.0; // Math.toDegrees(angrad) and Math.toRadians(angdeg) are cool too
     public static final double[][] SHOOTER_DATA = new double[][] {
             // Distance, Velocity, Angle
-            { 75, 4750, 80},
-            { 100, 5000, 70 },
-            { 150, 5500, 61 },
-            { 200, 10000, 55 }
+            { 5, 8000, 90},
+            { 76, 8100, 82},
+            { 150, 8700, 72 },
+            { 175, 9000, 60 },
+            { 500, 9000, 60}
     };
-    public static final double LIMELIGHT_ELEVATION_ANGLE = 30;
+    public static final double LIMELIGHT_ELEVATION_ANGLE = 40;
     public static final double LIMELIGHT_YAW_OFFSET = 0;
     public static final double[] WAYPOINT_BALL_1 = {5,5};
     public static final double[] WAYPOINT_BALL_2 = null;
