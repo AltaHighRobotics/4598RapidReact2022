@@ -155,8 +155,8 @@ public final class Constants {
     public static final double ELEVATION_ANGLE_MAX_POWER = 0.5;
 
     // Azimuth Constants
-    public static final double AZIMUTH_LOWER_LIMIT = -45;
-    public static final double AZIMUTH_UPPER_LIMIT = 45;
+    public static final double AZIMUTH_LOWER_LIMIT = -60;
+    public static final double AZIMUTH_UPPER_LIMIT = 60;
     public static final double AZIMUTH_CURRENT_LIMIT = 40;
     public static final double AZIMUTH_POWER_RAMP_TIME = 0.5;
     public static final double AZIMUTH_GEAR_RATIO = 0.140;
@@ -189,7 +189,7 @@ public final class Constants {
             { 76, 8100, 82},
             { 115, 8352, 77.5},
             { 150, 9000, 72 },
-            { 175, 9000, 68 },
+            { 175, 9000, 70 },
             { 500, 9000, 60}
     };
     public static final double LIMELIGHT_ELEVATION_ANGLE = 40;

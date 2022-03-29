@@ -29,7 +29,7 @@ public class FeedSub extends SubsystemBase {
   }
 
   public void feedOff(){
-    feedMotor.set(ControlMode.PercentOutput, -0.1);
+    feedMotor.set(ControlMode.PercentOutput, -0.15);
     SmartDashboard.putString("Feeder Status:", "Stopped");
   }
   

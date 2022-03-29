@@ -66,7 +66,7 @@ public class AimCommand extends CommandBase {
       count = 0;
     } else {
       count = count + 1;
-      if(count > 100) {
+      if(count > 150) {
         shouldScore = true;
       }
     }
@@ -83,7 +83,7 @@ public class AimCommand extends CommandBase {
       m_aimingSub.moveAzimuthMotorToLimeLight(limeLightYaw+Constants.LIMELIGHT_YAW_OFFSET);
       
     } else {
-      m_aimingSub.moveAzimuthMotorToAngle(Constants.AZIMUTH_BARF_ANGLE);
+      m_aimingSub.moveAzimuthMotorToAngle(limeLightYaw+Constants.AZIMUTH_BARF_ANGLE);
       //m_aimingSub.setShooterMotorsVelocity(Constants.SHOOTER_BARF_SPEED);
     }
     if(m_aimingSub.getIsAimReady()) {
