@@ -8,14 +8,27 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Utilities.ConfigurablePID;
+import limelightvision.limelight.frc.LimeLight;
+import limelightvision.limelight.frc.ControlMode.LedMode;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SPI;
 public class ShootingSub extends SubsystemBase {
+  private final I2C.Port i2cPort = I2C.Port.kOnboard;
+  private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+  private Color detectedColor;
+
+  SendableChooser<String> m_allianceChooser = new SendableChooser<>();
+  private final LimeLight limeLight;
+  private final int targetPipeline = 0;
   private final WPI_TalonFX azimuthMotor;
   private final ConfigurablePID azimuthPID;
   private final SupplyCurrentLimitConfiguration azimuthCurrentLimit;
@@ -48,9 +61,19 @@ public class ShootingSub extends SubsystemBase {
   private boolean elevationReady = false;
   private boolean shooterReady = false;
   private int shotProbability = 0;
+  private int autoMissTimer = 0;
+  private boolean shouldMiss = false;
   
 
   public ShootingSub() {
+
+    m_allianceChooser.setDefaultOption("Red Alliance", "Red Alliance");
+    m_allianceChooser.addOption("Blue Alliance", "Blue Alliance");
+
+    // Displays the alliance selector on the dashboard
+    SmartDashboard.putData(m_allianceChooser);
+
+    limeLight = new LimeLight();
 
     feedMotor = new WPI_VictorSPX(Constants.FEED_MOTOR);
     feedMotor.configFactoryDefault();
@@ -144,15 +167,88 @@ public class ShootingSub extends SubsystemBase {
     rightShooterMotor.configSupplyCurrentLimit(shooterCurrentLimit);
   }
 
+  public void getColor() {
+    detectedColor = m_colorSensor.getColor();
+    SmartDashboard.putNumber("RED:", detectedColor.red);
+    SmartDashboard.putNumber("GREEN:", detectedColor.green);
+    SmartDashboard.putNumber("BLUE:", detectedColor.blue);
+  }
+
+  public boolean ballDetected() {
+    return (matchColorToAlliance("Red Alliance") || matchColorToAlliance("Blue Alliance"));
+  }
+
+  public boolean matchColorToAlliance(String alliance) {
+    detectedColor = m_colorSensor.getColor();
+    if(alliance == "Red Alliance") {
+      if(matchColorToColor(Constants.RED_ALLIANCE_COLOR, detectedColor)) {
+        SmartDashboard.putString("Color Match:", "Color Matches Red Alliance");
+        return true;
+      } else {
+        SmartDashboard.putString("Color Match:", "Color Does Not Match Red Alliance");
+        return false;
+      }
+    } else if(alliance == "Blue Alliance") {
+      if(matchColorToColor(Constants.BLUE_ALLIANCE_COLOR, detectedColor)) {
+        SmartDashboard.putString("Color Match:", "Color Matches Blue Alliance");
+        return true;
+      } else {
+        SmartDashboard.putString("Color Match:", "Color Does Not Match Blue Alliance");
+        return false;
+      }
+    } else {
+      System.out.println("matchColorToAlliance() was used without a valid alliance. This will always return false!");
+      return false;
+    }
+  }
+
+  public boolean matchColorToColor(Color colorA, Color colorB) {
+    boolean rMatch = matchColorChannel(colorA.red, colorB.red);
+    boolean bMatch = matchColorChannel(colorA.blue, colorB.blue);
+    boolean gMatch = matchColorChannel(colorA.green, colorB.green);
+
+    return rMatch && bMatch && gMatch;
+  }
+
+  private boolean matchColorChannel(double a, double b) {
+    return (a < b + Constants.COLOR_MATCH_THRESHOLD && a > b - Constants.COLOR_MATCH_THRESHOLD);
+  }
+
+  public String getAlliance() {
+    return m_allianceChooser.getSelected();
+  }
+
+  public LimeLight getLimeLight() {
+    return limeLight;
+  }
+  
+  public double getLimeLightYaw() {
+    return limeLight.getdegRotationToTarget();
+  }
+  
+  public double getLimeLightElevation() {
+    return limeLight.getdegVerticalToTarget();
+  }
+  
+  public void enableLimeLight() {
+    limeLight.setPipeline(targetPipeline);
+    limeLight.setLEDMode(LedMode.kforceOn);
+  }
+  
+  public void disableLimeLight() {
+    limeLight.setPipeline(targetPipeline);
+    limeLight.setLEDMode(LedMode.kforceOff);
+  }
+
   /** PID Controller used to set the azimuth angle for the shooter
    *  Adjusts the motor power to aim with the limeLight.
    *  @param limeLightYaw the rotation angle to the target, as measured by the limelight
    */
-  public void moveAzimuthMotorToLimeLight(double limeLightYaw) {
+  public void moveAzimuthMotorToLimeLight(double offset) {
     azimuthEncoderPosition = (azimuthMotor.getSelectedSensorPosition() / 4096 * 360) * Constants.AZIMUTH_GEAR_RATIO;
     azimuthEncoderVelocity = (azimuthMotor.getSelectedSensorVelocity() / 4096 * 360) * Constants.AZIMUTH_GEAR_RATIO;
     absoluteNavYaw = navX.getYaw();
-    relativeLimeLightYaw = limeLightYaw;
+    relativeLimeLightYaw = getLimeLightYaw() + offset;
     if(relativeLimeLightYaw != 0) {
       absoluteAzimuthToTarget = relativeLimeLightYaw + azimuthEncoderPosition + absoluteNavYaw;
     }
@@ -297,12 +393,22 @@ public class ShootingSub extends SubsystemBase {
 
   }
 
-  public boolean autoShoot(double limeLightYaw, double limeLightElevationAngle, boolean shouldMiss) {
-    if(shouldMiss) {
-      moveAzimuthMotorToLimeLight(limeLightYaw + Constants.AZIMUTH_BARF_ANGLE);
+  public boolean autoShoot() {
+    if(ballDetected()) {
+      shouldMiss = !matchColorToAlliance(getAlliance());
+      autoMissTimer = 0;
     } else {
-      moveAzimuthMotorToLimeLight(limeLightYaw);
+      autoMissTimer = autoMissTimer + 1;
+      if(autoMissTimer > 150) {
+        shouldMiss = false;
+      }
     }
+    if(shouldMiss) {
+      moveAzimuthMotorToLimeLight(Constants.AZIMUTH_BARF_ANGLE);
+    } else {
+      moveAzimuthMotorToLimeLight(0);
+    }
+    double limeLightElevationAngle = getLimeLightElevation();
     if(limeLightElevationAngle != 0) {
       lerpShooter(limeLightElevationAngle);
     } else {

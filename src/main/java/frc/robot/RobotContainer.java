@@ -28,15 +28,13 @@ public class RobotContainer {
   private final ClimbingSub m_climbingSub = new ClimbingSub();
   private final IntakeSub m_intakeSub = new IntakeSub();
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
-  private final ColorSub m_colorSub = new ColorSub();
   private final ShootingSub m_shootingSub = new ShootingSub();
-  private final LimeLightSub m_limeLightSub = new LimeLightSub();
   
   private final JackFrickedUpCommand m_jackFrickedUpCommand = new JackFrickedUpCommand(m_climbingSub);
   private final ClimbingCommand m_climbingCommand = new ClimbingCommand(m_climbingSub, m_shootingSub);
 
   private final DriveCommand m_driveCommand =  new DriveCommand(m_drivetrainSub, m_driverOne);
-  private final ShootCommand m_shootCommand = new ShootCommand(m_shootingSub, m_driverOne, m_limeLightSub, m_colorSub);
+  private final ShootCommand m_shootCommand = new ShootCommand(m_shootingSub, m_driverOne);
   private final IntakeCommand m_IntakeCommand = new IntakeCommand(m_intakeSub);
 
   //private final TestAutoCommand m_testAuto = new TestAutoCommand(m_drivetrainSub);

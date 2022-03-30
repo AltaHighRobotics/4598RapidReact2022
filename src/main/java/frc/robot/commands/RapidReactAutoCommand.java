@@ -71,7 +71,7 @@ public class RapidReactAutoCommand extends CommandBase {
           waypoint = Constants.WAYPOINT_BALL_1;
           if (m_drivetrain.hasReachedWaypoint())
           {
-            if(m_shootingSub.autoShoot(0,0,false))
+            if(m_shootingSub.autoShoot())
             {
               stage = 2;
             }

@@ -9,15 +9,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShootingSub;
-import frc.robot.subsystems.ColorSub;
-import frc.robot.subsystems.LimeLightSub;
 
 public class ShootCommand extends CommandBase {
   
-  private final ShootingSub m_aimingSub;
+  private final ShootingSub m_shootingSub;
   private final PS4Controller m_Ps4Controller;
-  private final LimeLightSub m_limeLightSub;
-  private final ColorSub m_colorSub;
   private double leftXAxis;
   private double leftYAxis;
   private double targetShooterVelocity = 5000;
@@ -27,19 +23,17 @@ public class ShootCommand extends CommandBase {
   
   
   /** Creates a new ElveationAngleCommand. */
-  public ShootCommand(ShootingSub aimingSub, PS4Controller ps4Controller, LimeLightSub limeLightSub, ColorSub colorSub) {
+  public ShootCommand(ShootingSub shootingSub, PS4Controller ps4Controller) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_aimingSub = aimingSub;
+    m_shootingSub = shootingSub;
     m_Ps4Controller = ps4Controller;
-    m_limeLightSub = limeLightSub;
-    m_colorSub = colorSub;
-    addRequirements(m_aimingSub, m_limeLightSub, m_colorSub);
+    addRequirements(shootingSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_limeLightSub.enableLimeLight();
+    m_shootingSub.enableLimeLight();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -47,38 +41,17 @@ public class ShootCommand extends CommandBase {
   public void execute() {
     leftXAxis = m_Ps4Controller.getRawAxis(Constants.PS4_LEFT_STICK_X_AXIS);
     leftYAxis = m_Ps4Controller.getRawAxis(Constants.PS4_LEFT_STICK_Y_AXIS);
-    if(Math.abs(leftYAxis) > 0.2) {
-      targetShooterElevation = targetShooterElevation + leftYAxis*0.25;
-    }
-    if(Math.abs(leftXAxis) > 0.2) {
-      targetShooterVelocity = targetShooterVelocity + leftXAxis*5;
-    }
-    m_colorSub.getColor();
-    if(m_colorSub.ballDetected()) {
-      if(m_colorSub.matchColorToAlliance(m_colorSub.getAlliance())) {
-        shouldScore = true;
-      } else {
-        shouldScore = false;
-      }
-      count = 0;
-    } else {
-      count = count + 1;
-      if(count > 150) {
-        shouldScore = true;
-      }
-    }
-    SmartDashboard.putBoolean("Should Shoot?", shouldScore);
-    double limeLightYaw = m_limeLightSub.getLimeLightYaw();
-    double limeLightElevation = m_limeLightSub.getLimeLightElevation();
+
+    m_shootingSub.autoShoot();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_limeLightSub.disableLimeLight();
-    m_aimingSub.stopAimingMotors();
-    m_aimingSub.stopShooterMotors();
-    m_aimingSub.feedOff();
+    m_shootingSub.disableLimeLight();
+    m_shootingSub.stopAimingMotors();
+    m_shootingSub.stopShooterMotors();
+    m_shootingSub.feedOff();
   }
 
   // Returns true when the command should end.
