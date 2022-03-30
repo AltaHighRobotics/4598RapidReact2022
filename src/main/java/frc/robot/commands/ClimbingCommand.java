@@ -43,7 +43,8 @@ public class ClimbingCommand extends CommandBase {
 
     m_climbingSub.SetArmsWithClamp(currentTarget, currentSpeed);
       //Makes climbing arms go to the current Target
-    m_aimingSub.moveAzimuthMotorToAngle(90);
+    m_aimingSub.moveAzimuthMotorToAngle(0);
+    m_aimingSub.moveElevationMotorToAngle(30);
       //Moves the shooter out of the way
 
     if (m_climbingSub.hasReachedPosition(currentTarget))
