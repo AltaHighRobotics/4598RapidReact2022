@@ -8,17 +8,15 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.AimingSub;
+import frc.robot.subsystems.ShootingSub;
 import frc.robot.subsystems.ColorSub;
-import frc.robot.subsystems.FeedSub;
 import frc.robot.subsystems.LimeLightSub;
 
-public class AimCommand extends CommandBase {
+public class ShootCommand extends CommandBase {
   
-  private final AimingSub m_aimingSub;
+  private final ShootingSub m_aimingSub;
   private final PS4Controller m_Ps4Controller;
   private final LimeLightSub m_limeLightSub;
-  private final FeedSub m_feedSub;
   private final ColorSub m_colorSub;
   private double leftXAxis;
   private double leftYAxis;
@@ -29,14 +27,13 @@ public class AimCommand extends CommandBase {
   
   
   /** Creates a new ElveationAngleCommand. */
-  public AimCommand(AimingSub aimingSub, PS4Controller ps4Controller, LimeLightSub limeLightSub, FeedSub feedSub, ColorSub colorSub) {
+  public ShootCommand(ShootingSub aimingSub, PS4Controller ps4Controller, LimeLightSub limeLightSub, ColorSub colorSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_aimingSub = aimingSub;
     m_Ps4Controller = ps4Controller;
     m_limeLightSub = limeLightSub;
-    m_feedSub = feedSub;
     m_colorSub = colorSub;
-    addRequirements(m_aimingSub, m_limeLightSub, m_feedSub, m_colorSub);
+    addRequirements(m_aimingSub, m_limeLightSub, m_colorSub);
   }
 
   // Called when the command is initially scheduled.
@@ -73,27 +70,6 @@ public class AimCommand extends CommandBase {
     SmartDashboard.putBoolean("Should Shoot?", shouldScore);
     double limeLightYaw = m_limeLightSub.getLimeLightYaw();
     double limeLightElevation = m_limeLightSub.getLimeLightElevation();
-    if(limeLightElevation != 0) {
-      m_aimingSub.lerpShooter(limeLightElevation);
-    } else {
-      m_aimingSub.stopShooterMotors();
-      m_aimingSub.moveElevationMotorToAngle(0);
-    }
-    if(shouldScore) {
-      m_aimingSub.moveAzimuthMotorToLimeLight(limeLightYaw+Constants.LIMELIGHT_YAW_OFFSET);
-      
-    } else {
-      m_aimingSub.moveAzimuthMotorToAngle(limeLightYaw+Constants.AZIMUTH_BARF_ANGLE);
-      //m_aimingSub.setShooterMotorsVelocity(Constants.SHOOTER_BARF_SPEED);
-    }
-    if(m_aimingSub.getIsAimReady()) {
-      m_feedSub.feedOn();
-    } else {
-      m_feedSub.feedOff();
-    }
-    // m_aimingSub.moveAzimuthMotorToLimeLight(limeLightYaw+Constants.LIMELIGHT_YAW_OFFSET);
-    // m_aimingSub.moveElevationMotorToAngle(Constants.ELEVATION_BARF_ANGLE);
-    // m_aimingSub.setShooterMotorsVelocity(10000);
   }
 
   // Called once the command ends or is interrupted.
@@ -102,7 +78,7 @@ public class AimCommand extends CommandBase {
     m_limeLightSub.disableLimeLight();
     m_aimingSub.stopAimingMotors();
     m_aimingSub.stopShooterMotors();
-    m_feedSub.feedOff();
+    m_aimingSub.feedOff();
   }
 
   // Returns true when the command should end.

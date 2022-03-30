@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.MathUtil;
@@ -14,17 +15,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Utilities.ConfigurablePID;
 import edu.wpi.first.wpilibj.SPI;
-public class AimingSub extends SubsystemBase {
+public class ShootingSub extends SubsystemBase {
   private final WPI_TalonFX azimuthMotor;
   private final ConfigurablePID azimuthPID;
   private final SupplyCurrentLimitConfiguration azimuthCurrentLimit;
   private final AHRS navX;
   private final WPI_TalonSRX elevationAngleMotor;
+  private final WPI_VictorSPX feedMotor;
   private final ConfigurablePID elevationAnglePID;
   private final WPI_TalonFX leftShooterMotor;
   private final WPI_TalonFX rightShooterMotor;
-  private final ConfigurablePID leftShooterPID;
-  private final ConfigurablePID rightShooterPID;
+  private final ConfigurablePID shooterPID;
   private final SupplyCurrentLimitConfiguration shooterCurrentLimit;
   private final SupplyCurrentLimitConfiguration elevationAngleCurrentLimit;
   private double absoluteAzimuthToTarget;
@@ -41,16 +42,19 @@ public class AimingSub extends SubsystemBase {
   private double angleToGoalDegrees;
   private double angleToGoalRadians;
   private double distanceToGoal;
-  private double shooterLeftVelocity;
-  private double shooterRightVelocity;
-  private double shooterLeftPower;
-  private double shooterRightPower;
+  private double shooterVelocity;
+  private double shooterPower;
   private boolean azimuthReady = false;
   private boolean elevationReady = false;
   private boolean shooterReady = false;
+  private int shotProbability = 0;
   
 
-  public AimingSub() {
+  public ShootingSub() {
+
+    feedMotor = new WPI_VictorSPX(Constants.FEED_MOTOR);
+    feedMotor.configFactoryDefault();
+    feedMotor.setInverted(true);
 
     azimuthCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.AZIMUTH_CURRENT_LIMIT, 0, 0.1);
 
@@ -106,19 +110,7 @@ public class AimingSub extends SubsystemBase {
 
     shooterCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.SHOOTER_CURRENT_LIMIT, 0, 0.1);
 
-    leftShooterPID = new ConfigurablePID(
-      Constants.SHOOTER_PORPORTIONAL_GAIN,
-      Constants.SHOOTER_INTERGRAL_GAIN,
-      Constants.SHOOTER_DERIVITIVE_GAIN,
-      Constants.SHOOTER_MAX_PROPORTIONAL,
-      Constants.SHOOTER_MAX_INTEGRAL,
-      Constants.SHOOTER_MAX_DERIVITIVE,
-      Constants.SHOOTER_POWER_OFFSET,
-      1,
-      1
-    );
-
-    rightShooterPID = new ConfigurablePID(
+    shooterPID = new ConfigurablePID(
       Constants.SHOOTER_PORPORTIONAL_GAIN,
       Constants.SHOOTER_INTERGRAL_GAIN,
       Constants.SHOOTER_DERIVITIVE_GAIN,
@@ -215,8 +207,12 @@ public class AimingSub extends SubsystemBase {
     azimuthMotor.neutralOutput();
   }
 
+  public void stopElevationMotor() {
+    elevationAngleMotor.neutralOutput();
+  }
+
   public boolean getIsAimReady() {
-    return shooterReady && azimuthReady;
+    return shooterReady && azimuthReady && elevationReady;
   }
 
   public double getNavYaw() {
@@ -233,28 +229,23 @@ public class AimingSub extends SubsystemBase {
    */
   public void setShooterMotorsVelocity(double targetShooterVelocity) {
 
-    // Gets the velocity of each of the two shooter motors
-    shooterLeftVelocity = leftShooterMotor.getSelectedSensorVelocity();
-    shooterRightVelocity = rightShooterMotor.getSelectedSensorVelocity();
+    // Gets the velocity of the shooter
+    shooterVelocity = leftShooterMotor.getSelectedSensorVelocity();
 
-    // Runs the controllers
-    shooterLeftPower = leftShooterPID.runPID(targetShooterVelocity, shooterLeftVelocity);
-    shooterRightPower = rightShooterPID.runPID(targetShooterVelocity, shooterRightVelocity);
+    // Runs the controller
+    shooterPower = shooterPID.runPID(targetShooterVelocity, shooterVelocity);
 
-    shooterReady = (Math.abs(leftShooterPID.getError()) + Math.abs(rightShooterPID.getError())) < Constants.SHOOTER_MAX_ERROR;
+    shooterReady = Math.abs(shooterPID.getError()) < Constants.SHOOTER_MAX_ERROR;
 
-    // Sets the motors to the computed power levels
-    leftShooterMotor.set(ControlMode.PercentOutput, shooterLeftPower);
-    //rightShooterMotor.set(ControlMode.PercentOutput, shooterRightPower);
-    rightShooterMotor.set(ControlMode.PercentOutput, shooterLeftPower);
+    // Sets the motors to the computed power level
+    leftShooterMotor.set(ControlMode.PercentOutput, shooterPower);
+    rightShooterMotor.set(ControlMode.PercentOutput, shooterPower);
 
     // Displays useful values in Smart Dashboard
-    SmartDashboard.putNumber("Shooter Left Power:", shooterLeftPower);
-    SmartDashboard.putNumber("Shooter Right Power:", shooterRightPower);
+    SmartDashboard.putNumber("Shooter Power:", shooterPower);
     SmartDashboard.putString("Shooter Status:", "Shooting");
-    SmartDashboard.putNumber("Target Speed", targetShooterVelocity);
-    SmartDashboard.putNumber("Left Speed", shooterLeftVelocity);
-    SmartDashboard.putNumber("Right Speed", shooterRightVelocity);
+    SmartDashboard.putNumber("Shooter Target Speed", targetShooterVelocity);
+    SmartDashboard.putNumber("Shooter Speed", shooterVelocity);
   }
 
   public void setShooterMotorsPower(double Speed) {
@@ -263,8 +254,8 @@ public class AimingSub extends SubsystemBase {
   }
 
   public void stopShooterMotors() {
-    leftShooterMotor.set(ControlMode.PercentOutput, 0);
-    rightShooterMotor.set(ControlMode.PercentOutput, 0);
+    leftShooterMotor.neutralOutput();
+    rightShooterMotor.neutralOutput();
     SmartDashboard.putString("Shooter Status:", "Stopped");
   }
 
@@ -304,6 +295,48 @@ public class AimingSub extends SubsystemBase {
     setShooterMotorsVelocity(finalPower);
     moveElevationMotorToAngle(finalAngle);
 
+  }
+
+  public boolean autoShoot(double limeLightYaw, double limeLightElevationAngle, boolean shouldMiss) {
+    if(shouldMiss) {
+      moveAzimuthMotorToLimeLight(limeLightYaw + Constants.AZIMUTH_BARF_ANGLE);
+    } else {
+      moveAzimuthMotorToLimeLight(limeLightYaw);
+    }
+    if(limeLightElevationAngle != 0) {
+      lerpShooter(limeLightElevationAngle);
+    } else {
+      stopShooterMotors();
+      stopElevationMotor();
+    }
+    if(getIsAimReady()) {
+      shotProbability = shotProbability + 1;
+      if(shotProbability > Constants.SHOT_PROBABILITY_THRESHOLD) {
+        feedOff();
+        return true;
+      }
+      feedOn();
+    } else {
+      shotProbability = 0;
+      feedReverse();
+    }
+    return false;
+
+  }
+
+  public void feedOn(){
+    feedMotor.set(ControlMode.PercentOutput, Constants.FEED_POWER);
+    SmartDashboard.putString("Feeder Status:", "Feeding");
+  }
+
+  public void feedOff(){
+    feedMotor.neutralOutput();
+    SmartDashboard.putString("Feeder Status:", "Stopped");
+  }
+
+  public void feedReverse(){
+    feedMotor.set(ControlMode.PercentOutput, -0.15);
+    SmartDashboard.putString("Feeder Status:", "Reverse");
   }
 
 }

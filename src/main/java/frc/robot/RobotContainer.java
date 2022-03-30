@@ -29,22 +29,15 @@ public class RobotContainer {
   private final IntakeSub m_intakeSub = new IntakeSub();
   private final DrivetrainSub m_drivetrainSub = new DrivetrainSub();
   private final ColorSub m_colorSub = new ColorSub();
-  private final ShooterSub m_ShooterSub = new ShooterSub();
-  private final StorageSub m_StorageSub = new StorageSub();
-  private final FeedSub m_feedSub = new FeedSub();
-  private final AimingSub m_aimingSub = new AimingSub();
+  private final ShootingSub m_shootingSub = new ShootingSub();
   private final LimeLightSub m_limeLightSub = new LimeLightSub();
   
   private final JackFrickedUpCommand m_jackFrickedUpCommand = new JackFrickedUpCommand(m_climbingSub);
-  private final ClimbingCommand m_climbingCommand = new ClimbingCommand(m_climbingSub, m_aimingSub);
+  private final ClimbingCommand m_climbingCommand = new ClimbingCommand(m_climbingSub, m_shootingSub);
 
   private final DriveCommand m_driveCommand =  new DriveCommand(m_drivetrainSub, m_driverOne);
-  private final ConstantShootCommand m_ConstantShootCommand = new ConstantShootCommand(m_ShooterSub);
-  //private final FeedCommand m_FeedCommand = new FeedCommand(m_feedSub);
-  private final StorageCommand m_StorageCommand = new StorageCommand(m_StorageSub);
-  private final AimCommand m_aimCommand = new AimCommand(m_aimingSub, m_driverOne, m_limeLightSub, m_feedSub, m_colorSub);
+  private final ShootCommand m_shootCommand = new ShootCommand(m_shootingSub, m_driverOne, m_limeLightSub, m_colorSub);
   private final IntakeCommand m_IntakeCommand = new IntakeCommand(m_intakeSub);
-  private final ColorCommand m_colorCommand = new ColorCommand(m_colorSub);
 
   //private final TestAutoCommand m_testAuto = new TestAutoCommand(m_drivetrainSub);
 
@@ -60,7 +53,7 @@ public class RobotContainer {
     
     CommandScheduler.getInstance().setDefaultCommand(m_drivetrainSub, m_driveCommand);
     //CommandScheduler.getInstance().setDefaultCommand(m_colorSub, m_colorCommand);
-    //CommandScheduler.getInstance().setDefaultCommand(m_aimingSub, m_aimCommand);
+    //CommandScheduler.getInstance().setDefaultCommand(m_shootingSub, m_shootCommand);
     //CommandScheduler.getInstance().setDefaultCommand(m_computerVisionSub, m_intakeVisionCommand);
 
     m_condition1.setDefaultOption("Exclude Ball 1", false);
@@ -90,18 +83,12 @@ public class RobotContainer {
   private void configureButtonBindings() {
     final JoystickButton climbButton;
     final JoystickButton frickButton;
-    final JoystickButton feedButton;
-    //final JoystickButton shootButton;
-    final JoystickButton storageButton;
     final JoystickButton aimButton;
     final JoystickButton intakeButton;
     final JoystickButton intakeReverseButton;
 
     climbButton = new JoystickButton(m_driverOne, 2); // X button
     frickButton = new JoystickButton(m_driverOne, 9); // Share button
-    //feedButton = new JoystickButton(m_driverOne, 6); // Right bumper
-    //shootButton = new JoystickButton(m_driverOne, 6); // Right bumper
-    storageButton = new JoystickButton(m_driverOne, 3); // Circle button
     aimButton = new JoystickButton(m_driverOne, 4); // Triangle Button
     intakeButton = new JoystickButton(m_driverOne, 1); // Square Button
     intakeReverseButton = new JoystickButton(m_driverOne, 5); // Left Bumper
@@ -109,10 +96,7 @@ public class RobotContainer {
 
     climbButton.toggleWhenPressed(m_climbingCommand);
     frickButton.toggleWhenPressed(m_jackFrickedUpCommand);
-    //feedButton.toggleWhenPressed(m_ConstantShootCommand);
-    //feedButton.toggleWhenPressed(m_FeedCommand);
-    storageButton.toggleWhenPressed(m_StorageCommand);
-    aimButton.toggleWhenPressed(m_aimCommand);
+    aimButton.toggleWhenPressed(m_shootCommand);
     intakeButton.toggleWhenPressed(m_IntakeCommand);
     
   }
@@ -123,7 +107,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    RapidReactAutoCommand m_rapidReactAutoCommand = new RapidReactAutoCommand(m_drivetrainSub, m_ShooterSub, m_intakeSub, m_condition1.getSelected(), m_condition2.getSelected(), m_condition3.getSelected(), m_condition4.getSelected());
+    RapidReactAutoCommand m_rapidReactAutoCommand = new RapidReactAutoCommand(m_drivetrainSub, m_shootingSub, m_intakeSub, m_condition1.getSelected(), m_condition2.getSelected(), m_condition3.getSelected(), m_condition4.getSelected());
     return m_rapidReactAutoCommand;
   }
 

@@ -8,12 +8,12 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
-import frc.robot.subsystems.AimingSub;
+import frc.robot.subsystems.ShootingSub;
 import frc.robot.subsystems.ClimbingSub;
 
 public class ClimbingCommand extends CommandBase {
   private final ClimbingSub m_climbingSub;
-  private final AimingSub m_aimingSub;
+  private final ShootingSub m_aimingSub;
   private double currentTarget;
     //Current target the robot is attempting to reach
   private double currentSpeed;
@@ -21,7 +21,7 @@ public class ClimbingCommand extends CommandBase {
   private int currentStage;
     //Current stage of climbing the robot is on
 
-  public ClimbingCommand(ClimbingSub climbingSub, AimingSub aimingSub) {
+  public ClimbingCommand(ClimbingSub climbingSub, ShootingSub aimingSub) {
     m_climbingSub = climbingSub;
     m_aimingSub = aimingSub;
   }

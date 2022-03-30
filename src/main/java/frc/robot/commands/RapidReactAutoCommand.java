@@ -12,12 +12,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.IntakeSub;
-import frc.robot.subsystems.ShooterSub;
+import frc.robot.subsystems.ShootingSub;
 
 public class RapidReactAutoCommand extends CommandBase {
   private final DrivetrainSub m_drivetrain;
   private final IntakeSub m_intakeSub;
-  private final ShooterSub m_shooterSub;
+  private final ShootingSub m_shootingSub;
   private boolean includeBall1;
   private boolean includeBall2;
   private boolean includeBall3;
@@ -25,9 +25,9 @@ public class RapidReactAutoCommand extends CommandBase {
   private int stage;
   private double [] waypoint;
 
-  public RapidReactAutoCommand(DrivetrainSub drivetrainSub, ShooterSub shooterSub, IntakeSub intakeSub, Boolean ball1, Boolean ball2, Boolean ball3, Boolean ball4) {
+  public RapidReactAutoCommand(DrivetrainSub drivetrainSub, ShootingSub shootingSub, IntakeSub intakeSub, Boolean ball1, Boolean ball2, Boolean ball3, Boolean ball4) {
     m_drivetrain = drivetrainSub;
-    m_shooterSub = shooterSub;
+    m_shootingSub = shootingSub;
     m_intakeSub = intakeSub;
     includeBall1 = ball1;
     includeBall2 = ball2;
@@ -37,7 +37,7 @@ public class RapidReactAutoCommand extends CommandBase {
     waypoint = new double[2];
     stage = 1;
     
-    addRequirements(shooterSub, intakeSub, drivetrainSub);
+    addRequirements(shootingSub, intakeSub, drivetrainSub);
   }
 
   // Called when the command is initially scheduled.
@@ -71,7 +71,7 @@ public class RapidReactAutoCommand extends CommandBase {
           waypoint = Constants.WAYPOINT_BALL_1;
           if (m_drivetrain.hasReachedWaypoint())
           {
-            if(m_shooterSub.autoShootBall())
+            if(m_shootingSub.autoShoot(0,0,false))
             {
               stage = 2;
             }
