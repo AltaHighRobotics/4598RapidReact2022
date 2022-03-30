@@ -128,6 +128,8 @@ public final class Constants {
     public static final double SHOOTER_MAX_ERROR = 500;
     public static final double SHOOTER_BARF_SPEED = 7000;
     public static final int SHOT_PROBABILITY_THRESHOLD = 500;
+    public static final double SHOOTER_CONTROL_OVERRIDE_THRESHOLD = 0.25;
+    public static final double SHOOTER_CONTROL_SPEED = 0.25;
 
     // Shooter Controller Constants
     public static final double SHOOTER_PORPORTIONAL_GAIN = 0.000007;

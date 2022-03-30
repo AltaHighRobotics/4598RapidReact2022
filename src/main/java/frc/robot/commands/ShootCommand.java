@@ -16,10 +16,8 @@ public class ShootCommand extends CommandBase {
   private final PS4Controller m_Ps4Controller;
   private double leftXAxis;
   private double leftYAxis;
-  private double targetShooterVelocity = 5000;
-  private double targetShooterElevation = 45;
-  private boolean shouldScore = false;
-  private int count = 0;
+  private double manualTargetAzimuth;
+  private double manualTargetElevation;
   
   
   /** Creates a new ElveationAngleCommand. */
@@ -40,9 +38,22 @@ public class ShootCommand extends CommandBase {
   @Override
   public void execute() {
     leftXAxis = m_Ps4Controller.getRawAxis(Constants.PS4_LEFT_STICK_X_AXIS);
+    if(Math.abs(leftXAxis) < Constants.SHOOTER_CONTROL_OVERRIDE_THRESHOLD) {
+      leftXAxis = 0;
+    }
     leftYAxis = m_Ps4Controller.getRawAxis(Constants.PS4_LEFT_STICK_Y_AXIS);
+    if(Math.abs(leftYAxis) < Constants.SHOOTER_CONTROL_OVERRIDE_THRESHOLD) {
+      leftYAxis = 0;
+    }
 
-    m_shootingSub.autoShoot();
+    if(m_shootingSub.getLimeLightElevation() == 0 && (leftXAxis != 0 || leftYAxis != 0) ) {
+      manualTargetAzimuth = manualTargetAzimuth + leftXAxis * Constants.SHOOTER_CONTROL_SPEED;
+      manualTargetElevation = manualTargetElevation + leftYAxis * Constants.SHOOTER_CONTROL_SPEED;
+      m_shootingSub.moveAzimuthMotorToAngle(manualTargetAzimuth);
+      m_shootingSub.moveElevationMotorToAngle(manualTargetElevation);
+    } else {
+      m_shootingSub.autoShoot();
+    }
   }
 
   // Called once the command ends or is interrupted.
