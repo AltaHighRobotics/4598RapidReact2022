@@ -89,7 +89,7 @@ public final class Constants {
     public static final double MIN_ARM_POSITION = 0;
     public static final double ALMOST_MIN_POSITION = 50000;
     public static final double HALF_ARM_POSITION = 100000;
-    public static final double MAX_ARM_POSITION = 200000;
+    public static final double MAX_ARM_POSITION = 220000;
     public static final double ACCEPTABLE_ERROR = 8000;
     public static final double ARM_CURRENT_LIMIT = 40;
     public static final double ARM_POWER_RAMP_TIME = 0.5;
