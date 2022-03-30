@@ -119,11 +119,9 @@ public class RobotContainer {
 
     // Shooter display
     SmartDashboard.putString("Shooter Status:", "NA");
-    SmartDashboard.putString("Shooter Left Power:", "NA");
-    SmartDashboard.putString("Shooter Right Power:", "NA");
+    SmartDashboard.putString("Shooter Power:", "NA");
     SmartDashboard.putString("Target Elevation Angle:", "NA");
     SmartDashboard.putString("Current Elevation Angle:", "NA");
-    SmartDashboard.putString("Elevation Angle Motor Power:", "NA");
 
     // Intake display
     SmartDashboard.putString("Intake Piston Status:", "NA");
@@ -131,9 +129,6 @@ public class RobotContainer {
 
     // Feed display
     SmartDashboard.putString("Feeder Status:", "NA");
-    
-    // Storage display
-    SmartDashboard.putString("Storage Status:", "NA");
 
     // Color display
     SmartDashboard.putString("Color Match:", "NA");

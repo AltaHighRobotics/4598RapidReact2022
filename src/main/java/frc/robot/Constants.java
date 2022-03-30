@@ -117,6 +117,7 @@ public final class Constants {
 
     // Storage Constants
     public static final double FEED_POWER = 0.6;
+    public static final double FEED_REVERSE_POWER = -0.15;
     public static final double STORAGE_POWER = 0.5;
 
     // Shooter Constants

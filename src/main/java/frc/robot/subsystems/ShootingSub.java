@@ -63,6 +63,7 @@ public class ShootingSub extends SubsystemBase {
   private int shotProbability = 0;
   private int autoMissTimer = 0;
   private boolean shouldMiss = false;
+  private double relativeLimeLightElevation = 0;
   
 
   public ShootingSub() {
@@ -167,18 +168,21 @@ public class ShootingSub extends SubsystemBase {
     rightShooterMotor.configSupplyCurrentLimit(shooterCurrentLimit);
   }
 
-  public void getColor() {
+  public void getColor()
+  {
     detectedColor = m_colorSensor.getColor();
     SmartDashboard.putNumber("RED:", detectedColor.red);
     SmartDashboard.putNumber("GREEN:", detectedColor.green);
     SmartDashboard.putNumber("BLUE:", detectedColor.blue);
   }
 
-  public boolean ballDetected() {
+  public boolean ballDetected()
+  {
     return (matchColorToAlliance("Red Alliance") || matchColorToAlliance("Blue Alliance"));
   }
 
-  public boolean matchColorToAlliance(String alliance) {
+  public boolean matchColorToAlliance(String alliance)
+  {
     detectedColor = m_colorSensor.getColor();
     if(alliance == "Red Alliance") {
       if(matchColorToColor(Constants.RED_ALLIANCE_COLOR, detectedColor)) {
@@ -202,7 +206,8 @@ public class ShootingSub extends SubsystemBase {
     }
   }
 
-  public boolean matchColorToColor(Color colorA, Color colorB) {
+  public boolean matchColorToColor(Color colorA, Color colorB)
+  {
     boolean rMatch = matchColorChannel(colorA.red, colorB.red);
     boolean bMatch = matchColorChannel(colorA.blue, colorB.blue);
     boolean gMatch = matchColorChannel(colorA.green, colorB.green);
@@ -210,69 +215,58 @@ public class ShootingSub extends SubsystemBase {
     return rMatch && bMatch && gMatch;
   }
 
-  private boolean matchColorChannel(double a, double b) {
+  private boolean matchColorChannel(double a, double b)
+  {
     return (a < b + Constants.COLOR_MATCH_THRESHOLD && a > b - Constants.COLOR_MATCH_THRESHOLD);
   }
 
-  public String getAlliance() {
+  public String getAlliance()
+  {
     return m_allianceChooser.getSelected();
   }
 
-  public LimeLight getLimeLight() {
+  public LimeLight getLimeLight()
+  {
     return limeLight;
   }
   
-  public double getLimeLightYaw() {
+  public double getLimeLightYaw()
+  {
     return limeLight.getdegRotationToTarget();
   }
   
-  public double getLimeLightElevation() {
+  public double getLimeLightElevation()
+  {
     return limeLight.getdegVerticalToTarget();
   }
   
-  public void enableLimeLight() {
+  public void enableLimeLight()
+  {
     limeLight.setPipeline(targetPipeline);
     limeLight.setLEDMode(LedMode.kforceOn);
   }
   
-  public void disableLimeLight() {
+  public void disableLimeLight()
+  {
     limeLight.setPipeline(targetPipeline);
     limeLight.setLEDMode(LedMode.kforceOff);
-  }
-
-  /** PID Controller used to set the azimuth angle for the shooter
-   *  Adjusts the motor power to aim with the limeLight.
-   *  @param limeLightYaw the rotation angle to the target, as measured by the limelight
-   */
-  public void moveAzimuthMotorToLimeLight(double offset) {
-    azimuthEncoderPosition = (azimuthMotor.getSelectedSensorPosition() / 4096 * 360) * Constants.AZIMUTH_GEAR_RATIO;
-    azimuthEncoderVelocity = (azimuthMotor.getSelectedSensorVelocity() / 4096 * 360) * Constants.AZIMUTH_GEAR_RATIO;
-    absoluteNavYaw = navX.getYaw();
-    relativeLimeLightYaw = getLimeLightYaw() + offset;
-    if(relativeLimeLightYaw != 0) {
-      absoluteAzimuthToTarget = relativeLimeLightYaw + azimuthEncoderPosition + absoluteNavYaw;
-    }
-    azimuthTargetAngle = (absoluteAzimuthToTarget-absoluteNavYaw)%360;
-    clampedAzimuthTargetAngle = MathUtil.clamp(azimuthTargetAngle, Constants.AZIMUTH_LOWER_LIMIT, Constants.AZIMUTH_UPPER_LIMIT);
-    azimuthMotorPower = azimuthPID.runVelocityPID(clampedAzimuthTargetAngle, azimuthEncoderPosition, azimuthEncoderVelocity);
-    azimuthReady = azimuthTargetAngle == clampedAzimuthTargetAngle && Math.abs(azimuthPID.getError()) < Constants.AZIMUTH_MAX_ERROR;
-    SmartDashboard.putNumber("Target Azimuth", azimuthTargetAngle);
-    SmartDashboard.putNumber("Azimuth Angle", azimuthEncoderPosition);
-    SmartDashboard.putNumber("Azimuth Power", azimuthMotorPower);
-    azimuthMotor.set(ControlMode.PercentOutput, azimuthMotorPower);
   }
 
   /** PID Controller used to set the azimuth angle for the shooter
    *  Adjusts the motor power to go to a target angle, in degrees.
    *  @param targetAngle A double representing the target angle that the azimuth angle motor should attempt to reach
    */
-  public void moveAzimuthMotorToAngle(double targetAngle) {
+  public void moveAzimuthMotorToAngle(double targetAngle)
+  {
     clampedAzimuthTargetAngle = MathUtil.clamp(targetAngle, Constants.AZIMUTH_LOWER_LIMIT, Constants.AZIMUTH_UPPER_LIMIT);
     azimuthEncoderPosition = (azimuthMotor.getSelectedSensorPosition() / 4096 * 360) * Constants.AZIMUTH_GEAR_RATIO;
     azimuthEncoderVelocity = (azimuthMotor.getSelectedSensorVelocity() / 4096 * 360) * Constants.AZIMUTH_GEAR_RATIO;
 
     azimuthMotorPower = azimuthPID.runVelocityPID(clampedAzimuthTargetAngle, azimuthEncoderPosition, azimuthEncoderVelocity);
     azimuthReady = targetAngle == clampedAzimuthTargetAngle && Math.abs(azimuthPID.getError()) < Constants.AZIMUTH_MAX_ERROR;
+    SmartDashboard.putNumber("Target Azimuth", clampedAzimuthTargetAngle);
+    SmartDashboard.putNumber("Azimuth Angle", azimuthEncoderPosition);
+    SmartDashboard.putNumber("Azimuth Power", azimuthMotorPower);
     azimuthMotor.set(ControlMode.PercentOutput, azimuthMotorPower);
   }
 
@@ -280,7 +274,8 @@ public class ShootingSub extends SubsystemBase {
    *  Adjusts the motor power to go to a target angle, in degrees.
    *  @param targetElevationAngle A double representing the target angle that the elevation angle motor should attempt to reach
    */
-  public void moveElevationMotorToAngle(double targetElevationAngle) {
+  public void moveElevationMotorToAngle(double targetElevationAngle)
+  {
 
     SmartDashboard.putNumber("Target Elevation Angle:", targetElevationAngle);
 
@@ -298,24 +293,13 @@ public class ShootingSub extends SubsystemBase {
     elevationAngleMotor.set(ControlMode.PercentOutput, elevationMotorPower);
   }
 
-  public void stopAimingMotors() {
-    elevationAngleMotor.neutralOutput();
-    azimuthMotor.neutralOutput();
-  }
-
-  public void stopElevationMotor() {
-    elevationAngleMotor.neutralOutput();
-  }
-
-  public boolean getIsAimReady() {
-    return shooterReady && azimuthReady && elevationReady;
-  }
-
-  public double getNavYaw() {
+  public double getNavYaw()
+  {
     return navX.getYaw();
   }
 
-  public double getAzimuth() {
+  public double getAzimuth()
+  {
     return (azimuthMotor.getSelectedSensorPosition() / 4096 * 360) * Constants.AZIMUTH_GEAR_RATIO;
   }
 
@@ -323,7 +307,8 @@ public class ShootingSub extends SubsystemBase {
    *  Adjusts both motors power to match a target velocity
    *  @param targetShooterVelocity A double representing the target velocity that the shooter motors should attempt to reach
    */
-  public void setShooterMotorsVelocity(double targetShooterVelocity) {
+  public void setShooterMotorsVelocity(double targetShooterVelocity)
+  {
 
     // Gets the velocity of the shooter
     shooterVelocity = leftShooterMotor.getSelectedSensorVelocity();
@@ -344,19 +329,33 @@ public class ShootingSub extends SubsystemBase {
     SmartDashboard.putNumber("Shooter Speed", shooterVelocity);
   }
 
-  public void setShooterMotorsPower(double Speed) {
+  public void setShooterMotorsPower(double Speed)
+  {
     leftShooterMotor.set(ControlMode.PercentOutput, Speed);
     rightShooterMotor.set(ControlMode.PercentOutput, Speed);
   }
 
-  public void stopShooterMotors() {
+  public void stopShooterMotors()
+  {
     leftShooterMotor.neutralOutput();
     rightShooterMotor.neutralOutput();
     SmartDashboard.putString("Shooter Status:", "Stopped");
   }
 
-  public void lerpShooter(double limeLightElevationAngle) {
-    angleToGoalDegrees = limeLightElevationAngle + Constants.LIMELIGHT_ELEVATION_ANGLE;
+  public void stopAimingMotors()
+  {
+    elevationAngleMotor.neutralOutput();
+    azimuthMotor.neutralOutput();
+  }
+
+  public void stopElevationMotor()
+  {
+    elevationAngleMotor.neutralOutput();
+  }
+
+  public void setShooterToLerpValues()
+  {
+    angleToGoalDegrees = getLimeLightElevation() + Constants.LIMELIGHT_ELEVATION_ANGLE;
     angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
     distanceToGoal = (Constants.GOAL_HEIGHT-Constants.LIMELIGHT_HEIGHT)/(Math.tan(angleToGoalRadians));
     SmartDashboard.putNumber("Distance", distanceToGoal);
@@ -393,7 +392,13 @@ public class ShootingSub extends SubsystemBase {
 
   }
 
-  public boolean autoShoot() {
+  public boolean getIsAimReady()
+  {
+    return shooterReady && azimuthReady && elevationReady;
+  }
+
+  public boolean autoShoot()
+  {
     if(ballDetected()) {
       shouldMiss = !matchColorToAlliance(getAlliance());
       autoMissTimer = 0;
@@ -403,18 +408,26 @@ public class ShootingSub extends SubsystemBase {
         shouldMiss = false;
       }
     }
-    if(shouldMiss) {
-      moveAzimuthMotorToLimeLight(Constants.AZIMUTH_BARF_ANGLE);
-    } else {
-      moveAzimuthMotorToLimeLight(0);
-    }
-    double limeLightElevationAngle = getLimeLightElevation();
-    if(limeLightElevationAngle != 0) {
-      lerpShooter(limeLightElevationAngle);
+
+    azimuthEncoderPosition = getAzimuth();
+    absoluteNavYaw = navX.getYaw();
+    relativeLimeLightYaw = getLimeLightYaw();
+    relativeLimeLightElevation = getLimeLightElevation();
+
+    if(relativeLimeLightElevation != 0) {
+      absoluteAzimuthToTarget = relativeLimeLightYaw + azimuthEncoderPosition + absoluteNavYaw;
+      setShooterToLerpValues();
     } else {
       stopShooterMotors();
       stopElevationMotor();
     }
+
+    azimuthTargetAngle = (absoluteAzimuthToTarget-absoluteNavYaw)%360;
+    if(shouldMiss) {
+      azimuthTargetAngle = azimuthTargetAngle + Constants.AZIMUTH_BARF_ANGLE;
+    }
+    moveAzimuthMotorToAngle(azimuthTargetAngle);
+    
     if(getIsAimReady()) {
       shotProbability = shotProbability + 1;
       if(shotProbability > Constants.SHOT_PROBABILITY_THRESHOLD) {
@@ -430,18 +443,21 @@ public class ShootingSub extends SubsystemBase {
 
   }
 
-  public void feedOn(){
+  public void feedOn()
+  {
     feedMotor.set(ControlMode.PercentOutput, Constants.FEED_POWER);
     SmartDashboard.putString("Feeder Status:", "Feeding");
   }
 
-  public void feedOff(){
+  public void feedOff()
+  {
     feedMotor.neutralOutput();
     SmartDashboard.putString("Feeder Status:", "Stopped");
   }
 
-  public void feedReverse(){
-    feedMotor.set(ControlMode.PercentOutput, -0.15);
+  public void feedReverse()
+  {
+    feedMotor.set(ControlMode.PercentOutput, Constants.FEED_REVERSE_POWER);
     SmartDashboard.putString("Feeder Status:", "Reverse");
   }
 
