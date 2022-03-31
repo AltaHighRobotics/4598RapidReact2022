@@ -33,13 +33,13 @@ public final class Constants {
     public static final int RIGHT_ARM_MOTOR = 5;
     public static final int LEFT_ARM_MOTOR = 6;
     public static final int INTAKE_MOTOR = 7;
-    public static final int STORAGE_MOTOR = 8;
+    public static final int STORAGE_MOTOR = 8; //disconnected
     public static final int FEED_MOTOR = 9;
     public static final int RIGHT_SHOOTER_MOTOR = 10;
     public static final int LEFT_SHOOTER_MOTOR = 11;
     public static final int ELEVATION_ANGLE_MOTOR = 12;
     public static final int AZIMUTH_MOTOR = 13;
-    public static final int ARM_WINCH_MOTOR = 14;
+    public static final int ARM_WINCH_MOTOR = 14; //disconnected
 
     // MOTOR SPEEDS
     public static final double LIFT_ARM_SPEED = 0;

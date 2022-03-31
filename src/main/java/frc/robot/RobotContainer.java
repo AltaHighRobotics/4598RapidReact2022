@@ -43,6 +43,7 @@ public class RobotContainer {
   private SendableChooser<Boolean> m_condition2 = new SendableChooser<>();
   private SendableChooser<Boolean> m_condition3 = new SendableChooser<>();
   private SendableChooser<Boolean> m_condition4 = new SendableChooser<>();
+  private SendableChooser<Integer> m_positionChoose = new SendableChooser<>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -66,10 +67,15 @@ public class RobotContainer {
     m_condition4.setDefaultOption("Exclude Ball 4", false);
     m_condition4.addOption("Include Ball 4", true);
 
+    m_positionChoose.setDefaultOption("Position1", 1);
+    m_positionChoose.addOption("Position2", 2);
+    m_positionChoose.addOption("Position3", 3);
+
     SmartDashboard.putData(m_condition1);
     SmartDashboard.putData(m_condition2);
     SmartDashboard.putData(m_condition3);
     SmartDashboard.putData(m_condition4);
+    SmartDashboard.putData(m_positionChoose);
   }
 
   /**
@@ -105,7 +111,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    RapidReactAutoCommand m_rapidReactAutoCommand = new RapidReactAutoCommand(m_drivetrainSub, m_shootingSub, m_intakeSub, m_condition1.getSelected(), m_condition2.getSelected(), m_condition3.getSelected(), m_condition4.getSelected());
+    RapidReactAutoCommand m_rapidReactAutoCommand = new RapidReactAutoCommand(m_drivetrainSub, m_shootingSub, m_intakeSub, m_positionChoose.getSelected(), m_condition1.getSelected(), m_condition2.getSelected(), m_condition3.getSelected(), m_condition4.getSelected());
     return m_rapidReactAutoCommand;
   }
 

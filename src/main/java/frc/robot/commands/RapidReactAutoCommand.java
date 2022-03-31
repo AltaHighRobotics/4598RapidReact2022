@@ -25,9 +25,10 @@ public class RapidReactAutoCommand extends CommandBase {
   private boolean hasgoneshoot;
   private boolean runningoutofnames;
   private int stage;
+  private Integer origPos;
   private double [] waypoint;
 
-  public RapidReactAutoCommand(DrivetrainSub drivetrainSub, ShootingSub shootingSub, IntakeSub intakeSub, Boolean ball1, Boolean ball2, Boolean ball3, Boolean ball4) {
+  public RapidReactAutoCommand(DrivetrainSub drivetrainSub, ShootingSub shootingSub, IntakeSub intakeSub, Integer InitialPosition, Boolean ball1, Boolean ball2, Boolean ball3, Boolean ball4) {
     m_drivetrain = drivetrainSub;
     m_shootingSub = shootingSub;
     m_intakeSub = intakeSub;
@@ -37,6 +38,7 @@ public class RapidReactAutoCommand extends CommandBase {
     includeBall2 = ball2;
     includeBall3 = ball3;
     includeBall4 = ball4;
+    origPos = InitialPosition;
 
     waypoint = new double[2];
     stage = 1;
@@ -50,6 +52,18 @@ public class RapidReactAutoCommand extends CommandBase {
   {
     waypoint[0] = 1;
     waypoint[1] = 1;
+    switch (origPos)
+    {
+      case 1:
+        m_drivetrain.setPos(0, 0);
+        break;
+
+      case 2:
+        m_drivetrain.setPos(0, 0);
+      
+      case 3:
+        m_drivetrain.setPos(0, 0);
+    }
     m_drivetrain.setPos(0, 0);
     m_drivetrain.resetYaw();
   }
@@ -90,28 +104,82 @@ public class RapidReactAutoCommand extends CommandBase {
         }
         break;
 
-      case 2:
-        if(!includeBall2)
+        case 2:
+        if (!includeBall2)
         {
           stage = 3;
         }
-        //ball 2 code
+        else
+        {
+          if(!hasgoneshoot)
+          {
+            waypoint = Constants.WAYPOINT_BALL_2;
+            if (m_drivetrain.hasReachedWaypoint())
+            {
+              runningoutofnames = true;
+            }
+          }
+          if (runningoutofnames)
+          {
+            if(inCommandgoShoot())
+            {
+              runningoutofnames = false;
+              stage = 3;
+            }
+          }
+        }
         break;
 
-      case 3:
-        if(!includeBall3)
+        case 3:
+        if (!includeBall3)
         {
           stage = 4;
         }
-        //ball 3 code
+        else
+        {
+          if(!hasgoneshoot)
+          {
+            waypoint = Constants.WAYPOINT_BALL_3;
+            if (m_drivetrain.hasReachedWaypoint())
+            {
+              runningoutofnames = true;
+            }
+          }
+          if (runningoutofnames)
+          {
+            if(inCommandgoShoot())
+            {
+              runningoutofnames = false;
+              stage = 4;
+            }
+          }
+        }
         break;
 
-      case 4:
-        if(!includeBall4)
+        case 4:
+        if (!includeBall4)
         {
           stage = 5;
         }
-        //ball 4 code
+        else
+        {
+          if(!hasgoneshoot)
+          {
+            waypoint = Constants.WAYPOINT_BALL_4;
+            if (m_drivetrain.hasReachedWaypoint())
+            {
+              runningoutofnames = true;
+            }
+          }
+          if (runningoutofnames)
+          {
+            if(inCommandgoShoot())
+            {
+              runningoutofnames = false;
+              stage = 5;
+            }
+          }
+        }
         break;
 
       case 5:
