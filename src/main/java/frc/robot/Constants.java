@@ -55,16 +55,16 @@ public final class Constants {
     public static final int PS4_RIGHT_STICK_X_AXIS = 2;
 
     // DriveTrain Navigation Constants
-    public static final double ENCODER_ROTATION_UNITS = 4096;
+    public static final double ENCODER_ROTATION_UNITS = 341.333333333;
     public static final double DRIVETRAIN_GEAR_RATIO = 0.1647058823;
     public static final double DRIVETRAIN_ROTATION_DISTANCE_RATIO = Math.PI * 0.666666666;
-    public static final double MAX_WAYPOINT_ERROR = 0.5;
+    public static final double MAX_WAYPOINT_ERROR = 0.125;
     public static final double MAX_DRIVE_HEADING_ERROR = 10;
     public static final double DRIVETRAIN_CURRENT_LIMIT = 40;
     public static final double DRIVETRAIN_POWER_RAMP_TIME = 0.1;
 
     // Drivetrain Controller Constants
-    public static final double DRIVETRAIN_HEADING_PROPORTIONAL_GAIN = 0.1;
+    public static final double DRIVETRAIN_HEADING_PROPORTIONAL_GAIN = 0.4;
     public static final double DRIVETRAIN_SPEED_PROPORTIONAL_GAIN = 0.5;
     public static final double DRIVETRAIN_HEADING_INTEGRAL_GAIN = 0;
     public static final double DRIVETRAIN_SPEED_INTEGRAL_GAIN = 0;
@@ -76,10 +76,10 @@ public final class Constants {
     public static final double DRIVETRAIN_SPEED_MAX_INTEGRAL = 0;
     public static final double DRIVETRAIN_HEADING_MAX_DERIVITIVE = 0;
     public static final double DRIVETRAIN_SPEED_MAX_DERIVITIVE = 0;
-    public static final double DRIVETRAIN_HEADING_MAX_POWER = 0.5;
+    public static final double DRIVETRAIN_HEADING_MAX_POWER = 0.75;
     public static final double DRIVETRAIN_SPEED_MAX_POWER = 0.5;
     public static final double DRIVETRAIN_HEADING_SPEED = 0.5;
-    public static final double DRIVETRAIN_SPEED_SPEED = 0.5;
+    public static final double DRIVETRAIN_SPEED_SPEED = 0.4;
     
     // ARM CONSTANTS
     public static final double MAX_ARM_ERROR = 40000;
@@ -90,7 +90,7 @@ public final class Constants {
     public static final double ALMOST_MIN_POSITION = 50000;
     public static final double HALF_ARM_POSITION = 100000;
     public static final double MAX_ARM_POSITION = 220000;
-    public static final double ALMOST_MAX_ARM_POSITION = 110000;
+    public static final double ALMOST_MAX_ARM_POSITION = 150000;
     public static final double ACCEPTABLE_ERROR = 8000;
     public static final double ARM_CURRENT_LIMIT = 40;
     public static final double ARM_POWER_RAMP_TIME = 0.5;
@@ -199,9 +199,10 @@ public final class Constants {
     };
     public static final double LIMELIGHT_ELEVATION_ANGLE = 40;
     public static final double LIMELIGHT_YAW_OFFSET = 0;
-    public static final double[] WAYPOINT_BALL_1 = {5,5};
-    public static final double[] WAYPOINT_BALL_2 = {0,0};
-    public static final double[] WAYPOINT_BALL_3 = {0,0};
-    public static final double[] WAYPOINT_BALL_4 = {0,0};
-    public static final double[] SHOOT_DISTANCE_WAYPOINT = {0,0};
+    public static final double[] WAYPOINT_BALL_1 = {87.75, 20};
+    public static final double[] WAYPOINT_BALL_2 = {150, -80};
+    public static final double[] WAYPOINT_BALL_3 = {-85, 20};
+    public static final double[] WAYPOINT_BALL_4 = {0,50};
+    public static final double[] SHOOT_DISTANCE_WAYPOINT_BUT_NOT = {0, 75};
+    public static final double[] SHOOT_DISTANCE_WAYPOINT = {0,50};
 }

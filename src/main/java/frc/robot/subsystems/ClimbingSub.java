@@ -85,7 +85,7 @@ public class ClimbingSub extends SubsystemBase {
     leftArmMotor.configSupplyCurrentLimit(armCurrentLimit);
     rightArmMotor.configSupplyCurrentLimit(armCurrentLimit);
 
-    currentArmTarget = Constants.MAX_ARM_POSITION;
+    currentArmTarget = Constants.ALMOST_MAX_ARM_POSITION;
     currentArmSpeed = Constants.ARM_FAST_SPEED;
     currentStage = 0;
     hasRun = false;

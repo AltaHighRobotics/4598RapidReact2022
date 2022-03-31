@@ -25,6 +25,8 @@ public class RapidReactAutoCommand extends CommandBase {
   private boolean hasgoneshoot;
   private boolean runningoutofnames;
   private int stage;
+  private int c;
+  private int cButlikeAgain;
   private Integer origPos;
   private double [] waypoint;
 
@@ -39,9 +41,11 @@ public class RapidReactAutoCommand extends CommandBase {
     includeBall3 = ball3;
     includeBall4 = ball4;
     origPos = InitialPosition;
+    c = 0;
+    cButlikeAgain = 0;
 
     waypoint = new double[2];
-    stage = 1;
+    stage = 0;
     
     addRequirements(shootingSub, intakeSub, drivetrainSub);
   }
@@ -55,14 +59,14 @@ public class RapidReactAutoCommand extends CommandBase {
     switch (origPos)
     {
       case 1:
-        m_drivetrain.setPos(0, 0);
+        m_drivetrain.setPos(53, 20);
         break;
 
       case 2:
-        m_drivetrain.setPos(0, 0);
+        m_drivetrain.setPos(-57, 40);
       
       case 3:
-        m_drivetrain.setPos(0, 0);
+        m_drivetrain.setPos(85.5, 67);
     }
     m_drivetrain.setPos(0, 0);
     m_drivetrain.resetYaw();
@@ -72,12 +76,24 @@ public class RapidReactAutoCommand extends CommandBase {
   @Override
   public void execute() {
     m_intakeSub.IntakeOn();
+    m_intakeSub.IntakeExtend(); 
     m_drivetrain.drivetrainPositionIntegration();
-    m_drivetrain.setDriveToWaypoint(waypoint[0],waypoint[1]);
+    if(cButlikeAgain > 250)
+    {
+      m_drivetrain.setDriveToWaypoint(waypoint[0],waypoint[1]);
+    }
     //System.out.println(!includeBall1);
 
     switch (stage)
     {
+      case 0:
+        cButlikeAgain++;
+        if(cButlikeAgain > 250)
+        {
+          stage = 1;
+        }
+        break;
+
       case 1:
         if (!includeBall1)
         {
@@ -206,12 +222,20 @@ public class RapidReactAutoCommand extends CommandBase {
   public boolean inCommandgoShoot()
   {
     hasgoneshoot = true;
-    waypoint = Constants.SHOOT_DISTANCE_WAYPOINT;
+    if (c == 0)
+    {
+    waypoint = Constants.SHOOT_DISTANCE_WAYPOINT_BUT_NOT;
+    }
+    else
+    {
+      waypoint = Constants.SHOOT_DISTANCE_WAYPOINT;
+    }
     if (m_drivetrain.hasReachedWaypoint())
     {
       if(m_shootingSub.autoShoot())
       {
         hasgoneshoot = false;
+        c = 0;
         return true;
       }
     }

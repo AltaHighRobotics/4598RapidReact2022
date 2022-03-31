@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.MjpegServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
@@ -24,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final PS4Controller m_driverOne = new PS4Controller(Constants.DRIVER_ONE);
+  private final PS4Controller m_driverTwo = new PS4Controller(1);
 
   private final ClimbingSub m_climbingSub = new ClimbingSub();
   private final IntakeSub m_intakeSub = new IntakeSub();
@@ -55,6 +60,9 @@ public class RobotContainer {
     //CommandScheduler.getInstance().setDefaultCommand(m_shootingSub, m_shootCommand);
     //CommandScheduler.getInstance().setDefaultCommand(m_computerVisionSub, m_intakeVisionCommand);
 
+    UsbCamera cam = new UsbCamera("cam", 0);
+    CameraServer.startAutomaticCapture();;
+    
     m_condition1.setDefaultOption("Exclude Ball 1", false);
     m_condition1.addOption("Include Ball 1", true);
 
@@ -91,10 +99,10 @@ public class RobotContainer {
     final JoystickButton intakeButton;
     final JoystickButton intakeReverseButton;
 
-    climbButton = new JoystickButton(m_driverOne, 2); // X button
-    frickButton = new JoystickButton(m_driverOne, 9); // Share button
-    aimButton = new JoystickButton(m_driverOne, 4); // Triangle Button
-    intakeButton = new JoystickButton(m_driverOne, 1); // Square Button
+    climbButton = new JoystickButton(m_driverTwo, 2); // X button
+    frickButton = new JoystickButton(m_driverTwo, 9); // Share button
+    aimButton = new JoystickButton(m_driverTwo, 4); // Triangle Button
+    intakeButton = new JoystickButton(m_driverOne, 4); // Square Button
     intakeReverseButton = new JoystickButton(m_driverOne, 5); // Left Bumper
 
 
