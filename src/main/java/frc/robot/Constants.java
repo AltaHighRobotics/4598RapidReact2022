@@ -200,8 +200,8 @@ public final class Constants {
     public static final double LIMELIGHT_ELEVATION_ANGLE = 40;
     public static final double LIMELIGHT_YAW_OFFSET = 0;
     public static final double[] WAYPOINT_BALL_1 = {5,5};
-    public static final double[] WAYPOINT_BALL_2 = null;
-    public static final double[] WAYPOINT_BALL_3 = null;
-    public static final double[] WAYPOINT_BALL_4 = null;
-    public static final double[] SHOOT_DISTANCE_WAYPOINT = null;
+    public static final double[] WAYPOINT_BALL_2 = {0,0};
+    public static final double[] WAYPOINT_BALL_3 = {0,0};
+    public static final double[] WAYPOINT_BALL_4 = {0,0};
+    public static final double[] SHOOT_DISTANCE_WAYPOINT = {0,0};
 }

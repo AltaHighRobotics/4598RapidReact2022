@@ -83,6 +83,7 @@ public class RapidReactAutoCommand extends CommandBase {
           {
             if(inCommandgoShoot())
             {
+              runningoutofnames = false;
               stage = 2;
             }
           }
