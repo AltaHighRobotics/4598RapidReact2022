@@ -90,6 +90,7 @@ public final class Constants {
     public static final double ALMOST_MIN_POSITION = 50000;
     public static final double HALF_ARM_POSITION = 100000;
     public static final double MAX_ARM_POSITION = 220000;
+    public static final double ALMOST_MAX_ARM_POSITION = 110000;
     public static final double ACCEPTABLE_ERROR = 8000;
     public static final double ARM_CURRENT_LIMIT = 40;
     public static final double ARM_POWER_RAMP_TIME = 0.5;
@@ -202,4 +203,5 @@ public final class Constants {
     public static final double[] WAYPOINT_BALL_2 = null;
     public static final double[] WAYPOINT_BALL_3 = null;
     public static final double[] WAYPOINT_BALL_4 = null;
+    public static final double[] SHOOT_DISTANCE_WAYPOINT = null;
 }

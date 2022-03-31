@@ -22,6 +22,8 @@ public class RapidReactAutoCommand extends CommandBase {
   private boolean includeBall2;
   private boolean includeBall3;
   private boolean includeBall4;
+  private boolean hasgoneshoot;
+  private boolean runningoutofnames;
   private int stage;
   private double [] waypoint;
 
@@ -29,6 +31,8 @@ public class RapidReactAutoCommand extends CommandBase {
     m_drivetrain = drivetrainSub;
     m_shootingSub = shootingSub;
     m_intakeSub = intakeSub;
+    hasgoneshoot = false;
+    runningoutofnames = false;
     includeBall1 = ball1;
     includeBall2 = ball2;
     includeBall3 = ball3;
@@ -63,15 +67,21 @@ public class RapidReactAutoCommand extends CommandBase {
       case 1:
         if (!includeBall1)
         {
-          System.out.println("doesnt work");
           stage = 2;
         }
         else
         {
-          waypoint = Constants.WAYPOINT_BALL_1;
-          if (m_drivetrain.hasReachedWaypoint())
+          if(!hasgoneshoot)
           {
-            if(m_shootingSub.autoShoot())
+            waypoint = Constants.WAYPOINT_BALL_1;
+            if (m_drivetrain.hasReachedWaypoint())
+            {
+              runningoutofnames = true;
+            }
+          }
+          if (runningoutofnames)
+          {
+            if(inCommandgoShoot())
             {
               stage = 2;
             }
@@ -121,6 +131,21 @@ public class RapidReactAutoCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    return false;
+  }
+
+  public boolean inCommandgoShoot()
+  {
+    hasgoneshoot = true;
+    waypoint = Constants.SHOOT_DISTANCE_WAYPOINT;
+    if (m_drivetrain.hasReachedWaypoint())
+    {
+      if(m_shootingSub.autoShoot())
+      {
+        hasgoneshoot = false;
+        return true;
+      }
+    }
     return false;
   }
 }
