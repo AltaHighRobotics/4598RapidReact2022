@@ -40,6 +40,7 @@ public class RobotContainer {
 
   private final DriveCommand m_driveCommand =  new DriveCommand(m_drivetrainSub, m_driverOne);
   private final ShootCommand m_shootCommand = new ShootCommand(m_shootingSub, m_driverOne);
+  private final ZeroShooterCommand m_zeroShooterCommand = new ZeroShooterCommand(m_shootingSub);
   private final IntakeCommand m_IntakeCommand = new IntakeCommand(m_intakeSub);
 
   //private final TestAutoCommand m_testAuto = new TestAutoCommand(m_drivetrainSub);
@@ -96,12 +97,14 @@ public class RobotContainer {
     final JoystickButton climbButton;
     final JoystickButton frickButton;
     final JoystickButton aimButton;
+    final JoystickButton zeroButton;
     final JoystickButton intakeButton;
     final JoystickButton intakeReverseButton;
 
     climbButton = new JoystickButton(m_driverTwo, 2); // X button
     frickButton = new JoystickButton(m_driverTwo, 9); // Share button
-    aimButton = new JoystickButton(m_driverTwo, 4); // Triangle Button
+    aimButton = new JoystickButton(m_driverOne, 6); // Right Bumper
+    zeroButton = new JoystickButton(m_driverOne, 3); // Circle
     intakeButton = new JoystickButton(m_driverOne, 4); // Square Button
     intakeReverseButton = new JoystickButton(m_driverOne, 5); // Left Bumper
 
@@ -109,6 +112,7 @@ public class RobotContainer {
     climbButton.toggleWhenPressed(m_climbingCommand);
     frickButton.toggleWhenPressed(m_jackFrickedUpCommand);
     aimButton.toggleWhenPressed(m_shootCommand);
+    zeroButton.toggleWhenPressed(m_zeroShooterCommand);
     intakeButton.toggleWhenPressed(m_IntakeCommand);
     
   }
