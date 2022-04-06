@@ -24,6 +24,7 @@ public class RapidReactAutoCommand extends CommandBase {
   private boolean includeBall4;
   private boolean hasgoneshoot;
   private boolean runningoutofnames;
+  private boolean backwards;
   private int stage;
   private int c;
   private int cButlikeAgain;
@@ -34,6 +35,7 @@ public class RapidReactAutoCommand extends CommandBase {
     m_drivetrain = drivetrainSub;
     m_shooterSub = shootingSub;
     m_intakeSub = intakeSub;
+    backwards = false;
     hasgoneshoot = false;
     runningoutofnames = false;
     includeBall1 = ball1;
@@ -122,78 +124,75 @@ public class RapidReactAutoCommand extends CommandBase {
         case 2:
         if (!includeBall2)
         {
+          System.out.println("doesnt work");
           stage = 3;
         }
         else
         {
-          if(!hasgoneshoot)
+          SmartDashboard.putString("Auto Process", "HEADING WAYPOINT 2");
+          waypoint = Constants.WAYPOINT_BALL_2;
+          if (m_drivetrain.hasReachedWaypoint())
           {
-            waypoint = Constants.WAYPOINT_BALL_2;
-            if (m_drivetrain.hasReachedWaypoint())
+            if(m_shooterSub.autoShoot())
             {
-              runningoutofnames = true;
+              hasgoneshoot = true;
             }
           }
-          if (runningoutofnames)
+          else
           {
-            if(inCommandgoShoot())
-            {
-              runningoutofnames = false;
-              stage = 3;
-            }
+            inCommandgoShoot();
           }
+          
         }
         break;
 
         case 3:
         if (!includeBall3)
         {
+          System.out.println("doesnt work");
           stage = 4;
         }
         else
         {
-          if(!hasgoneshoot)
+          SmartDashboard.putString("Auto Process", "HEADING WAYPOINT 3");
+          waypoint = Constants.WAYPOINT_BALL_3;
+          if (m_drivetrain.hasReachedWaypoint())
           {
-            waypoint = Constants.WAYPOINT_BALL_3;
-            if (m_drivetrain.hasReachedWaypoint())
+            if(m_shooterSub.autoShoot())
             {
-              runningoutofnames = true;
+              hasgoneshoot = true;
             }
           }
-          if (runningoutofnames)
+          else
           {
-            if(inCommandgoShoot())
-            {
-              runningoutofnames = false;
-              stage = 4;
-            }
+            inCommandgoShoot();
           }
+          
         }
         break;
 
         case 4:
-        if (!includeBall4)
+        if (!includeBall1)
         {
+          System.out.println("doesnt work");
           stage = 5;
         }
         else
         {
-          if(!hasgoneshoot)
+          SmartDashboard.putString("Auto Process", "HEADING WAYPOINT 4");
+          waypoint = Constants.WAYPOINT_BALL_4;
+          if (m_drivetrain.hasReachedWaypoint())
           {
-            waypoint = Constants.WAYPOINT_BALL_4;
-            if (m_drivetrain.hasReachedWaypoint())
+            if(m_shooterSub.autoShoot())
             {
-              runningoutofnames = true;
+              hasgoneshoot = true;
             }
           }
-          if (runningoutofnames)
+          else
           {
-            if(inCommandgoShoot())
-            {
-              runningoutofnames = false;
-              stage = 5;
-            }
+            inCommandgoShoot();
           }
+          
         }
         break;
 
@@ -223,7 +222,7 @@ public class RapidReactAutoCommand extends CommandBase {
     waypoint = Constants.SHOOT_DISTANCE_WAYPOINT;
     if (c > 50)
     {
-      if(m_drivetrain.setDriveToWaypoint(waypoint[0], waypoint[1], false))
+      if(m_drivetrain.setDriveToWaypoint(waypoint[0], waypoint[1], true))
       {
         runningoutofnames = true;
       }
@@ -233,6 +232,7 @@ public class RapidReactAutoCommand extends CommandBase {
         {
           if(m_shooterSub.autoShoot())
           {
+            hasgoneshoot = false;
             return true;
           }
         }
