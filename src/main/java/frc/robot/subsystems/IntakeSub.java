@@ -26,30 +26,30 @@ public class IntakeSub extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  }
+  } 
 
   public void IntakeExtend(){
     intakeSolenoid.set(true);
-    SmartDashboard.putString("Intake Piston Status:", "Deployed");
+    //SmartDashboard.putString("Intake Piston Status:", "Deployed");
   }
 
   public void IntakeRetract(){
     intakeSolenoid.set(false);
-    SmartDashboard.putString("Intake Piston Status:", "Retracted");
+    //SmartDashboard.putString("Intake Piston Status:", "Retracted");
   }
 
   public void IntakeOn(){
     intakeMotor.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
-    SmartDashboard.putString("Intake Motor Status:", "Running");
+    //SmartDashboard.putString("Intake Motor Status:", "Running");
   }
 
   public void IntakeReverse(){
     intakeMotor.set(ControlMode.PercentOutput, -Constants.INTAKE_SPEED);
-    SmartDashboard.putString("Intake Motor Status:", "Reverse");
+    //SmartDashboard.putString("Intake Motor Status:", "Reverse");
   }
 
   public void IntakeOff(){
     intakeMotor.set(ControlMode.PercentOutput, 0);
-    SmartDashboard.putString("Intake Motor Status:", "Stopped");
+    //SmartDashboard.putString("Intake Motor Status:", "Stopped");
   }
 }

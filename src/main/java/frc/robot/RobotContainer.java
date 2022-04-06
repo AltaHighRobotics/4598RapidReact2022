@@ -24,6 +24,10 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final PS4Controller m_driverOne = new PS4Controller(Constants.DRIVER_ONE);
+<<<<<<< Updated upstream
+=======
+  // private final PS4Controller m_driverTwo = new PS4Controller(1);
+>>>>>>> Stashed changes
 
   private final ClimbingSub m_climbingSub = new ClimbingSub();
   private final IntakeSub m_intakeSub = new IntakeSub();
@@ -44,9 +48,14 @@ public class RobotContainer {
   private final StorageCommand m_StorageCommand = new StorageCommand(m_StorageSub);
   private final AimCommand m_aimCommand = new AimCommand(m_aimingSub, m_driverOne, m_limeLightSub);
   private final IntakeCommand m_IntakeCommand = new IntakeCommand(m_intakeSub);
+<<<<<<< Updated upstream
   private final ColorCommand m_colorCommand = new ColorCommand(m_colorSub);
+=======
+  private final IntakeReverseCommand m_intakeReverseCommand = new IntakeReverseCommand(m_intakeSub);
+>>>>>>> Stashed changes
 
-  //private final TestAutoCommand m_testAuto = new TestAutoCommand(m_drivetrainSub);
+  private final TestAutoCommand m_testAuto = new TestAutoCommand(m_drivetrainSub);
+  private final backupauto m_bBackupauto = new backupauto(m_drivetrainSub);
 
   private SendableChooser<Boolean> m_condition1 = new SendableChooser<>();
   private SendableChooser<Boolean> m_condition2 = new SendableChooser<>();
@@ -59,10 +68,17 @@ public class RobotContainer {
     configureButtonBindings();
     
     CommandScheduler.getInstance().setDefaultCommand(m_drivetrainSub, m_driveCommand);
+<<<<<<< Updated upstream
     CommandScheduler.getInstance().setDefaultCommand(m_colorSub, m_colorCommand);
     //CommandScheduler.getInstance().setDefaultCommand(m_aimingSub, m_aimCommand);
     //CommandScheduler.getInstance().setDefaultCommand(m_computerVisionSub, m_intakeVisionCommand);
 
+=======
+   // CommandScheduler.getInstance().setDefaultCommand(m_colorSub, m_colorCommand);
+  //  CommandScheduler.getInstance().setDefaultCommand(m_shootingSub, m_shootCommand);
+ //   CommandScheduler.getInstance().setDefaultCommand(m_computerVisionSub, m_intakeVisionCommand);
+    
+>>>>>>> Stashed changes
     m_condition1.setDefaultOption("Exclude Ball 1", false);
     m_condition1.addOption("Include Ball 1", true);
 
@@ -99,12 +115,18 @@ public class RobotContainer {
 
     climbButton = new JoystickButton(m_driverOne, 2); // X button
     frickButton = new JoystickButton(m_driverOne, 9); // Share button
+<<<<<<< Updated upstream
     feedButton = new JoystickButton(m_driverOne, 6); // Right bumper
     //shootButton = new JoystickButton(m_driverOne, 6); // Right bumper
     storageButton = new JoystickButton(m_driverOne, 3); // Circle button
     aimButton = new JoystickButton(m_driverOne, 4); // Triangle Button
     intakeButton = new JoystickButton(m_driverOne, 1); // Square Button
+=======
+    aimButton = new JoystickButton(m_driverOne, 6); // right bumper Button
+    intakeButton = new JoystickButton(m_driverOne, 4); // Square Button
+>>>>>>> Stashed changes
     intakeReverseButton = new JoystickButton(m_driverOne, 5); // Left Bumper
+
 
 
     climbButton.toggleWhenPressed(m_climbingCommand);
@@ -114,6 +136,7 @@ public class RobotContainer {
     storageButton.toggleWhenPressed(m_StorageCommand);
     aimButton.toggleWhenPressed(m_aimCommand);
     intakeButton.toggleWhenPressed(m_IntakeCommand);
+    intakeReverseButton.toggleWhenPressed(m_intakeReverseCommand);
     
   }
 
@@ -129,6 +152,7 @@ public class RobotContainer {
 
   public void resetDashboard() {
     // Climb display
+<<<<<<< Updated upstream
     SmartDashboard.putString("Climb Stage:", "NA");
     SmartDashboard.putString("Climb Target:", "NA");
     SmartDashboard.putString("Climb Resetting?", "No");
@@ -167,6 +191,41 @@ public class RobotContainer {
     SmartDashboard.putString("Distance to Waypoint:", "NA");
     SmartDashboard.putString("Auto Throttle:", "NA");
     SmartDashboard.putString("Auto Steering:", "NA");
+=======
+    // SmartDashboard.putString("Climb Stage:", "NA");
+    // SmartDashboard.putString("Climb Target:", "NA");
+    // SmartDashboard.putString("Climb Resetting?", "No");
+    // SmartDashboard.putString("Left Arm Power:", "NA");
+    // SmartDashboard.putString("Right Arm Power:", "NA");
+
+    // // Shooter display
+    // SmartDashboard.putString("Shooter Status:", "NA");
+    // SmartDashboard.putString("Shooter Power:", "NA");
+    // SmartDashboard.putString("Target Elevation Angle:", "NA");
+    // SmartDashboard.putString("Current Elevation Angle:", "NA");
+
+    // // Intake display
+    // SmartDashboard.putString("Intake Piston Status:", "NA");
+    // SmartDashboard.putString("Intake Motor Status:", "NA");
+
+    // // Feed display
+    // SmartDashboard.putString("Feeder Status:", "NA");
+
+    // // Color display
+    // SmartDashboard.putString("Color Match:", "NA");
+    // SmartDashboard.putString("RED:", "NA");
+    // SmartDashboard.putString("GREEN:", "NA");
+    // SmartDashboard.putString("BLUE:", "NA");
+
+    // // Nav + Auto display
+    // SmartDashboard.putString("Robot X:", "NA");
+    // SmartDashboard.putString("Robot Y:", "NA");
+    // SmartDashboard.putString("Robot Heading:", "NA");
+    // SmartDashboard.putString("Heading Error:", "NA");
+    // SmartDashboard.putString("Distance to Waypoint:", "NA");
+    // SmartDashboard.putString("Auto Throttle:", "NA");
+    // SmartDashboard.putString("Auto Steering:", "NA");
+>>>>>>> Stashed changes
     
   }
 

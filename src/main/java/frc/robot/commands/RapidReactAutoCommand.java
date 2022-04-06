@@ -22,6 +22,13 @@ public class RapidReactAutoCommand extends CommandBase {
   private boolean includeBall3;
   private boolean includeBall4;
   private int stage;
+<<<<<<< Updated upstream
+=======
+  private int c;
+  private int ballCount;
+  private int cButlikeAgain;
+  private Integer origPos;
+>>>>>>> Stashed changes
   private double [] waypoint;
 
   public RapidReactAutoCommand(DrivetrainSub drivetrainSub, ShooterSub shooterSub, IntakeSub intakeSub, Boolean ball1, Boolean ball2, Boolean ball3, Boolean ball4) {
@@ -32,20 +39,52 @@ public class RapidReactAutoCommand extends CommandBase {
     includeBall2 = ball2;
     includeBall3 = ball3;
     includeBall4 = ball4;
+<<<<<<< Updated upstream
 
     waypoint = new double[2];
     stage = 1;
     
     addRequirements(shooterSub, intakeSub, drivetrainSub);
+=======
+    origPos = InitialPosition;
+    c = 0;
+    ballCount = 1;
+    cButlikeAgain = 0;
+
+    waypoint = new double[2];
+    stage = 0;
+    addRequirements(shootingSub, intakeSub, drivetrainSub);
+>>>>>>> Stashed changes
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() 
   {
+    SmartDashboard.putString("SHOOT????", "nah");
     waypoint[0] = 1;
+<<<<<<< Updated upstream
     waypoint[1] = 1;
     m_drivetrain.setPos(0, 0);
+=======
+    waypoint[1] = 99999;
+    switch (origPos)
+    {
+      case 1:
+        m_drivetrain.setPos(0,0);
+        break;
+
+      case 2:
+        m_drivetrain.setPos(-57, 40);
+        break;
+      
+      default:
+        m_drivetrain.setPos(85.5, 67);
+        break;
+
+    }
+    //m_drivetrain.setPos(0, 0);
+>>>>>>> Stashed changes
     m_drivetrain.resetYaw();
   }
 
@@ -54,7 +93,14 @@ public class RapidReactAutoCommand extends CommandBase {
   public void execute() {
     m_intakeSub.IntakeOn();
     m_drivetrain.drivetrainPositionIntegration();
+<<<<<<< Updated upstream
     m_drivetrain.setDriveToWaypoint(waypoint[0],waypoint[1]);
+=======
+    if(cButlikeAgain > 250)
+    {
+      m_drivetrain.setDriveToWaypoint(waypoint[0],waypoint[1], false);
+    }
+>>>>>>> Stashed changes
     //System.out.println(!includeBall1);
 
     switch (stage)
@@ -73,9 +119,19 @@ public class RapidReactAutoCommand extends CommandBase {
           {
             if(m_shooterSub.autoShootBall())
             {
+<<<<<<< Updated upstream
               stage = 2;
             }
+=======
+              hasgoneshoot = true;
+            }
           }
+          else
+          {
+            inCommandgoShoot();
+>>>>>>> Stashed changes
+          }
+          
         }
         break;
 
@@ -180,4 +236,31 @@ public class RapidReactAutoCommand extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+<<<<<<< Updated upstream
+=======
+
+  public boolean inCommandgoShoot()
+  {
+    c++;
+    waypoint = Constants.SHOOT_DISTANCE_WAYPOINT;
+    if (c > 50)
+    {
+      if(m_drivetrain.setDriveToWaypoint(waypoint[0], waypoint[1], false))
+      {
+        runningoutofnames = true;
+      }
+      if(runningoutofnames)
+      {
+        if(m_drivetrain.pointAtWaypoint(0,0))
+        {
+          if(m_shootingSub.autoShoot())
+          {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+>>>>>>> Stashed changes
 }

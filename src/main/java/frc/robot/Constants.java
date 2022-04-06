@@ -42,8 +42,14 @@ public final class Constants {
 
     // MOTOR SPEEDS
     public static final double LIFT_ARM_SPEED = 0;
+<<<<<<< Updated upstream
     public static final double INTAKE_SPEED = 0.3;
     public static final double DRIVE_MAX_SPEED = 0.5;
+=======
+    public static final double INTAKE_SPEED = 0.4;
+    public static final double DRIVE_MAX_SPEED = 1;
+    public static final double ARM_WINCH_SPEED = 1;
+>>>>>>> Stashed changes
 
     // DRIVER CONTROLS
     public static final int DRIVER_ONE = 0;
@@ -56,14 +62,23 @@ public final class Constants {
     public static final double ENCODER_ROTATION_UNITS = 4096;
     public static final double DRIVETRAIN_GEAR_RATIO = 0.1647058823;
     public static final double DRIVETRAIN_ROTATION_DISTANCE_RATIO = Math.PI * 0.666666666;
+<<<<<<< Updated upstream
     public static final double MAX_WAYPOINT_ERROR = 0.5;
+=======
+    public static final double MAX_WAYPOINT_ERROR = 6;
+>>>>>>> Stashed changes
     public static final double MAX_DRIVE_HEADING_ERROR = 10;
     public static final double DRIVETRAIN_CURRENT_LIMIT = 40;
     public static final double DRIVETRAIN_POWER_RAMP_TIME = 0.1;
 
     // Drivetrain Controller Constants
+<<<<<<< Updated upstream
     public static final double DRIVETRAIN_HEADING_PROPORTIONAL_GAIN = 0.1;
     public static final double DRIVETRAIN_SPEED_PROPORTIONAL_GAIN = 0.5;
+=======
+    public static final double DRIVETRAIN_HEADING_PROPORTIONAL_GAIN = 0.3;
+    public static final double DRIVETRAIN_SPEED_PROPORTIONAL_GAIN = 0.3;
+>>>>>>> Stashed changes
     public static final double DRIVETRAIN_HEADING_INTEGRAL_GAIN = 0;
     public static final double DRIVETRAIN_SPEED_INTEGRAL_GAIN = 0;
     public static final double DRIVETRAIN_HEADING_DERIVITIVE_GAIN = 0;
@@ -75,30 +90,41 @@ public final class Constants {
     public static final double DRIVETRAIN_HEADING_MAX_DERIVITIVE = 0;
     public static final double DRIVETRAIN_SPEED_MAX_DERIVITIVE = 0;
     public static final double DRIVETRAIN_HEADING_MAX_POWER = 0.5;
+<<<<<<< Updated upstream
     public static final double DRIVETRAIN_SPEED_MAX_POWER = 0.5;
     public static final double DRIVETRAIN_HEADING_SPEED = 0.5;
+=======
+    public static final double DRIVETRAIN_SPEED_MAX_POWER = 0.3;
+    public static final double DRIVETRAIN_HEADING_SPEED = 0.4;
+>>>>>>> Stashed changes
     public static final double DRIVETRAIN_SPEED_SPEED = 0.5;
     
     // ARM CONSTANTS
     public static final double MAX_ARM_ERROR = 40000;
     public static final double ARM_SLOW_SPEED = 1;
-    public static final double ARM_FAST_SPEED = 3;
-    public static final double FIRST_HOOK_POSITION = 150000;
+    public static final double ARM_FAST_SPEED = 1.5;
+    public static final double FIRST_HOOK_POSITION = 90000;
     public static final double MIN_ARM_POSITION = 0;
     public static final double ALMOST_MIN_POSITION = 50000;
+<<<<<<< Updated upstream
     public static final double HALF_ARM_POSITION = 100000;
     public static final double MAX_ARM_POSITION = 200000;
+=======
+    public static final double HALF_ARM_POSITION = 75000;
+    public static final double MAX_ARM_POSITION = 150000;
+    public static final double ALMOST_MAX_ARM_POSITION = 120000;
+>>>>>>> Stashed changes
     public static final double ACCEPTABLE_ERROR = 8000;
     public static final double ARM_CURRENT_LIMIT = 40;
     public static final double ARM_POWER_RAMP_TIME = 0.5;
 
     // Arm Controller Constants
-    public static final double ARM_PROPORTIONAL_GAIN = 0.00001;
-    public static final double ARM_INTEGRAL_GAIN = 0.00000003;
-    public static final double ARM_DERIVITIVE_GAIN = 0;
+    public static final double ARM_PROPORTIONAL_GAIN = 0.00003;
+    public static final double ARM_INTEGRAL_GAIN = 0.00000004;
+    public static final double ARM_DERIVITIVE_GAIN = 0.002;
     public static final double MAX_ARM_PROPORTIONAL = 1;
-    public static final double MAX_ARM_INTEGRAL = 0.25;
-    public static final double MAX_ARM_DERIVITIVE = 0;
+    public static final double MAX_ARM_INTEGRAL = 0.2;
+    public static final double MAX_ARM_DERIVITIVE = 0.5;
     public static final double ARM_MAX_POWER = 1;
 
     // Storage Constants
@@ -110,6 +136,14 @@ public final class Constants {
     public static final double SHOOTER_POWER_OFFSET = 0.1;
     public static final double SHOOTER_CURRENT_LIMIT = 20;
     public static final double SHOOTER_POWER_RAMP_TIME = 0.5;
+<<<<<<< Updated upstream
+=======
+    public static final double SHOOTER_MAX_ERROR = 1000;
+    public static final double SHOOTER_BARF_SPEED = 7000;
+    public static final int SHOT_PROBABILITY_THRESHOLD = 500;
+    public static final double SHOOTER_CONTROL_OVERRIDE_THRESHOLD = 0.25;
+    public static final double SHOOTER_CONTROL_SPEED = 0.25;
+>>>>>>> Stashed changes
 
     // Shooter Controller Constants
     public static final double SHOOTER_PORPORTIONAL_GAIN = 0.000006;
@@ -124,6 +158,13 @@ public final class Constants {
     public static final double SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT = 80; //Actually 86
     public static final double SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT = 30;
     public static final double ELEVATION_SPEED = 0.1;
+<<<<<<< Updated upstream
+=======
+    public static final double ELEVATION_MAX_ERROR = 5;
+    public static final double ELEVATION_BARF_ANGLE = 30;
+    public static final double ELEVATION_ANGLE_CURRENT_LIMIT = 20;
+    public static final double ELEVATION_ANGLE_RAMP_TIME = 0.5;
+>>>>>>> Stashed changes
 
     // Elevation Angle Controller Constants
     public static final double ELEVATION_ANGLE_PROPORTIONAL_GAIN = 0.5;
@@ -132,6 +173,10 @@ public final class Constants {
     public static final double ELEVATION_ANGLE_MAX_PROPORTIONAL = 1;
     public static final double ELEVATION_ANGLE_MAX_INTEGRAL = 0;
     public static final double ELEVATION_ANGLE_MAX_DERIVITIVE = 0;
+<<<<<<< Updated upstream
+=======
+    public static final double ELEVATION_ANGLE_MAX_POWER = 1;
+>>>>>>> Stashed changes
 
     // Azimuth Constants
     public static final double AZIMUTH_LOWER_LIMIT = -90;
@@ -139,7 +184,12 @@ public final class Constants {
     public static final double AZIMUTH_CURRENT_LIMIT = 40;
     public static final double AZIMUTH_POWER_RAMP_TIME = 0.5;
     public static final double AZIMUTH_GEAR_RATIO = 0.140;
+<<<<<<< Updated upstream
     public static final double AZIMUTH_MAX_ERROR = 4;
+=======
+    public static final double AZIMUTH_MAX_ERROR = 8;
+    public static final double AZIMUTH_BARF_ANGLE = 40;
+>>>>>>> Stashed changes
 
     // Azimuth Controller Constants
     public static final double AZIMUTH_PROPORTIONAL_GAIN = 0.009;
@@ -163,12 +213,30 @@ public final class Constants {
     public static final double RADIAN_CONVERSION = 3.14159 / 180.0; // Math.toDegrees(angrad) and Math.toRadians(angdeg) are cool too
     public static final double[][] SHOOTER_DATA = new double[][] {
             // Distance, Velocity, Angle
+<<<<<<< Updated upstream
             { 75, 4750, 70},
             { 100, 5000, 66.5 },
             { 150, 5500, 61 },
             { 200, 10000, 55 }
+=======
+            { 5, 9000, 78},
+            { 100, 9000, 75 },
+            { 157, 9900, 68},
+            { 187, 11000, 65 },
+            { 500, 11000, 65}
+>>>>>>> Stashed changes
     };
     public static final double LIMELIGHT_ELEVATION_ANGLE = 32;
     public static final double LIMELIGHT_YAW_OFFSET = 0;
+<<<<<<< Updated upstream
     public static final double[] WAYPOINT_BALL_1 = {5,5};
 }
+=======
+    public static final double[] WAYPOINT_BALL_1 = {25, 25};
+    public static final double[] WAYPOINT_BALL_2 = {150, -80};
+    public static final double[] WAYPOINT_BALL_3 = {20, -85};
+    public static final double[] WAYPOINT_BALL_4 = {0,50};
+    public static final double[] SHOOT_DISTANCE_WAYPOINT_BUT_NOT = {75, 75};
+    public static final double[] SHOOT_DISTANCE_WAYPOINT = {50,50};
+}
+>>>>>>> Stashed changes
