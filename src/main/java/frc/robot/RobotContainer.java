@@ -37,7 +37,7 @@ public class RobotContainer {
   
   private final JackFrickedUpCommand m_jackFrickedUpCommand = new JackFrickedUpCommand(m_climbingSub);
   private final ClimbingCommand m_climbingCommand = new ClimbingCommand(m_climbingSub, m_shootingSub);
-
+  private final MultiballAutoCommand m_multiballAutoCommand = new MultiballAutoCommand(m_drivetrainSub, m_shootingSub);
   private final DriveCommand m_driveCommand =  new DriveCommand(m_drivetrainSub, m_driverOne);
   private final ShootCommand m_shootCommand = new ShootCommand(m_shootingSub, m_driverOne);
   private final ZeroShooterCommand m_zeroShooterCommand = new ZeroShooterCommand(m_shootingSub);
@@ -123,8 +123,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    RapidReactAutoCommand m_rapidReactAutoCommand = new RapidReactAutoCommand(m_drivetrainSub, m_shootingSub, m_intakeSub, m_positionChoose.getSelected(), m_condition1.getSelected(), m_condition2.getSelected(), m_condition3.getSelected(), m_condition4.getSelected());
-    return m_rapidReactAutoCommand;
+    //MultiballAutoCommand m_multiballAutoCommand = new MultiballAutoCommand(m_drivetrainSub, m_shootingSub, m_intakeSub, m_positionChoose.getSelected(), m_condition1.getSelected(), m_condition2.getSelected(), m_condition3.getSelected(), m_condition4.getSelected());
+    return m_multiballAutoCommand;
   }
 
   public void resetDashboard() {

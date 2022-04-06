@@ -44,7 +44,7 @@ public final class Constants {
     // MOTOR SPEEDS
     public static final double LIFT_ARM_SPEED = 0;
     public static final double INTAKE_SPEED = 0.4;
-    public static final double DRIVE_MAX_SPEED = 0.5;
+    public static final double DRIVE_MAX_SPEED = 1;
     public static final double ARM_WINCH_SPEED = 1;
 
     // DRIVER CONTROLS
@@ -64,7 +64,7 @@ public final class Constants {
     public static final double DRIVETRAIN_POWER_RAMP_TIME = 0.1;
 
     // Drivetrain Controller Constants
-    public static final double DRIVETRAIN_HEADING_PROPORTIONAL_GAIN = 0.4;
+    public static final double DRIVETRAIN_HEADING_PROPORTIONAL_GAIN = 0.1;
     public static final double DRIVETRAIN_SPEED_PROPORTIONAL_GAIN = 0.5;
     public static final double DRIVETRAIN_HEADING_INTEGRAL_GAIN = 0;
     public static final double DRIVETRAIN_SPEED_INTEGRAL_GAIN = 0;
@@ -76,9 +76,9 @@ public final class Constants {
     public static final double DRIVETRAIN_SPEED_MAX_INTEGRAL = 0;
     public static final double DRIVETRAIN_HEADING_MAX_DERIVITIVE = 0;
     public static final double DRIVETRAIN_SPEED_MAX_DERIVITIVE = 0;
-    public static final double DRIVETRAIN_HEADING_MAX_POWER = 0.75;
+    public static final double DRIVETRAIN_HEADING_MAX_POWER = 0.5;
     public static final double DRIVETRAIN_SPEED_MAX_POWER = 0.5;
-    public static final double DRIVETRAIN_HEADING_SPEED = 0.5;
+    public static final double DRIVETRAIN_HEADING_SPEED = 1;
     public static final double DRIVETRAIN_SPEED_SPEED = 0.4;
     
     // ARM CONSTANTS
@@ -145,7 +145,7 @@ public final class Constants {
     public static final double SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT = 85; //Actually 86
     public static final double SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT = 30;
     public static final double ELEVATION_SPEED = 0.1;
-    public static final double ELEVATION_MAX_ERROR = 2;
+    public static final double ELEVATION_MAX_ERROR = 0.5;
     public static final double ELEVATION_BARF_ANGLE = 30;
     public static final double ELEVATION_ANGLE_CURRENT_LIMIT = 5;
     public static final double ELEVATION_ANGLE_RAMP_TIME = 0.5;
@@ -165,7 +165,7 @@ public final class Constants {
     public static final double AZIMUTH_CURRENT_LIMIT = 40;
     public static final double AZIMUTH_POWER_RAMP_TIME = 0.5;
     public static final double AZIMUTH_GEAR_RATIO = 0.140;
-    public static final double AZIMUTH_MAX_ERROR = 4;
+    public static final double AZIMUTH_MAX_ERROR = 2;
     public static final double AZIMUTH_BARF_ANGLE = 40;
 
     // Azimuth Controller Constants
@@ -190,8 +190,8 @@ public final class Constants {
     public static final double RADIAN_CONVERSION = 3.14159 / 180.0; // Math.toDegrees(angrad) and Math.toRadians(angdeg) are cool too
     public static final double[][] SHOOTER_DATA = new double[][] {
             // Distance, Velocity, Angle
-            { 1, 8000, 79},
-            { 85, 8000, 75},
+            { 1, 8100, 72},
+            { 85, 8100, 72},
             { 105, 8100, 70},
             { 140, 9000, 65 },
             { 185, 9500, 62},
@@ -199,10 +199,10 @@ public final class Constants {
     };
     public static final double LIMELIGHT_ELEVATION_ANGLE = 40;
     public static final double LIMELIGHT_YAW_OFFSET = 0;
-    public static final double[] WAYPOINT_BALL_1 = {87.75, 20};
-    public static final double[] WAYPOINT_BALL_2 = {150, -80};
-    public static final double[] WAYPOINT_BALL_3 = {-85, 20};
-    public static final double[] WAYPOINT_BALL_4 = {0,50};
+    public static final double[] WAYPOINT_BALL_1 = {150.79, 25.91};
+    public static final double[] WAYPOINT_BALL_2 = {88.3, 124.95};
+    public static final double[] WAYPOINT_BALL_3 = {-81.84, 129.4};
+    public static final double[] WAYPOINT_BALL_4 = {-149.23, 33.77};
     public static final double[] SHOOT_DISTANCE_WAYPOINT_BUT_NOT = {0, 75};
     public static final double[] SHOOT_DISTANCE_WAYPOINT = {0,50};
 }

@@ -275,7 +275,11 @@ public class ShootingSub extends SubsystemBase {
     // SmartDashboard.putNumber("Target Azimuth", clampedAzimuthTargetAngle);
     // SmartDashboard.putNumber("Azimuth Angle", azimuthEncoderPosition);
     // SmartDashboard.putNumber("Azimuth Power", azimuthMotorPower);
-    azimuthMotor.set(ControlMode.PercentOutput, azimuthMotorPower);
+    if(azimuthReady) {
+      stopAzimuthMotor();
+    } else {
+      azimuthMotor.set(ControlMode.PercentOutput, azimuthMotorPower);
+    }
   }
 
   /** PI Controller used to set the elevation angle for the shooter
@@ -297,8 +301,11 @@ public class ShootingSub extends SubsystemBase {
     elevationReady = clampedElevationTargetAngle == targetElevationAngle && Math.abs(elevationAnglePID.getError()) < Constants.ELEVATION_MAX_ERROR;
 
     //SmartDashboard.putNumber("Elevation Angle Motor Power:", elevationMotorPower);
-
-    elevationAngleMotor.set(ControlMode.PercentOutput, elevationMotorPower);
+    if(elevationReady) {
+      stopElevationMotor();
+    } else {
+      elevationAngleMotor.set(ControlMode.PercentOutput, elevationMotorPower);
+    }
   }
 
   public double getNavYaw()
@@ -359,6 +366,11 @@ public class ShootingSub extends SubsystemBase {
   public void stopElevationMotor()
   {
     elevationAngleMotor.neutralOutput();
+  }
+
+  public void stopAzimuthMotor()
+  {
+    azimuthMotor.neutralOutput();
   }
 
   public void setShooterToLerpValues()
@@ -423,11 +435,11 @@ public class ShootingSub extends SubsystemBase {
     //   }
     // }
     enableLimeLight();
-    shouldMiss=false;
+    shouldMiss = false;
     azimuthEncoderPosition = getAzimuth();
     absoluteNavYaw = navX.getYaw();
-    relativeLimeLightYaw = getLimeLightYaw();
-    relativeLimeLightElevation = getLimeLightElevation();
+    relativeLimeLightYaw = (getLimeLightYaw() + relativeLimeLightYaw)/2;
+    relativeLimeLightElevation = (getLimeLightElevation() + relativeLimeLightElevation)/2;
 
     if(relativeLimeLightElevation != 0) {
       absoluteAzimuthToTarget = relativeLimeLightYaw + azimuthEncoderPosition + absoluteNavYaw;
@@ -450,6 +462,7 @@ public class ShootingSub extends SubsystemBase {
     //moveAzimuthMotorToAngle(0);
     
     if(getIsAimReady()) {
+      stopAimingMotors();
       shotProbability = shotProbability + 1;
       if(shotProbability > Constants.SHOT_PROBABILITY_THRESHOLD) {
         //feedOff();

@@ -205,8 +205,11 @@ public class DrivetrainSub extends SubsystemBase
     SmartDashboard.putNumber("Target Y", this.targetY);
     //SmartDashboard.putNumber("Auto Throttle:", this.drivePower);
     //SmartDashboard.putNumber("Auto Steering:", this.steeringPower);
-
-    this.setArcadeDrive(this.drivePower, this.steeringPower);
+    if(hasReachedWaypoint()) {
+      stopMotors();
+    } else {
+      this.setArcadeDrive(this.drivePower, this.steeringPower);
+    }
     return hasReachedWaypoint();
   }
 
@@ -253,8 +256,8 @@ public class DrivetrainSub extends SubsystemBase
 
   public void setMotorAuto()
   {
-    leftMotorFront.set(ControlMode.PercentOutput, 0.3);    
-    rightMotorFront.set(ControlMode.PercentOutput, 0.3);  
+    leftMotorFront.set(ControlMode.PercentOutput, -0.3);    
+    rightMotorFront.set(ControlMode.PercentOutput, -0.3);  
   }
 
   // public void stopMotorAuto()
