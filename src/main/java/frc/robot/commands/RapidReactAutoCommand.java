@@ -17,7 +17,7 @@ import frc.robot.subsystems.ShootingSub;
 public class RapidReactAutoCommand extends CommandBase {
   private final DrivetrainSub m_drivetrain;
   private final IntakeSub m_intakeSub;
-  private final ShootingSub m_shootingSub;
+  private final ShootingSub m_shooterSub;
   private boolean includeBall1;
   private boolean includeBall2;
   private boolean includeBall3;
@@ -32,7 +32,7 @@ public class RapidReactAutoCommand extends CommandBase {
 
   public RapidReactAutoCommand(DrivetrainSub drivetrainSub, ShootingSub shootingSub, IntakeSub intakeSub, Integer InitialPosition, Boolean ball1, Boolean ball2, Boolean ball3, Boolean ball4) {
     m_drivetrain = drivetrainSub;
-    m_shootingSub = shootingSub;
+    m_shooterSub = shootingSub;
     m_intakeSub = intakeSub;
     hasgoneshoot = false;
     runningoutofnames = false;
@@ -80,7 +80,7 @@ public class RapidReactAutoCommand extends CommandBase {
     m_drivetrain.drivetrainPositionIntegration();
     if(cButlikeAgain > 250)
     {
-      m_drivetrain.setDriveToWaypoint(waypoint[0],waypoint[1]);
+      m_drivetrain.setDriveToWaypoint(waypoint[0],waypoint[1], false);
     }
     //System.out.println(!includeBall1);
 
@@ -94,29 +94,28 @@ public class RapidReactAutoCommand extends CommandBase {
         }
         break;
 
-      case 1:
+        case 1:
         if (!includeBall1)
         {
+          System.out.println("doesnt work");
           stage = 2;
         }
         else
         {
-          if(!hasgoneshoot)
+          SmartDashboard.putString("Auto Process", "HEADING WAYPOINT 1");
+          waypoint = Constants.WAYPOINT_BALL_1;
+          if (m_drivetrain.hasReachedWaypoint())
           {
-            waypoint = Constants.WAYPOINT_BALL_1;
-            if (m_drivetrain.hasReachedWaypoint())
+            if(m_shooterSub.autoShoot())
             {
-              runningoutofnames = true;
+              hasgoneshoot = true;
             }
           }
-          if (runningoutofnames)
+          else
           {
-            if(inCommandgoShoot())
-            {
-              runningoutofnames = false;
-              stage = 2;
-            }
+            inCommandgoShoot();
           }
+          
         }
         break;
 
@@ -218,27 +217,28 @@ public class RapidReactAutoCommand extends CommandBase {
   public boolean isFinished() {
     return false;
   }
-
   public boolean inCommandgoShoot()
   {
-    hasgoneshoot = true;
-    if (c == 0)
+    c++;
+    waypoint = Constants.SHOOT_DISTANCE_WAYPOINT;
+    if (c > 50)
     {
-    waypoint = Constants.SHOOT_DISTANCE_WAYPOINT_BUT_NOT;
-    }
-    else
-    {
-      waypoint = Constants.SHOOT_DISTANCE_WAYPOINT;
-    }
-    if (m_drivetrain.hasReachedWaypoint())
-    {
-      if(m_shootingSub.autoShoot())
+      if(m_drivetrain.setDriveToWaypoint(waypoint[0], waypoint[1], false))
       {
-        hasgoneshoot = false;
-        c = 0;
-        return true;
+        runningoutofnames = true;
+      }
+      if(runningoutofnames)
+      {
+        if(m_drivetrain.pointAtWaypoint(0,0))
+        {
+          if(m_shooterSub.autoShoot())
+          {
+            return true;
+          }
+        }
       }
     }
     return false;
   }
+
 }

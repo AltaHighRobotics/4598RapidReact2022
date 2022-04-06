@@ -64,6 +64,7 @@ public class ShootingSub extends SubsystemBase {
   private int autoMissTimer = 0;
   private boolean shouldMiss = false;
   private double relativeLimeLightElevation = 0;
+  private int fixedShootDelay = 0;
   
 
   public ShootingSub() {
@@ -78,7 +79,7 @@ public class ShootingSub extends SubsystemBase {
 
     feedMotor = new WPI_VictorSPX(Constants.FEED_MOTOR);
     feedMotor.configFactoryDefault();
-    feedMotor.setInverted(true);
+    feedMotor.setInverted(false);
 
     azimuthCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.AZIMUTH_CURRENT_LIMIT, 0, 0.1);
 
@@ -171,9 +172,9 @@ public class ShootingSub extends SubsystemBase {
   public void getColor()
   {
     detectedColor = m_colorSensor.getColor();
-    SmartDashboard.putNumber("RED:", detectedColor.red);
-    SmartDashboard.putNumber("GREEN:", detectedColor.green);
-    SmartDashboard.putNumber("BLUE:", detectedColor.blue);
+    //SmartDashboard.putNumber("RED:", detectedColor.red);
+    //SmartDashboard.putNumber("GREEN:", detectedColor.green);
+    //SmartDashboard.putNumber("BLUE:", detectedColor.blue);
   }
 
   public boolean ballDetected()
@@ -186,22 +187,22 @@ public class ShootingSub extends SubsystemBase {
     detectedColor = m_colorSensor.getColor();
     if(alliance == "Red Alliance") {
       if(matchColorToColor(Constants.RED_ALLIANCE_COLOR, detectedColor)) {
-        SmartDashboard.putString("Color Match:", "Color Matches Red Alliance");
+        //SmartDashboard.putString("Color Match:", "Color Matches Red Alliance");
         return true;
       } else {
-        SmartDashboard.putString("Color Match:", "Color Does Not Match Red Alliance");
+        //SmartDashboard.putString("Color Match:", "Color Does Not Match Red Alliance");
         return false;
       }
     } else if(alliance == "Blue Alliance") {
       if(matchColorToColor(Constants.BLUE_ALLIANCE_COLOR, detectedColor)) {
-        SmartDashboard.putString("Color Match:", "Color Matches Blue Alliance");
+        //SmartDashboard.putString("Color Match:", "Color Matches Blue Alliance");
         return true;
       } else {
-        SmartDashboard.putString("Color Match:", "Color Does Not Match Blue Alliance");
+        //SmartDashboard.putString("Color Match:", "Color Does Not Match Blue Alliance");
         return false;
       }
     } else {
-      System.out.println("matchColorToAlliance() was used without a valid alliance. This will always return false!");
+      //System.out.println("matchColorToAlliance() was used without a valid alliance. This will always return false!");
       return false;
     }
   }
@@ -264,9 +265,9 @@ public class ShootingSub extends SubsystemBase {
 
     azimuthMotorPower = azimuthPID.runVelocityPID(clampedAzimuthTargetAngle, azimuthEncoderPosition, azimuthEncoderVelocity);
     azimuthReady = targetAngle == clampedAzimuthTargetAngle && Math.abs(azimuthPID.getError()) < Constants.AZIMUTH_MAX_ERROR;
-    SmartDashboard.putNumber("Target Azimuth", clampedAzimuthTargetAngle);
-    SmartDashboard.putNumber("Azimuth Angle", azimuthEncoderPosition);
-    SmartDashboard.putNumber("Azimuth Power", azimuthMotorPower);
+    // SmartDashboard.putNumber("Target Azimuth", clampedAzimuthTargetAngle);
+    // SmartDashboard.putNumber("Azimuth Angle", azimuthEncoderPosition);
+    // SmartDashboard.putNumber("Azimuth Power", azimuthMotorPower);
     azimuthMotor.set(ControlMode.PercentOutput, azimuthMotorPower);
   }
 
@@ -277,18 +278,18 @@ public class ShootingSub extends SubsystemBase {
   public void moveElevationMotorToAngle(double targetElevationAngle)
   {
 
-    SmartDashboard.putNumber("Target Elevation Angle:", targetElevationAngle);
+    //SmartDashboard.putNumber("Target Elevation Angle:", targetElevationAngle);
 
     clampedElevationTargetAngle = MathUtil.clamp(targetElevationAngle, Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT, Constants.SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT);
     elevationEncoderPosition = ((elevationAngleMotor.getSelectedSensorPosition()*Constants.ELEVATION_ANGLE_GEAR_RATIO)/4096 * 360) + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT;
 
     //SmartDashboard.putNumber("Raw Encoder Angle Degrees",(elevationAngleMotor.getSelectedSensorPosition())/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT);
-    SmartDashboard.putNumber("Current Elevation Angle:", elevationEncoderPosition);
+    //SmartDashboard.putNumber("Current Elevation Angle:", elevationEncoderPosition);
 
     elevationMotorPower = elevationAnglePID.runPID(clampedElevationTargetAngle, elevationEncoderPosition);
     elevationReady = clampedElevationTargetAngle == targetElevationAngle && Math.abs(elevationAnglePID.getError()) < Constants.ELEVATION_MAX_ERROR;
 
-    SmartDashboard.putNumber("Elevation Angle Motor Power:", elevationMotorPower);
+    //SmartDashboard.putNumber("Elevation Angle Motor Power:", elevationMotorPower);
 
     elevationAngleMotor.set(ControlMode.PercentOutput, elevationMotorPower);
   }
@@ -323,10 +324,10 @@ public class ShootingSub extends SubsystemBase {
     rightShooterMotor.set(ControlMode.PercentOutput, shooterPower);
 
     // Displays useful values in Smart Dashboard
-    SmartDashboard.putNumber("Shooter Power:", shooterPower);
-    SmartDashboard.putString("Shooter Status:", "Shooting");
-    SmartDashboard.putNumber("Shooter Target Speed", targetShooterVelocity);
-    SmartDashboard.putNumber("Shooter Speed", shooterVelocity);
+    // SmartDashboard.putNumber("Shooter Power:", shooterPower);
+    // SmartDashboard.putString("Shooter Status:", "Shooting");
+    // SmartDashboard.putNumber("Shooter Target Speed", targetShooterVelocity);
+    // SmartDashboard.putNumber("Shooter Speed", shooterVelocity);
   }
 
   public void setShooterMotorsPower(double Speed)
@@ -339,7 +340,7 @@ public class ShootingSub extends SubsystemBase {
   {
     leftShooterMotor.neutralOutput();
     rightShooterMotor.neutralOutput();
-    SmartDashboard.putString("Shooter Status:", "Stopped");
+    //SmartDashboard.putString("Shooter Status:", "Stopped");
   }
 
   public void stopAimingMotors()
@@ -394,21 +395,28 @@ public class ShootingSub extends SubsystemBase {
 
   public boolean getIsAimReady()
   {
-    return shooterReady && azimuthReady && elevationReady;
+    return shooterReady && elevationReady && azimuthReady;
+  }
+
+  public void fixedShoot() {
+    moveAzimuthMotorToAngle(0);
+    //moveElevationMotorToAngle(77);
+    setShooterMotorsVelocity(5000);
   }
 
   public boolean autoShoot()
   {
-    if(ballDetected()) {
-      shouldMiss = !matchColorToAlliance(getAlliance());
-      autoMissTimer = 0;
-    } else {
-      autoMissTimer = autoMissTimer + 1;
-      if(autoMissTimer > 150) {
-        shouldMiss = false;
-      }
-    }
-
+    // if(ballDetected()) {
+    //   shouldMiss = !matchColorToAlliance(getAlliance());
+    //   autoMissTimer = 0;
+    // } else {
+    //   autoMissTimer = autoMissTimer + 1;
+    //   if(autoMissTimer > 150) {
+    //     shouldMiss = false;
+    //   }
+    // }
+    enableLimeLight();
+    shouldMiss=false;
     azimuthEncoderPosition = getAzimuth();
     absoluteNavYaw = navX.getYaw();
     relativeLimeLightYaw = getLimeLightYaw();
@@ -421,17 +429,20 @@ public class ShootingSub extends SubsystemBase {
       stopShooterMotors();
       stopElevationMotor();
     }
+    //setShooterMotorsVelocity(9000);
+    //moveElevationMotorToAngle(77);
 
     azimuthTargetAngle = (absoluteAzimuthToTarget-absoluteNavYaw)%360;
-    if(shouldMiss) {
-      azimuthTargetAngle = azimuthTargetAngle + Constants.AZIMUTH_BARF_ANGLE;
+    if(false) {
+     azimuthTargetAngle = azimuthTargetAngle + Constants.AZIMUTH_BARF_ANGLE;
     }
     moveAzimuthMotorToAngle(azimuthTargetAngle);
+    //moveAzimuthMotorToAngle(0);
     
     if(getIsAimReady()) {
       shotProbability = shotProbability + 1;
       if(shotProbability > Constants.SHOT_PROBABILITY_THRESHOLD) {
-        feedOff();
+        //feedOff();
         return true;
       }
       feedOn();
@@ -446,19 +457,19 @@ public class ShootingSub extends SubsystemBase {
   public void feedOn()
   {
     feedMotor.set(ControlMode.PercentOutput, Constants.FEED_POWER);
-    SmartDashboard.putString("Feeder Status:", "Feeding");
+    SmartDashboard.putString("Feeder:", "Feeding");
   }
 
   public void feedOff()
   {
     feedMotor.neutralOutput();
-    SmartDashboard.putString("Feeder Status:", "Stopped");
+    SmartDashboard.putString("Feeder:", "Stopped");
   }
 
   public void feedReverse()
   {
     feedMotor.set(ControlMode.PercentOutput, Constants.FEED_REVERSE_POWER);
-    SmartDashboard.putString("Feeder Status:", "Reverse");
+    SmartDashboard.putString("Feeder:", "Reverse");
   }
 
 }
