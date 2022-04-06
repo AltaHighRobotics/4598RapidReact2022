@@ -66,6 +66,7 @@ public class ShootingSub extends SubsystemBase {
   private double relativeLimeLightElevation = 0;
   private int fixedShootDelay = 0;
   private int scanningAngle = 0;
+  private int shooterReadyCapacitor = 0;
   
 
   public ShootingSub() {
@@ -179,9 +180,9 @@ public class ShootingSub extends SubsystemBase {
   public void getColor()
   {
     detectedColor = m_colorSensor.getColor();
-    //SmartDashboard.putNumber("RED:", detectedColor.red);
-    //SmartDashboard.putNumber("GREEN:", detectedColor.green);
-    //SmartDashboard.putNumber("BLUE:", detectedColor.blue);
+    SmartDashboard.putNumber("RED:", detectedColor.red);
+    SmartDashboard.putNumber("GREEN:", detectedColor.green);
+    SmartDashboard.putNumber("BLUE:", detectedColor.blue);
   }
 
   public boolean ballDetected()
@@ -194,18 +195,18 @@ public class ShootingSub extends SubsystemBase {
     detectedColor = m_colorSensor.getColor();
     if(alliance == "Red Alliance") {
       if(matchColorToColor(Constants.RED_ALLIANCE_COLOR, detectedColor)) {
-        //SmartDashboard.putString("Color Match:", "Color Matches Red Alliance");
+        SmartDashboard.putString("Color Match:", "Color Matches Red Alliance");
         return true;
       } else {
-        //SmartDashboard.putString("Color Match:", "Color Does Not Match Red Alliance");
+        SmartDashboard.putString("Color Match:", "Color Does Not Match Red Alliance");
         return false;
       }
     } else if(alliance == "Blue Alliance") {
       if(matchColorToColor(Constants.BLUE_ALLIANCE_COLOR, detectedColor)) {
-        //SmartDashboard.putString("Color Match:", "Color Matches Blue Alliance");
+        SmartDashboard.putString("Color Match:", "Color Matches Blue Alliance");
         return true;
       } else {
-        //SmartDashboard.putString("Color Match:", "Color Does Not Match Blue Alliance");
+        SmartDashboard.putString("Color Match:", "Color Does Not Match Blue Alliance");
         return false;
       }
     } else {
@@ -331,7 +332,19 @@ public class ShootingSub extends SubsystemBase {
     // Runs the controller
     shooterPower = shooterPID.runPID(targetShooterVelocity, shooterVelocity);
 
-    shooterReady = Math.abs(shooterPID.getError()) < Constants.SHOOTER_MAX_ERROR;
+    //shooterReady = Math.abs(shooterPID.getError()) < Constants.SHOOTER_MAX_ERROR;
+    if(Math.abs(shooterPID.getError()) < Constants.SHOOTER_MAX_ERROR) {
+      shooterReadyCapacitor = MathUtil.clamp(shooterReadyCapacitor + 1, 0, 50);
+    } else {
+      shooterReadyCapacitor = MathUtil.clamp(shooterReadyCapacitor - 1, 0, 50);
+    }
+    if(shooterReadyCapacitor > 25) {
+      shooterReady = true;
+    } else {
+      shooterReady = false;
+    }
+    SmartDashboard.putNumber("Shooter Ready", shooterReadyCapacitor);
+
 
     // Sets the motors to the computed power level
     leftShooterMotor.set(ControlMode.PercentOutput, shooterPower);
@@ -354,6 +367,7 @@ public class ShootingSub extends SubsystemBase {
   {
     leftShooterMotor.neutralOutput();
     rightShooterMotor.neutralOutput();
+    shooterReadyCapacitor = 0;
     //SmartDashboard.putString("Shooter Status:", "Stopped");
   }
 
@@ -425,21 +439,12 @@ public class ShootingSub extends SubsystemBase {
 
   public boolean autoShoot()
   {
-    // if(ballDetected()) {
-    //   shouldMiss = !matchColorToAlliance(getAlliance());
-    //   autoMissTimer = 0;
-    // } else {
-    //   autoMissTimer = autoMissTimer + 1;
-    //   if(autoMissTimer > 150) {
-    //     shouldMiss = false;
-    //   }
-    // }
     enableLimeLight();
     shouldMiss = false;
     azimuthEncoderPosition = getAzimuth();
     absoluteNavYaw = navX.getYaw();
-    relativeLimeLightYaw = (getLimeLightYaw() + relativeLimeLightYaw)/2;
-    relativeLimeLightElevation = (getLimeLightElevation() + relativeLimeLightElevation)/2;
+    relativeLimeLightYaw = getLimeLightYaw();
+    relativeLimeLightElevation = getLimeLightElevation();
 
     if(relativeLimeLightElevation != 0) {
       absoluteAzimuthToTarget = relativeLimeLightYaw + azimuthEncoderPosition + absoluteNavYaw;
@@ -448,29 +453,27 @@ public class ShootingSub extends SubsystemBase {
     } else {
       stopShooterMotors();
       stopElevationMotor();
-      azimuthTargetAngle = Math.floorMod(scanningAngle/100, 90) - 45;
-      scanningAngle = scanningAngle + 1;
+      elevationReady = false;
+      azimuthReady = false;
+      // azimuthTargetAngle = Math.floorMod(scanningAngle/100, 90) - 45;
+      // scanningAngle = scanningAngle + 1;
     }
-    //setShooterMotorsVelocity(9000);
-    //moveElevationMotorToAngle(77);
-
     
     // if(false) {
     //  azimuthTargetAngle = azimuthTargetAngle + Constants.AZIMUTH_BARF_ANGLE;
     // }
     moveAzimuthMotorToAngle(azimuthTargetAngle);
-    //moveAzimuthMotorToAngle(0);
     
     if(getIsAimReady()) {
       stopAimingMotors();
       shotProbability = shotProbability + 1;
       if(shotProbability > Constants.SHOT_PROBABILITY_THRESHOLD) {
         //feedOff();
+        shotProbability = 0;
         return true;
       }
       feedOn();
     } else {
-      shotProbability = 0;
       feedReverse();
     }
     return false;

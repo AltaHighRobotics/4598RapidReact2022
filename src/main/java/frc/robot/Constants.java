@@ -128,7 +128,7 @@ public final class Constants {
     public static final double SHOOTER_POWER_RAMP_TIME = 0.5;
     public static final double SHOOTER_MAX_ERROR = 50;
     public static final double SHOOTER_BARF_SPEED = 7000;
-    public static final int SHOT_PROBABILITY_THRESHOLD = 500;
+    public static final int SHOT_PROBABILITY_THRESHOLD = 100;
     public static final double SHOOTER_CONTROL_OVERRIDE_THRESHOLD = 0.25;
     public static final double SHOOTER_CONTROL_SPEED = 0.25;
 
@@ -160,8 +160,8 @@ public final class Constants {
     public static final double ELEVATION_ANGLE_MAX_POWER = 0.5;
 
     // Azimuth Constants
-    public static final double AZIMUTH_LOWER_LIMIT = -60;
-    public static final double AZIMUTH_UPPER_LIMIT = 60;
+    public static final double AZIMUTH_LOWER_LIMIT = -50;
+    public static final double AZIMUTH_UPPER_LIMIT = 50;
     public static final double AZIMUTH_CURRENT_LIMIT = 40;
     public static final double AZIMUTH_POWER_RAMP_TIME = 0.5;
     public static final double AZIMUTH_GEAR_RATIO = 0.140;
@@ -181,7 +181,7 @@ public final class Constants {
     // Color Constants
     public static final Color RED_ALLIANCE_COLOR = new Color(0.6,0.3,0.1);
     public static final Color BLUE_ALLIANCE_COLOR = new Color(0.2,0.4,0.4);
-    public static final double COLOR_MATCH_THRESHOLD = 0.1;
+    public static final double COLOR_MATCH_THRESHOLD = 0.15;
 
     // LIMELIGHT CONSTANTS
     public static final double A1 = 30;
