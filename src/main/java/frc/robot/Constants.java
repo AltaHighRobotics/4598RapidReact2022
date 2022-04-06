@@ -126,7 +126,7 @@ public final class Constants {
     public static final double SHOOTER_POWER_OFFSET = 0.1;
     public static final double SHOOTER_CURRENT_LIMIT = 20;
     public static final double SHOOTER_POWER_RAMP_TIME = 0.5;
-    public static final double SHOOTER_MAX_ERROR = 500;
+    public static final double SHOOTER_MAX_ERROR = 50;
     public static final double SHOOTER_BARF_SPEED = 7000;
     public static final int SHOT_PROBABILITY_THRESHOLD = 500;
     public static final double SHOOTER_CONTROL_OVERRIDE_THRESHOLD = 0.25;
@@ -190,12 +190,12 @@ public final class Constants {
     public static final double RADIAN_CONVERSION = 3.14159 / 180.0; // Math.toDegrees(angrad) and Math.toRadians(angdeg) are cool too
     public static final double[][] SHOOTER_DATA = new double[][] {
             // Distance, Velocity, Angle
-            { 5, 8000, 90},
-            { 76, 8100, 82},
-            { 115, 8352, 77.5},
-            { 150, 9000, 72 },
-            { 175, 9000, 70 },
-            { 500, 9000, 60}
+            { 1, 8000, 79},
+            { 85, 8000, 75},
+            { 105, 8100, 70},
+            { 140, 9000, 65 },
+            { 185, 9500, 62},
+            { 500, 9800, 62}
     };
     public static final double LIMELIGHT_ELEVATION_ANGLE = 40;
     public static final double LIMELIGHT_YAW_OFFSET = 0;

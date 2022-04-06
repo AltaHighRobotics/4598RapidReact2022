@@ -65,6 +65,7 @@ public class ShootingSub extends SubsystemBase {
   private boolean shouldMiss = false;
   private double relativeLimeLightElevation = 0;
   private int fixedShootDelay = 0;
+  private int scanningAngle = 0;
   
 
   public ShootingSub() {
@@ -167,6 +168,12 @@ public class ShootingSub extends SubsystemBase {
 
     leftShooterMotor.configSupplyCurrentLimit(shooterCurrentLimit);
     rightShooterMotor.configSupplyCurrentLimit(shooterCurrentLimit);
+
+    leftShooterMotor.enableVoltageCompensation(true);
+    rightShooterMotor.enableVoltageCompensation(true);
+
+    leftShooterMotor.configVoltageCompSaturation(11);
+    rightShooterMotor.configVoltageCompSaturation(11);
   }
 
   public void getColor()
@@ -278,13 +285,13 @@ public class ShootingSub extends SubsystemBase {
   public void moveElevationMotorToAngle(double targetElevationAngle)
   {
 
-    //SmartDashboard.putNumber("Target Elevation Angle:", targetElevationAngle);
+    SmartDashboard.putNumber("Target Elevation Angle:", targetElevationAngle);
 
     clampedElevationTargetAngle = MathUtil.clamp(targetElevationAngle, Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT, Constants.SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT);
     elevationEncoderPosition = ((elevationAngleMotor.getSelectedSensorPosition()*Constants.ELEVATION_ANGLE_GEAR_RATIO)/4096 * 360) + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT;
 
     //SmartDashboard.putNumber("Raw Encoder Angle Degrees",(elevationAngleMotor.getSelectedSensorPosition())/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT);
-    //SmartDashboard.putNumber("Current Elevation Angle:", elevationEncoderPosition);
+    SmartDashboard.putNumber("Current Elevation Angle:", elevationEncoderPosition);
 
     elevationMotorPower = elevationAnglePID.runPID(clampedElevationTargetAngle, elevationEncoderPosition);
     elevationReady = clampedElevationTargetAngle == targetElevationAngle && Math.abs(elevationAnglePID.getError()) < Constants.ELEVATION_MAX_ERROR;
@@ -326,8 +333,8 @@ public class ShootingSub extends SubsystemBase {
     // Displays useful values in Smart Dashboard
     // SmartDashboard.putNumber("Shooter Power:", shooterPower);
     // SmartDashboard.putString("Shooter Status:", "Shooting");
-    // SmartDashboard.putNumber("Shooter Target Speed", targetShooterVelocity);
-    // SmartDashboard.putNumber("Shooter Speed", shooterVelocity);
+    SmartDashboard.putNumber("Shooter Target Speed", targetShooterVelocity);
+    SmartDashboard.putNumber("Shooter Speed", shooterVelocity);
   }
 
   public void setShooterMotorsPower(double Speed)
@@ -424,18 +431,21 @@ public class ShootingSub extends SubsystemBase {
 
     if(relativeLimeLightElevation != 0) {
       absoluteAzimuthToTarget = relativeLimeLightYaw + azimuthEncoderPosition + absoluteNavYaw;
+      azimuthTargetAngle = (absoluteAzimuthToTarget-absoluteNavYaw)%360;
       setShooterToLerpValues();
     } else {
       stopShooterMotors();
       stopElevationMotor();
+      azimuthTargetAngle = Math.floorMod(scanningAngle/100, 90) - 45;
+      scanningAngle = scanningAngle + 1;
     }
     //setShooterMotorsVelocity(9000);
     //moveElevationMotorToAngle(77);
 
-    azimuthTargetAngle = (absoluteAzimuthToTarget-absoluteNavYaw)%360;
-    if(false) {
-     azimuthTargetAngle = azimuthTargetAngle + Constants.AZIMUTH_BARF_ANGLE;
-    }
+    
+    // if(false) {
+    //  azimuthTargetAngle = azimuthTargetAngle + Constants.AZIMUTH_BARF_ANGLE;
+    // }
     moveAzimuthMotorToAngle(azimuthTargetAngle);
     //moveAzimuthMotorToAngle(0);
     
