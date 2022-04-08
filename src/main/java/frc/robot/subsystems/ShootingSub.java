@@ -67,6 +67,8 @@ public class ShootingSub extends SubsystemBase {
   private int fixedShootDelay = 0;
   private int scanningAngle = 0;
   private int shooterReadyCapacitor = 0;
+  private int colorTimer = 0;
+  private int lastDetected = 0;
   
 
   public ShootingSub() {
@@ -116,7 +118,7 @@ public class ShootingSub extends SubsystemBase {
       Constants.ELEVATION_ANGLE_MAX_DERIVITIVE,
       -Constants.ELEVATION_ANGLE_MAX_POWER,
       Constants.ELEVATION_ANGLE_MAX_POWER,
-      0.5
+      Constants.ELEVATION_SPEED
     );
 
     elevationAngleCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.ELEVATION_ANGLE_CURRENT_LIMIT, 0, 0.1);
@@ -177,19 +179,65 @@ public class ShootingSub extends SubsystemBase {
     rightShooterMotor.configVoltageCompSaturation(11);
   }
 
-  public void getColor()
+  /** Gets the color sensors detected color, and puts it on dashboard
+   * 
+   * @return A Color value
+   */
+  public Color getColor()
   {
     detectedColor = m_colorSensor.getColor();
     SmartDashboard.putNumber("RED:", detectedColor.red);
     SmartDashboard.putNumber("GREEN:", detectedColor.green);
     SmartDashboard.putNumber("BLUE:", detectedColor.blue);
+    return detectedColor;
   }
 
-  public boolean ballDetected()
+  /** Get the last color the sensor saw
+   * 
+   * @return 0 = nothing, 1 = red, 2 = blue
+   */
+  public int getLastColor() {
+    int detectedBall = ballDetected();
+    switch (detectedBall)
+    {
+      case 0:
+        colorTimer = Math.max(colorTimer - 1, 0);
+        if(colorTimer == 0) {
+          lastDetected = 0;
+        }
+      break;
+      case 1:
+        colorTimer = 50;
+        lastDetected = 1;
+      break;
+      case 2:
+        colorTimer = 50;
+        lastDetected = 1;
+      break;
+    }
+    return lastDetected;
+  }
+
+  /** Returns if either a red OR blue ball is detected by the color sensor
+   * 
+   * @return 0 for no ball, 1 for red ball, 2 for blue ball
+   */
+  public int ballDetected()
   {
-    return (matchColorToAlliance("Red Alliance") || matchColorToAlliance("Blue Alliance"));
+    if(matchColorToAlliance("Red Alliance")) {
+      return 1;
+    } else if(matchColorToAlliance("Blue Alliance")) {
+      return 2;
+    } else {
+      return 0;
+    }
   }
 
+  /** Returns true if the detected color matches the set alliance
+   * 
+   * @param alliance a string representing the chosen alliance
+   * @return if the color matches the given alliance
+   */
   public boolean matchColorToAlliance(String alliance)
   {
     detectedColor = m_colorSensor.getColor();
@@ -210,11 +258,17 @@ public class ShootingSub extends SubsystemBase {
         return false;
       }
     } else {
-      //System.out.println("matchColorToAlliance() was used without a valid alliance. This will always return false!");
+      System.out.println("matchColorToAlliance() was used without a valid alliance. This will always return false!");
       return false;
     }
   }
 
+  /** Returns true if the two input colors are close
+   * 
+   * @param colorA
+   * @param colorB
+   * @return if colorA matches colorB
+   */
   public boolean matchColorToColor(Color colorA, Color colorB)
   {
     boolean rMatch = matchColorChannel(colorA.red, colorB.red);
@@ -224,11 +278,21 @@ public class ShootingSub extends SubsystemBase {
     return rMatch && bMatch && gMatch;
   }
 
+  /** Returns true if value a and value b are within the color match threshold
+   * 
+   * @param a
+   * @param b
+   * @return if a matches b
+   */
   private boolean matchColorChannel(double a, double b)
   {
     return (a < b + Constants.COLOR_MATCH_THRESHOLD && a > b - Constants.COLOR_MATCH_THRESHOLD);
   }
 
+  /** Get the alliance from smart dashboard
+   * 
+   * @return the selected alliance
+   */
   public String getAlliance()
   {
     return m_allianceChooser.getSelected();
@@ -289,19 +353,17 @@ public class ShootingSub extends SubsystemBase {
    */
   public void moveElevationMotorToAngle(double targetElevationAngle)
   {
-
-    SmartDashboard.putNumber("Target Elevation Angle:", targetElevationAngle);
-
     clampedElevationTargetAngle = MathUtil.clamp(targetElevationAngle, Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT, Constants.SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT);
     elevationEncoderPosition = ((elevationAngleMotor.getSelectedSensorPosition()*Constants.ELEVATION_ANGLE_GEAR_RATIO)/4096 * 360) + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT;
-
-    //SmartDashboard.putNumber("Raw Encoder Angle Degrees",(elevationAngleMotor.getSelectedSensorPosition())/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT);
-    SmartDashboard.putNumber("Current Elevation Angle:", elevationEncoderPosition);
 
     elevationMotorPower = elevationAnglePID.runPID(clampedElevationTargetAngle, elevationEncoderPosition);
     elevationReady = clampedElevationTargetAngle == targetElevationAngle && Math.abs(elevationAnglePID.getError()) < Constants.ELEVATION_MAX_ERROR;
 
     //SmartDashboard.putNumber("Elevation Angle Motor Power:", elevationMotorPower);
+    //SmartDashboard.putNumber("Raw Encoder Angle Degrees",(elevationAngleMotor.getSelectedSensorPosition())/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT);
+    //SmartDashboard.putNumber("Current Elevation Angle:", elevationEncoderPosition);
+    //SmartDashboard.putNumber("Target Elevation Angle:", targetElevationAngle);
+
     if(elevationReady) {
       stopElevationMotor();
     } else {
@@ -338,13 +400,11 @@ public class ShootingSub extends SubsystemBase {
     } else {
       shooterReadyCapacitor = MathUtil.clamp(shooterReadyCapacitor - 1, 0, 50);
     }
-    if(shooterReadyCapacitor > 25) {
+    if(shooterReadyCapacitor > 15) {
       shooterReady = true;
     } else {
       shooterReady = false;
     }
-    SmartDashboard.putNumber("Shooter Ready", shooterReadyCapacitor);
-
 
     // Sets the motors to the computed power level
     leftShooterMotor.set(ControlMode.PercentOutput, shooterPower);
@@ -353,8 +413,9 @@ public class ShootingSub extends SubsystemBase {
     // Displays useful values in Smart Dashboard
     // SmartDashboard.putNumber("Shooter Power:", shooterPower);
     // SmartDashboard.putString("Shooter Status:", "Shooting");
-    SmartDashboard.putNumber("Shooter Target Speed", targetShooterVelocity);
-    SmartDashboard.putNumber("Shooter Speed", shooterVelocity);
+    //SmartDashboard.putNumber("Shooter Target Speed", targetShooterVelocity);
+    //SmartDashboard.putNumber("Shooter Speed", shooterVelocity);
+    //SmartDashboard.putNumber("Shooter Ready", shooterReadyCapacitor);
   }
 
   public void setShooterMotorsPower(double Speed)
@@ -433,14 +494,14 @@ public class ShootingSub extends SubsystemBase {
 
   public void fixedShoot() {
     moveAzimuthMotorToAngle(0);
-    //moveElevationMotorToAngle(77);
+    moveElevationMotorToAngle(40);
     setShooterMotorsVelocity(5000);
   }
 
   public boolean autoShoot()
   {
     enableLimeLight();
-    shouldMiss = false;
+    shouldMiss = false; // TODO make this based on detected color
     azimuthEncoderPosition = getAzimuth();
     absoluteNavYaw = navX.getYaw();
     relativeLimeLightYaw = getLimeLightYaw();

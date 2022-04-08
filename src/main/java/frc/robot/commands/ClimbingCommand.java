@@ -8,12 +8,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
-import frc.robot.subsystems.ShootingSub;
 import frc.robot.subsystems.ClimbingSub;
 
 public class ClimbingCommand extends CommandBase {
   private final ClimbingSub m_climbingSub;
-  private final ShootingSub m_aimingSub;
   private double currentTarget;
     //Current target the robot is attempting to reach
   private double currentSpeed;
@@ -21,9 +19,9 @@ public class ClimbingCommand extends CommandBase {
   private int currentStage;
     //Current stage of climbing the robot is on
 
-  public ClimbingCommand(ClimbingSub climbingSub, ShootingSub aimingSub) {
+  public ClimbingCommand(ClimbingSub climbingSub) {
     m_climbingSub = climbingSub;
-    m_aimingSub = aimingSub;
+    addRequirements(climbingSub);
   }
 
   @Override
@@ -43,9 +41,6 @@ public class ClimbingCommand extends CommandBase {
 
     m_climbingSub.SetArmsWithClamp(currentTarget, currentSpeed);
       //Makes climbing arms go to the current Target
-    m_aimingSub.moveAzimuthMotorToAngle(0);
-    m_aimingSub.moveElevationMotorToAngle(30);
-      //Moves the shooter out of the way
 
     if (m_climbingSub.hasReachedPosition(currentTarget))
       //Checks if the climbing arms are at the current target

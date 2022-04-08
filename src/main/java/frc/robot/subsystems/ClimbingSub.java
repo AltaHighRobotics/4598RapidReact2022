@@ -73,8 +73,8 @@ public class ClimbingSub extends SubsystemBase {
     leftArmMotor.setNeutralMode(NeutralMode.Brake);
     rightArmMotor.setNeutralMode(NeutralMode.Brake);
 
-    leftArmMotor.setInverted(TalonFXInvertType.Clockwise);
-    rightArmMotor.setInverted(TalonFXInvertType.CounterClockwise);
+    leftArmMotor.setInverted(TalonFXInvertType.CounterClockwise);
+    rightArmMotor.setInverted(TalonFXInvertType.Clockwise);
 
     leftArmMotor.setSensorPhase(true);
     rightArmMotor.setSensorPhase(false);
@@ -85,7 +85,7 @@ public class ClimbingSub extends SubsystemBase {
     leftArmMotor.configSupplyCurrentLimit(armCurrentLimit);
     rightArmMotor.configSupplyCurrentLimit(armCurrentLimit);
 
-    currentArmTarget = Constants.ALMOST_MAX_ARM_POSITION;
+    currentArmTarget = Constants.FIRST_HOOK_POSITION;
     currentArmSpeed = Constants.ARM_FAST_SPEED;
     currentStage = 0;
     hasRun = false;
@@ -158,8 +158,8 @@ public class ClimbingSub extends SubsystemBase {
     double leftArmPower = leftArmPID.runVelocityPID(actualTarget, leftArmMotorPosition, leftArmMotorVelocity);
     double rightArmPower = rightArmPID.runVelocityPID(actualTarget, rightArmMotorPosition, rightArmMotorVelocity);
 
-    SmartDashboard.putNumber("Left Arm Power:", leftArmPower);
-    SmartDashboard.putNumber("Right Arm Power:", rightArmPower);
+    //SmartDashboard.putNumber("Left Arm Power:", leftArmPower);
+    //SmartDashboard.putNumber("Right Arm Power:", rightArmPower);
 
     leftArmMotor.set(ControlMode.PercentOutput, leftArmPower);
     rightArmMotor.set(ControlMode.PercentOutput, rightArmPower);

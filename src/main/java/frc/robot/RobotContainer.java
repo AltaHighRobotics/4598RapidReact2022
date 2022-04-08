@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final PS4Controller m_driverOne = new PS4Controller(Constants.DRIVER_ONE);
-  private final PS4Controller m_driverTwo = new PS4Controller(1);
+  //private final PS4Controller m_driverTwo = new PS4Controller(1);
 
   private final ClimbingSub m_climbingSub = new ClimbingSub();
   private final IntakeSub m_intakeSub = new IntakeSub();
@@ -36,12 +36,14 @@ public class RobotContainer {
   private final ShootingSub m_shootingSub = new ShootingSub();
   
   private final JackFrickedUpCommand m_jackFrickedUpCommand = new JackFrickedUpCommand(m_climbingSub);
-  private final ClimbingCommand m_climbingCommand = new ClimbingCommand(m_climbingSub, m_shootingSub);
+  private final ClimbingCommand m_climbingCommand = new ClimbingCommand(m_climbingSub);
   private final MultiballAutoCommand m_multiballAutoCommand = new MultiballAutoCommand(m_drivetrainSub, m_shootingSub);
   private final DriveCommand m_driveCommand =  new DriveCommand(m_drivetrainSub, m_driverOne);
-  private final ShootCommand m_shootCommand = new ShootCommand(m_shootingSub, m_driverOne);
+  private final ShootCommand m_shootCommand = new ShootCommand(m_shootingSub, m_driverOne, m_intakeSub);
   private final ZeroShooterCommand m_zeroShooterCommand = new ZeroShooterCommand(m_shootingSub);
   private final IntakeCommand m_IntakeCommand = new IntakeCommand(m_intakeSub);
+  private final IntakeReverseCommand m_IntakeReverseCommand = new IntakeReverseCommand(m_intakeSub);
+  private final FixedShootCommand m_fixedShootCommand = new FixedShootCommand(m_shootingSub, m_driverOne);
 
   //private final TestAutoCommand m_testAuto = new TestAutoCommand(m_drivetrainSub);
 
@@ -61,8 +63,8 @@ public class RobotContainer {
     //CommandScheduler.getInstance().setDefaultCommand(m_shootingSub, m_shootCommand);
     //CommandScheduler.getInstance().setDefaultCommand(m_computerVisionSub, m_intakeVisionCommand);
 
-    UsbCamera cam = new UsbCamera("cam", 0);
-    CameraServer.startAutomaticCapture();;
+    //UsbCamera cam = new UsbCamera("cam", 0);
+    
     
     m_condition1.setDefaultOption("Exclude Ball 1", false);
     m_condition1.addOption("Include Ball 1", true);
@@ -100,20 +102,23 @@ public class RobotContainer {
     final JoystickButton zeroButton;
     final JoystickButton intakeButton;
     final JoystickButton intakeReverseButton;
+    final JoystickButton fixedShootButton;
 
-    climbButton = new JoystickButton(m_driverTwo, 2); // X button
-    frickButton = new JoystickButton(m_driverTwo, 9); // Share button
+    climbButton = new JoystickButton(m_driverOne, 2); // X button
+    frickButton = new JoystickButton(m_driverOne, 9); // Share button
     aimButton = new JoystickButton(m_driverOne, 6); // Right Bumper
     zeroButton = new JoystickButton(m_driverOne, 3); // Circle
     intakeButton = new JoystickButton(m_driverOne, 4); // Square Button
     intakeReverseButton = new JoystickButton(m_driverOne, 5); // Left Bumper
-
+    fixedShootButton = new JoystickButton(m_driverOne, 8);
 
     climbButton.toggleWhenPressed(m_climbingCommand);
     frickButton.toggleWhenPressed(m_jackFrickedUpCommand);
-    aimButton.toggleWhenPressed(m_shootCommand);
+    aimButton.whileHeld(m_shootCommand);
+    fixedShootButton.toggleWhenPressed(m_fixedShootCommand);
     zeroButton.toggleWhenPressed(m_zeroShooterCommand);
     intakeButton.toggleWhenPressed(m_IntakeCommand);
+    intakeReverseButton.toggleWhenPressed(m_IntakeReverseCommand);
     
   }
 
