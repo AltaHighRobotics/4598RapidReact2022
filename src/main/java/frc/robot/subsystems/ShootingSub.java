@@ -8,12 +8,12 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.ColorSensorV3;
+//import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
+//import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Utilities.ConfigurablePID;
@@ -23,8 +23,8 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SPI;
 public class ShootingSub extends SubsystemBase {
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
-  private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
-  private Color detectedColor;
+  //private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+  //private Color detectedColor;
 
   SendableChooser<String> m_allianceChooser = new SendableChooser<>();
   private final LimeLight limeLight;
@@ -67,6 +67,8 @@ public class ShootingSub extends SubsystemBase {
   private int fixedShootDelay = 0;
   private int scanningAngle = 0;
   private int shooterReadyCapacitor = 0;
+  private int colorTimer = 0;
+  private int lastDetected = 0;
   
 
   public ShootingSub() {
@@ -176,59 +178,120 @@ public class ShootingSub extends SubsystemBase {
     leftShooterMotor.configVoltageCompSaturation(11);
     rightShooterMotor.configVoltageCompSaturation(11);
   }
+  /** Gets the color sensors detected color, and puts it on dashboard
+   * 
+   * @return A Color value
+   */
+  // public Color getColor()
+  // {
+  //   detectedColor = m_colorSensor.getColor();
+  //   SmartDashboard.putNumber("RED:", detectedColor.red);
+  //   SmartDashboard.putNumber("GREEN:", detectedColor.green);
+  //   SmartDashboard.putNumber("BLUE:", detectedColor.blue);
+  //   return detectedColor;
+  // }
 
-  public void getColor()
-  {
-    detectedColor = m_colorSensor.getColor();
-    SmartDashboard.putNumber("RED:", detectedColor.red);
-    SmartDashboard.putNumber("GREEN:", detectedColor.green);
-    SmartDashboard.putNumber("BLUE:", detectedColor.blue);
-  }
+  /** Get the last color the sensor saw
+   * 
+   * @return 0 = nothing, 1 = red, 2 = blue
+   */
+  // public int getLastColor() {
+  //   int detectedBall = ballDetected();
+  //   switch (detectedBall)
+  //   {
+  //     case 0:
+  //       colorTimer = Math.max(colorTimer - 1, 0);
+  //       if(colorTimer == 0) {
+  //         lastDetected = 0;
+  //       }
+  //     break;
+  //     case 1:
+  //       colorTimer = 50;
+  //       lastDetected = 1;
+  //     break;
+  //     case 2:
+  //       colorTimer = 50;
+  //       lastDetected = 1;
+  //     break;
+  //   }
+  //   return lastDetected;
+  // }
 
-  public boolean ballDetected()
-  {
-    return (matchColorToAlliance("Red Alliance") || matchColorToAlliance("Blue Alliance"));
-  }
+  /** Returns if either a red OR blue ball is detected by the color sensor
+   * 
+   * @return 0 for no ball, 1 for red ball, 2 for blue ball
+   */
+  // public int ballDetected()
+  // {
+  //   if(matchColorToAlliance("Red Alliance")) {
+  //     return 1;
+  //   } else if(matchColorToAlliance("Blue Alliance")) {
+  //     return 2;
+  //   } else {
+  //     return 0;
+  //   }
+  // }
 
-  public boolean matchColorToAlliance(String alliance)
-  {
-    detectedColor = m_colorSensor.getColor();
-    if(alliance == "Red Alliance") {
-      if(matchColorToColor(Constants.RED_ALLIANCE_COLOR, detectedColor)) {
-        SmartDashboard.putString("Color Match:", "Color Matches Red Alliance");
-        return true;
-      } else {
-        SmartDashboard.putString("Color Match:", "Color Does Not Match Red Alliance");
-        return false;
-      }
-    } else if(alliance == "Blue Alliance") {
-      if(matchColorToColor(Constants.BLUE_ALLIANCE_COLOR, detectedColor)) {
-        SmartDashboard.putString("Color Match:", "Color Matches Blue Alliance");
-        return true;
-      } else {
-        SmartDashboard.putString("Color Match:", "Color Does Not Match Blue Alliance");
-        return false;
-      }
-    } else {
-      //System.out.println("matchColorToAlliance() was used without a valid alliance. This will always return false!");
-      return false;
-    }
-  }
+  /** Returns true if the detected color matches the set alliance
+   * 
+   * @param alliance a string representing the chosen alliance
+   * @return if the color matches the given alliance
+   */
+  // public boolean matchColorToAlliance(String alliance)
+  // {
+  //   detectedColor = m_colorSensor.getColor();
+  //   if(alliance == "Red Alliance") {
+  //     if(matchColorToColor(Constants.RED_ALLIANCE_COLOR, detectedColor)) {
+  //       SmartDashboard.putString("Color Match:", "Color Matches Red Alliance");
+  //       return true;
+  //     } else {
+  //       SmartDashboard.putString("Color Match:", "Color Does Not Match Red Alliance");
+  //       return false;
+  //     }
+  //   } else if(alliance == "Blue Alliance") {
+  //     if(matchColorToColor(Constants.BLUE_ALLIANCE_COLOR, detectedColor)) {
+  //       SmartDashboard.putString("Color Match:", "Color Matches Blue Alliance");
+  //       return true;
+  //     } else {
+  //       SmartDashboard.putString("Color Match:", "Color Does Not Match Blue Alliance");
+  //       return false;
+  //     }
+  //   } else {
+  //     System.out.println("matchColorToAlliance() was used without a valid alliance. This will always return false!");
+  //     return false;
+  //   }
+  // }
 
-  public boolean matchColorToColor(Color colorA, Color colorB)
-  {
-    boolean rMatch = matchColorChannel(colorA.red, colorB.red);
-    boolean bMatch = matchColorChannel(colorA.blue, colorB.blue);
-    boolean gMatch = matchColorChannel(colorA.green, colorB.green);
+  /** Returns true if the two input colors are close
+   * 
+   * @param colorA
+   * @param colorB
+   * @return if colorA matches colorB
+   */
+  // public boolean matchColorToColor(Color colorA, Color colorB)
+  // {
+  //   boolean rMatch = matchColorChannel(colorA.red, colorB.red);
+  //   boolean bMatch = matchColorChannel(colorA.blue, colorB.blue);
+  //   boolean gMatch = matchColorChannel(colorA.green, colorB.green);
 
-    return rMatch && bMatch && gMatch;
-  }
+  //   return rMatch && bMatch && gMatch;
+  // }
 
-  private boolean matchColorChannel(double a, double b)
-  {
-    return (a < b + Constants.COLOR_MATCH_THRESHOLD && a > b - Constants.COLOR_MATCH_THRESHOLD);
-  }
+  /** Returns true if value a and value b are within the color match threshold
+   * 
+   * @param a
+   * @param b
+   * @return if a matches b
+   */
+  // private boolean matchColorChannel(double a, double b)
+  // {
+  //   return (a < b + Constants.COLOR_MATCH_THRESHOLD && a > b - Constants.COLOR_MATCH_THRESHOLD);
+  // }
 
+  /** Get the alliance from smart dashboard
+   * 
+   * @return the selected alliance
+   */
   public String getAlliance()
   {
     return m_allianceChooser.getSelected();
@@ -432,12 +495,17 @@ public class ShootingSub extends SubsystemBase {
     moveAzimuthMotorToAngle(0);
     moveElevationMotorToAngle(40);
     setShooterMotorsVelocity(5000);
+    if(getIsAimReady()) {
+      feedOn();
+    } else {
+      feedReverse();
+    }
   }
 
   public boolean autoShoot()
   {
     enableLimeLight();
-    shouldMiss = false;
+    shouldMiss = false; // TODO make this based on detected color
     azimuthEncoderPosition = getAzimuth();
     absoluteNavYaw = navX.getYaw();
     relativeLimeLightYaw = getLimeLightYaw();
