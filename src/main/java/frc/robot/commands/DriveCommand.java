@@ -4,6 +4,11 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.MjpegServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -19,6 +24,9 @@ public class DriveCommand extends CommandBase
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrainSub;
     m_controller = ps4Controller;
+    // CvSource outStream = new CvSource("Blur", PixelFormat.kMJPEG, 640, 480, 30);
+    // MjpegServer mjpegServer2 = new MjpegServer("serve_blur", 1182);
+    // mjpegServer2.setSource(outStream);
     addRequirements(drivetrainSub);
   }
 

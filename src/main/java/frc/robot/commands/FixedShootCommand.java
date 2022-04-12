@@ -8,13 +8,11 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.ShootingSub;
 
-public class ShootCommand extends CommandBase {
+public class FixedShootCommand extends CommandBase {
   
   private final ShootingSub m_shootingSub;
-  private final IntakeSub m_intakeSub;
   private final PS4Controller m_Ps4Controller;
   private double leftXAxis;
   private double leftYAxis;
@@ -23,12 +21,11 @@ public class ShootCommand extends CommandBase {
   
   
   /** Creates a new ElveationAngleCommand. */
-  public ShootCommand(ShootingSub shootingSub, PS4Controller ps4Controller, IntakeSub intakeSub) {
+  public FixedShootCommand(ShootingSub shootingSub, PS4Controller ps4Controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shootingSub = shootingSub;
     m_Ps4Controller = ps4Controller;
-    m_intakeSub = intakeSub;
-    addRequirements(shootingSub, intakeSub);
+    addRequirements(shootingSub);
   }
 
   // Called when the command is initially scheduled.
@@ -40,23 +37,7 @@ public class ShootCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // leftXAxis = m_Ps4Controller.getRawAxis(Constants.PS4_LEFT_STICK_X_AXIS);
-    // if(Math.abs(leftXAxis) < Constants.SHOOTER_CONTROL_OVERRIDE_THRESHOLD) {
-    //   leftXAxis = 0;
-    // }
-    // leftYAxis = m_Ps4Controller.getRawAxis(Constants.PS4_LEFT_STICK_Y_AXIS);
-    // if(Math.abs(leftYAxis) < Constants.SHOOTER_CONTROL_OVERRIDE_THRESHOLD) {
-    //   leftYAxis = 0;
-    // }
-
-    // if(m_shootingSub.getLimeLightElevation() == 0 && (leftXAxis != 0 || leftYAxis != 0) ) {
-    //   manualTargetAzimuth = manualTargetAzimuth + leftXAxis * Constants.SHOOTER_CONTROL_SPEED;
-    //   manualTargetElevation = manualTargetElevation + leftYAxis * Constants.SHOOTER_CONTROL_SPEED;
-    //   m_shootingSub.moveAzimuthMotorToAngle(manualTargetAzimuth);
-    //   m_shootingSub.moveElevationMotorToAngle(manualTargetElevation);
-    // } else {
-    m_intakeSub.IntakeExtend();
-    m_shootingSub.autoShoot();
+    m_shootingSub.fixedShoot();
   }
 
   // Called once the command ends or is interrupted.
@@ -64,9 +45,8 @@ public class ShootCommand extends CommandBase {
   public void end(boolean interrupted) {
     m_shootingSub.disableLimeLight();
     m_shootingSub.stopAimingMotors();
-    //m_shootingSub.stopShooterMotors();
+    m_shootingSub.stopShooterMotors();
     m_shootingSub.feedOff();
-    m_intakeSub.IntakeRetract();
   }
 
   // Returns true when the command should end.

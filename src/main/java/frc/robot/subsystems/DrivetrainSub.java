@@ -168,8 +168,8 @@ public class DrivetrainSub extends SubsystemBase
     this.robotX = this.robotX + (Math.cos(this.currentHeading) * this.distanceTraveled);
     this.robotY = this.robotY + (Math.sin(this.currentHeading) * this.distanceTraveled);
 
-    SmartDashboard.putNumber("Robot X:", this.robotX);
-    SmartDashboard.putNumber("Robot Y:", this.robotY);
+    //SmartDashboard.putNumber("Robot X:", this.robotX);
+    //SmartDashboard.putNumber("Robot Y:", this.robotY);
 
   }
 
@@ -201,12 +201,15 @@ public class DrivetrainSub extends SubsystemBase
     } else {
       this.drivePower = 0;
     }
-    SmartDashboard.putNumber("Target X", this.targetX);
-    SmartDashboard.putNumber("Target Y", this.targetY);
+    //SmartDashboard.putNumber("Target X", this.targetX);
+    //SmartDashboard.putNumber("Target Y", this.targetY);
     //SmartDashboard.putNumber("Auto Throttle:", this.drivePower);
     //SmartDashboard.putNumber("Auto Steering:", this.steeringPower);
-
-    this.setArcadeDrive(this.drivePower, this.steeringPower);
+    if(hasReachedWaypoint()) {
+      stopMotors();
+    } else {
+      this.setArcadeDrive(this.drivePower, this.steeringPower);
+    }
     return hasReachedWaypoint();
   }
 
@@ -216,11 +219,11 @@ public class DrivetrainSub extends SubsystemBase
     this.targetHeading = Math.toDegrees(Math.atan2(this.targetY - this.robotY, this.targetX - this.robotX));
 
     this.currentHeading = (double) this.navX.getYaw();
-    SmartDashboard.putNumber("Target Heading", this.targetHeading);
+    //SmartDashboard.putNumber("Target Heading", this.targetHeading);
     this.headingRate = this.currentHeading - this.previousHeading;
     this.headingError = this.targetHeading - this.currentHeading;
     this.previousHeading = this.currentHeading;
-    SmartDashboard.putNumber("Heading Error:", this.headingError);
+    //SmartDashboard.putNumber("Heading Error:", this.headingError);
 
     this.steeringPower = this.drivetrainHeadingPID.runVelocityPID(this.targetHeading, this.currentHeading, this.headingRate);
     this.setArcadeDrive(0, this.steeringPower);
@@ -242,7 +245,7 @@ public class DrivetrainSub extends SubsystemBase
   }
 
   public boolean hasReachedWaypoint() {
-    SmartDashboard.putNumber("DISTANCE ERROR", distanceError);
+    //SmartDashboard.putNumber("DISTANCE ERROR", distanceError);
     return Math.abs(this.distanceError) < Constants.MAX_WAYPOINT_ERROR;
   }
 
@@ -253,8 +256,8 @@ public class DrivetrainSub extends SubsystemBase
 
   public void setMotorAuto()
   {
-    leftMotorFront.set(ControlMode.PercentOutput, 0.3);    
-    rightMotorFront.set(ControlMode.PercentOutput, 0.3);  
+    leftMotorFront.set(ControlMode.PercentOutput, -0.3);    
+    rightMotorFront.set(ControlMode.PercentOutput, -0.3);  
   }
 
   // public void stopMotorAuto()

@@ -76,8 +76,8 @@ public class ClimbingSub extends SubsystemBase {
     leftArmMotor.setInverted(TalonFXInvertType.CounterClockwise);
     rightArmMotor.setInverted(TalonFXInvertType.Clockwise);
 
-    leftArmMotor.setSensorPhase(false);
-    rightArmMotor.setSensorPhase(true);
+    leftArmMotor.setSensorPhase(true);
+    rightArmMotor.setSensorPhase(false);
 
     leftArmMotor.configOpenloopRamp(Constants.ARM_POWER_RAMP_TIME, 0);
     rightArmMotor.configOpenloopRamp(Constants.ARM_POWER_RAMP_TIME, 0);
@@ -85,11 +85,7 @@ public class ClimbingSub extends SubsystemBase {
     leftArmMotor.configSupplyCurrentLimit(armCurrentLimit);
     rightArmMotor.configSupplyCurrentLimit(armCurrentLimit);
 
-<<<<<<< Updated upstream
-    currentArmTarget = Constants.MAX_ARM_POSITION;
-=======
     currentArmTarget = Constants.FIRST_HOOK_POSITION;
->>>>>>> Stashed changes
     currentArmSpeed = Constants.ARM_FAST_SPEED;
     currentStage = 0;
     hasRun = false;
@@ -118,9 +114,10 @@ public class ClimbingSub extends SubsystemBase {
   /** Sets the arms to not move
    * 
    */
-  public void ArmsStationary(){
-    leftArmMotor.set(ControlMode.PercentOutput, 0);
-    rightArmMotor.set(ControlMode.PercentOutput, 0);
+  public void ArmsStationary() {
+    leftArmMotor.neutralOutput();
+    rightArmMotor.neutralOutput();
+    //armWinch.neutralOutput();
   }
   
   /** Toggles the solonoids on the arms to on
@@ -258,10 +255,9 @@ public class ClimbingSub extends SubsystemBase {
     if(target > pos - Constants.ACCEPTABLE_ERROR &&
        target < pos + Constants.ACCEPTABLE_ERROR)
     {
-      SmartDashboard.putString("Climb Finished?", "yes");
+      System.out.println("Target Reached");
       return true;
     }
-    SmartDashboard.putString("Climb Finished?", "no");
     return false;
   }
 
