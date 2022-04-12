@@ -178,7 +178,6 @@ public class ShootingSub extends SubsystemBase {
     leftShooterMotor.configVoltageCompSaturation(11);
     rightShooterMotor.configVoltageCompSaturation(11);
   }
-
   /** Gets the color sensors detected color, and puts it on dashboard
    * 
    * @return A Color value
