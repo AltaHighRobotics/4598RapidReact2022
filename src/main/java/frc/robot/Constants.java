@@ -32,6 +32,7 @@ public final class Constants {
     public static final int LEFT_DRIVE_MOTOR_BACK = 4;
     public static final int RIGHT_ARM_MOTOR = 5;
     public static final int LEFT_ARM_MOTOR = 6;
+    public static final int WINCH_MOTOR = 0; //change when id got; change id through REVHWCLIENT
     public static final int INTAKE_MOTOR = 7;
     public static final int STORAGE_MOTOR = 8; //disconnected
     public static final int FEED_MOTOR = 9;
@@ -46,6 +47,7 @@ public final class Constants {
     public static final double INTAKE_SPEED = 0.4;
     public static final double DRIVE_MAX_SPEED = 1;
     public static final double ARM_WINCH_SPEED = 1;
+    public static final double WINCH_SPEED = 0.3;
 
     // DRIVER CONTROLS
     public static final int DRIVER_ONE = 0;

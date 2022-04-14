@@ -7,6 +7,11 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -20,6 +25,9 @@ public class ClimbingSub extends SubsystemBase {
   private final Solenoid armSwingSolenoid;
   private final WPI_TalonFX leftArmMotor;
   private final WPI_TalonFX rightArmMotor;
+
+  private final CANSparkMax winchMotor;
+
   private final ConfigurablePID leftArmPID;
   private final ConfigurablePID rightArmPID;
   private final SupplyCurrentLimitConfiguration armCurrentLimit;
@@ -40,6 +48,7 @@ public class ClimbingSub extends SubsystemBase {
     armSwingSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.ARM_SWING_SOLENOID);
     leftArmMotor = new WPI_TalonFX(Constants.LEFT_ARM_MOTOR);
     rightArmMotor = new WPI_TalonFX(Constants.RIGHT_ARM_MOTOR);
+    winchMotor = new CANSparkMax(Constants.WINCH_MOTOR, MotorType.kBrushless); //kBrushless for 21-1650 ONLY
 
     armCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.ARM_CURRENT_LIMIT, 0, 0.1);
     
@@ -69,9 +78,11 @@ public class ClimbingSub extends SubsystemBase {
 
     leftArmMotor.configFactoryDefault();
     rightArmMotor.configFactoryDefault();
+    winchMotor.restoreFactoryDefaults();
 
     leftArmMotor.setNeutralMode(NeutralMode.Brake);
     rightArmMotor.setNeutralMode(NeutralMode.Brake);
+    winchMotor.setIdleMode(IdleMode.kBrake);
 
     leftArmMotor.setInverted(TalonFXInvertType.CounterClockwise);
     rightArmMotor.setInverted(TalonFXInvertType.Clockwise);
@@ -84,6 +95,7 @@ public class ClimbingSub extends SubsystemBase {
 
     leftArmMotor.configSupplyCurrentLimit(armCurrentLimit);
     rightArmMotor.configSupplyCurrentLimit(armCurrentLimit);
+    winchMotor.setSmartCurrentLimit(50); //60 is upper limit for brushless model
 
     currentArmTarget = Constants.FIRST_HOOK_POSITION;
     currentArmSpeed = Constants.ARM_FAST_SPEED;
@@ -132,6 +144,27 @@ public class ClimbingSub extends SubsystemBase {
    */
   public void ReturnArms(){
     armSwingSolenoid.set(false);
+  }
+
+  /** Turns on the winch motor
+   * 
+   */
+  public void startWinch() {
+    winchMotor.set(Constants.WINCH_SPEED);
+  }
+
+  /** Reverses the winch motor
+   * 
+   */
+  public void revWinch() {
+    winchMotor.set(-Constants.WINCH_SPEED);
+  }
+
+  /** Turns off the winch motor
+   * 
+   */
+  public void stopWinch() {
+    winchMotor.stopMotor();
   }
 
   /** Proportional Integral Controller used for the arms
