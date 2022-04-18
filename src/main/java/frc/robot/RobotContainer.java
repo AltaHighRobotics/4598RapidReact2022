@@ -41,11 +41,13 @@ public class RobotContainer {
   private final DriveCommand m_driveCommand =  new DriveCommand(m_drivetrainSub, m_driverOne);
   private final ShootCommand m_shootCommand = new ShootCommand(m_shootingSub, m_driverOne, m_intakeSub);
   private final ZeroShooterCommand m_zeroShooterCommand = new ZeroShooterCommand(m_shootingSub);
-  private final IntakeCommand m_IntakeCommand = new IntakeCommand(m_intakeSub);
+  private final IntakeCommand m_IntakeCommand = new IntakeCommand(m_intakeSub, m_shootingSub);
   private final IntakeReverseCommand m_IntakeReverseCommand = new IntakeReverseCommand(m_intakeSub);
   private final FixedShootCommand m_fixedShootCommand = new FixedShootCommand(m_shootingSub, m_driverOne);
+  private final WinchForwardCommand m_wForwardCommand = new WinchForwardCommand(m_climbingSub);
+  private final WinchRevCommand m_wRevCommand = new WinchRevCommand(m_climbingSub);
 
-  //private final TestAutoCommand m_testAuto = new TestAutoCommand(m_drivetrainSub);
+  private final TestAutoCommand m_testAuto = new TestAutoCommand(m_drivetrainSub);
 
   private SendableChooser<Boolean> m_condition1 = new SendableChooser<>();
   private SendableChooser<Boolean> m_condition2 = new SendableChooser<>();
@@ -103,6 +105,8 @@ public class RobotContainer {
     final JoystickButton intakeButton;
     final JoystickButton intakeReverseButton;
     final JoystickButton fixedShootButton;
+    final JoystickButton winchForwardButton;
+    final JoystickButton winchBackwardButton;
 
     climbButton = new JoystickButton(m_driverOne, 2); // X button
     frickButton = new JoystickButton(m_driverOne, 9); // Share button
@@ -111,15 +115,18 @@ public class RobotContainer {
     intakeButton = new JoystickButton(m_driverOne, 4); // Square Button
     intakeReverseButton = new JoystickButton(m_driverOne, 5); // Left Bumper
     fixedShootButton = new JoystickButton(m_driverOne, 8);
+    winchForwardButton = new JoystickButton(m_driverOne, 1);
+    winchBackwardButton = new JoystickButton(m_driverOne, 7);
 
     climbButton.toggleWhenPressed(m_climbingCommand);
-    frickButton.toggleWhenPressed(m_jackFrickedUpCommand);
+    frickButton.whileHeld(m_jackFrickedUpCommand);
     aimButton.whileHeld(m_shootCommand);
-    fixedShootButton.toggleWhenPressed(m_fixedShootCommand);
+    fixedShootButton.whileHeld(m_fixedShootCommand);
     zeroButton.toggleWhenPressed(m_zeroShooterCommand);
     intakeButton.toggleWhenPressed(m_IntakeCommand);
     intakeReverseButton.toggleWhenPressed(m_IntakeReverseCommand);
-    
+    winchBackwardButton.whileHeld(m_wRevCommand);
+    winchForwardButton.whileHeld(m_wForwardCommand);
   }
 
   /**
@@ -129,7 +136,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     //MultiballAutoCommand m_multiballAutoCommand = new MultiballAutoCommand(m_drivetrainSub, m_shootingSub, m_intakeSub, m_positionChoose.getSelected(), m_condition1.getSelected(), m_condition2.getSelected(), m_condition3.getSelected(), m_condition4.getSelected());
-    return m_multiballAutoCommand;
+    return m_testAuto;
   }
 
   public void resetDashboard() {

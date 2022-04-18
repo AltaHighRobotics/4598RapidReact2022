@@ -25,21 +25,24 @@ public class ClimbingSub extends SubsystemBase {
   private final Solenoid armSwingSolenoid;
   private final WPI_TalonFX leftArmMotor;
   private final WPI_TalonFX rightArmMotor;
-
-  private final CANSparkMax winchMotor;
+  private final WPI_TalonFX armWinchMotor;
 
   private final ConfigurablePID leftArmPID;
   private final ConfigurablePID rightArmPID;
+  private final ConfigurablePID armWinchPID;
   private final SupplyCurrentLimitConfiguration armCurrentLimit;
 
   private double rightArmMotorVelocity;
   private double leftArmMotorVelocity;
+  private double armWinchVelocity;
 
   private double rightArmMotorPosition;
   private double leftArmMotorPosition;
+  private double armWinchPosition;
 
   private double currentArmTarget;
   private double currentArmSpeed;
+  private double currentWinchTarget;
   private int currentStage;
   private boolean hasRun;
 
@@ -48,7 +51,7 @@ public class ClimbingSub extends SubsystemBase {
     armSwingSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.ARM_SWING_SOLENOID);
     leftArmMotor = new WPI_TalonFX(Constants.LEFT_ARM_MOTOR);
     rightArmMotor = new WPI_TalonFX(Constants.RIGHT_ARM_MOTOR);
-    winchMotor = new CANSparkMax(Constants.WINCH_MOTOR, MotorType.kBrushless); //kBrushless for 21-1650 ONLY
+    armWinchMotor = new WPI_TalonFX(Constants.ARM_WINCH_MOTOR); //kBrushless for 21-1650 ONLY
 
     armCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.ARM_CURRENT_LIMIT, 0, 0.1);
     
@@ -76,30 +79,46 @@ public class ClimbingSub extends SubsystemBase {
       Constants.ARM_SLOW_SPEED
     );
 
+    armWinchPID = new ConfigurablePID(
+      Constants.ARM_WINCH_PROPORTIONAL_GAIN,
+      Constants.ARM_WINCH_INTEGRAL_GAIN,
+      Constants.ARM_WINCH_DERIVITIVE_GAIN,
+      Constants.MAX_ARM_WINCH_PROPORTIONAL,
+      Constants.MAX_ARM_WINCH_INTEGRAL,
+      Constants.MAX_ARM_WINCH_DERIVITIVE,
+      -Constants.ARM_WINCH_MAX_POWER,
+      Constants.ARM_WINCH_MAX_POWER,
+      Constants.ARM_WINCH_SPEED
+    );
+
     leftArmMotor.configFactoryDefault();
     rightArmMotor.configFactoryDefault();
-    winchMotor.restoreFactoryDefaults();
+    armWinchMotor.configFactoryDefault();
 
     leftArmMotor.setNeutralMode(NeutralMode.Brake);
     rightArmMotor.setNeutralMode(NeutralMode.Brake);
-    winchMotor.setIdleMode(IdleMode.kBrake);
+    armWinchMotor.setNeutralMode(NeutralMode.Brake);
 
     leftArmMotor.setInverted(TalonFXInvertType.CounterClockwise);
     rightArmMotor.setInverted(TalonFXInvertType.Clockwise);
+    armWinchMotor.setInverted(TalonFXInvertType.Clockwise);
 
     leftArmMotor.setSensorPhase(true);
+    armWinchMotor.setSensorPhase(true);
     rightArmMotor.setSensorPhase(false);
 
     leftArmMotor.configOpenloopRamp(Constants.ARM_POWER_RAMP_TIME, 0);
     rightArmMotor.configOpenloopRamp(Constants.ARM_POWER_RAMP_TIME, 0);
+    armWinchMotor.configOpenloopRamp(Constants.ARM_POWER_RAMP_TIME, 0);
 
     leftArmMotor.configSupplyCurrentLimit(armCurrentLimit);
     rightArmMotor.configSupplyCurrentLimit(armCurrentLimit);
-    winchMotor.setSmartCurrentLimit(50); //60 is upper limit for brushless model
+    armWinchMotor.configSupplyCurrentLimit(armCurrentLimit); //60 is upper limit for brushless model
 
     currentArmTarget = Constants.FIRST_HOOK_POSITION;
     currentArmSpeed = Constants.ARM_FAST_SPEED;
     currentStage = 0;
+    currentWinchTarget = 0;
     hasRun = false;
   }
 
@@ -129,7 +148,7 @@ public class ClimbingSub extends SubsystemBase {
   public void ArmsStationary() {
     leftArmMotor.neutralOutput();
     rightArmMotor.neutralOutput();
-    //armWinch.neutralOutput();
+    armWinchMotor.neutralOutput();
   }
   
   /** Toggles the solonoids on the arms to on
@@ -150,21 +169,23 @@ public class ClimbingSub extends SubsystemBase {
    * 
    */
   public void startWinch() {
-    winchMotor.set(Constants.WINCH_SPEED);
+    SmartDashboard.putNumber("WINCH POS", armWinchMotor.getSelectedSensorPosition());
+    armWinchMotor.set(Constants.WINCH_SPEED);
   }
 
   /** Reverses the winch motor
    * 
    */
   public void revWinch() {
-    winchMotor.set(-Constants.WINCH_SPEED);
+    SmartDashboard.putNumber("WINCH POS", armWinchMotor.getSelectedSensorPosition());
+    armWinchMotor.set(-Constants.WINCH_SPEED);
   }
 
   /** Turns off the winch motor
    * 
    */
   public void stopWinch() {
-    winchMotor.stopMotor();
+    armWinchMotor.stopMotor();
   }
 
   /** Proportional Integral Controller used for the arms
@@ -293,6 +314,34 @@ public class ClimbingSub extends SubsystemBase {
     }
     return false;
   }
+
+  /** Gets the current target for use in SetArmsWithClamp() later in the code
+   *  @return A double representing the location of the current target in terms of a motor encoder
+   */
+  public double getCurrentWinchTarget()
+  {
+    return currentWinchTarget;
+  }
+
+  /** Sets the current target for use in SetArmsWithClamp() later in the code
+   *  @param target A double representing the location of the target in terms of a motor encoder
+   */
+  public void setCurrentWinchTarget(double target)
+  {
+    currentWinchTarget = target;
+  }
+
+  public void moveArmWinchToPosition(double targetPosition) {
+    armWinchPosition = armWinchMotor.getSelectedSensorPosition();
+    armWinchVelocity = armWinchMotor.getSelectedSensorVelocity();
+    targetPosition = MathUtil.clamp(targetPosition, Constants.ARM_WINCH_MIN_POSITION, Constants.ARM_WINCH_MAX_POSITION);
+    double armWinchPower = armWinchPID.runVelocityPID(targetPosition, armWinchPosition, armWinchVelocity);
+    armWinchMotor.set(ControlMode.PercentOutput, armWinchPower);
+    // SmartDashboard.putNumber("Arm Winch Position", armWinchPosition);
+    // SmartDashboard.putNumber("Arm Winch Target", targetPosition);
+    // SmartDashboard.putNumber("Arm Winch Power", armWinchPower);
+  }
+
 
   @Override
   public void periodic() {} 

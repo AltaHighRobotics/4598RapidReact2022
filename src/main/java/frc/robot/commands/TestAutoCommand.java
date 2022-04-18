@@ -21,13 +21,14 @@ public class TestAutoCommand extends CommandBase {
   public void initialize() {
     m_drivetrain.setPos(0, 0);
     m_drivetrain.resetYaw();
+    System.out.println("IM NOT CRAZY");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     m_drivetrain.drivetrainPositionIntegration();
-    m_drivetrain.setDriveToWaypoint(5,5,false);
+    m_drivetrain.setDriveToWaypoint(25,25,true);
   }
 
   // Called once the command ends or is interrupted.
