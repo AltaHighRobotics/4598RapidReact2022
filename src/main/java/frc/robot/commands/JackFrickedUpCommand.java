@@ -23,20 +23,21 @@ public class JackFrickedUpCommand extends CommandBase {
 
   @Override
   public void execute() {
-    m_climbingSub.SetArmsWithClamp(Constants.MIN_ARM_POSITION, Constants.ARM_SLOW_SPEED);
-    SmartDashboard.putString("Climb Resetting?", "Yes");
+  //   m_climbingSub.SetArmsWithClamp(Constants.MIN_ARM_POSITION, Constants.ARM_SLOW_SPEED);
+  //   SmartDashboard.putString("Climb Resetting?", "Yes");
       //Sets arm position to its retracted position
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_climbingSub.setCurrentStage(0);
-    m_climbingSub.setCurrentTarget(Constants.MAX_ARM_POSITION);
-    m_climbingSub.ReturnArms();
-    m_climbingSub.setHasRun(false);
-      //Sets arm variables to their original state 
-    m_climbingSub.ArmsStationary();
-    SmartDashboard.putString("Climb Resetting?", "No");
+    // m_climbingSub.setCurrentStage(0);
+    // m_climbingSub.setCurrentTarget(Constants.MAX_ARM_POSITION);
+    // m_climbingSub.ReturnArms();
+    // m_climbingSub.setHasRun(false);
+    //   //Sets arm variables to their original state 
+    // m_climbingSub.ArmsStationary();
+    // SmartDashboard.putString("Climb Resetting?", "No");
+    m_climbingSub.setCurrentStage(m_climbingSub.getCurrentStage() - 1);
   }
 
   @Override

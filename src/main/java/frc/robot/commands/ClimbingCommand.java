@@ -16,6 +16,8 @@ public class ClimbingCommand extends CommandBase {
     //Current target the robot is attempting to reach
   private double currentSpeed;
     //Current speed the arms should travel at
+  private double currentWinchTarget;
+    //Current target the arm winch is attempting to reach
   private int currentStage;
     //Current stage of climbing the robot is on
 
@@ -29,6 +31,7 @@ public class ClimbingCommand extends CommandBase {
     currentTarget = m_climbingSub.getCurrentTarget();
     currentSpeed = m_climbingSub.getCurrentSpeed();
     currentStage = m_climbingSub.getCurrentStage();
+    currentWinchTarget = m_climbingSub.getCurrentWinchTarget();
   }
 
   @Override
@@ -36,11 +39,14 @@ public class ClimbingCommand extends CommandBase {
     currentTarget = m_climbingSub.getCurrentTarget();
     currentSpeed = m_climbingSub.getCurrentSpeed();
     currentStage = m_climbingSub.getCurrentStage();
+    currentWinchTarget = m_climbingSub.getCurrentWinchTarget();
 
     SmartDashboard.putNumber("Climb Stage:", currentStage);
 
     m_climbingSub.SetArmsWithClamp(currentTarget, currentSpeed);
       //Makes climbing arms go to the current Target
+    m_climbingSub.moveArmWinchToPosition(currentWinchTarget);
+      //Makes winch go to current target
 
     if (m_climbingSub.hasReachedPosition(currentTarget))
       //Checks if the climbing arms are at the current target
@@ -53,6 +59,7 @@ public class ClimbingCommand extends CommandBase {
           SmartDashboard.putString("Climb Target:", "Minimum Arm Position, Arms up");
           m_climbingSub.setCurrentTarget(Constants.MIN_ARM_POSITION);
           m_climbingSub.setCurrentSpeed(Constants.ARM_SLOW_SPEED);
+          m_climbingSub.setCurrentWinchTarget(Constants.ARM_WINCH_MAX_POSITION);
           break;
         
         case 2:
@@ -60,6 +67,7 @@ public class ClimbingCommand extends CommandBase {
           SmartDashboard.putString("Climb Target:", "Almost Minimum Arm Position, Arms up");
           m_climbingSub.setCurrentTarget(Constants.ALMOST_MIN_POSITION);
           m_climbingSub.setCurrentSpeed(Constants.ARM_SLOW_SPEED);
+          m_climbingSub.setCurrentWinchTarget(Constants.ARM_WINCH_MIN_POSITION);
           break;
 
         case 3:
@@ -68,12 +76,14 @@ public class ClimbingCommand extends CommandBase {
           m_climbingSub.SwingArms();
           m_climbingSub.setCurrentTarget(Constants.ALMOST_MIN_POSITION);
           m_climbingSub.setCurrentSpeed(Constants.ARM_SLOW_SPEED);
+          m_climbingSub.setCurrentWinchTarget(Constants.ARM_WINCH_MIN_POSITION);
           break;
         case 4:
           System.out.println("CASE 4");
           SmartDashboard.putString("Climb Target:", "Maximum Arm Position, Arms out");
           m_climbingSub.setCurrentTarget(Constants.MAX_ARM_POSITION);
           m_climbingSub.setCurrentSpeed(Constants.ARM_FAST_SPEED);
+          m_climbingSub.setCurrentWinchTarget(Constants.ARM_WINCH_MIN_POSITION);
           break;
         case 5:
           System.out.println("CASE 5");
@@ -81,23 +91,18 @@ public class ClimbingCommand extends CommandBase {
           m_climbingSub.ReturnArms();
           m_climbingSub.setCurrentTarget(Constants.MAX_ARM_POSITION);
           m_climbingSub.setCurrentSpeed(Constants.ARM_FAST_SPEED);
+          m_climbingSub.setCurrentWinchTarget(Constants.ARM_WINCH_MIN_POSITION);
           break;
         case 6:
           System.out.println("CASE 6");
           SmartDashboard.putString("Climb Target:", "Minimum Arm Position, Arms in");
           m_climbingSub.setCurrentTarget(Constants.MIN_ARM_POSITION);
           m_climbingSub.setCurrentSpeed(Constants.ARM_SLOW_SPEED);
-          if(m_climbingSub.getRightCoderPos() < Constants.HALF_ARM_POSITION)
-          {
-            m_climbingSub.SwingArms();
-          }
+          m_climbingSub.setCurrentWinchTarget(Constants.ARM_WINCH_MAX_POSITION);
+          break;
+
         case 7:
-          if (m_climbingSub.getHasRun())
-            m_climbingSub.setCurrentStage(8);
-          else
-          {
-            m_climbingSub.setCurrentStage(3);
-          }
+          m_climbingSub.setCurrentStage(2);
           break;
           
         default:

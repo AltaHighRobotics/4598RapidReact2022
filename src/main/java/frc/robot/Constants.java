@@ -31,8 +31,7 @@ public final class Constants {
     public static final int LEFT_DRIVE_MOTOR_FRONT = 3;
     public static final int LEFT_DRIVE_MOTOR_BACK = 4;
     public static final int RIGHT_ARM_MOTOR = 5;
-    public static final int LEFT_ARM_MOTOR = 6;
-    public static final int WINCH_MOTOR = 0; //change when id got; change id through REVHWCLIENT
+    public static final int LEFT_ARM_MOTOR = 6; //change when id got; change id through REVHWCLIENT
     public static final int INTAKE_MOTOR = 7;
     public static final int STORAGE_MOTOR = 8; //disconnected
     public static final int FEED_MOTOR = 9;
@@ -46,7 +45,7 @@ public final class Constants {
     public static final double LIFT_ARM_SPEED = 0;
     public static final double INTAKE_SPEED = 0.4;
     public static final double DRIVE_MAX_SPEED = 1;
-    public static final double ARM_WINCH_SPEED = 1;
+    public static final double ARM_WINCH_SPEED = 0.5;
     public static final double WINCH_SPEED = 0.3;
 
     // DRIVER CONTROLS
@@ -85,7 +84,7 @@ public final class Constants {
     
     // ARM CONSTANTS
     public static final double MAX_ARM_ERROR = 40000;
-    public static final double ARM_SLOW_SPEED = 0.75;
+    public static final double ARM_SLOW_SPEED = 0.3;
     public static final double ARM_FAST_SPEED = 1;
     public static final double FIRST_HOOK_POSITION = 105000;
     public static final double MIN_ARM_POSITION = 0;
@@ -98,7 +97,7 @@ public final class Constants {
     public static final double ARM_POWER_RAMP_TIME = 0.5;
     public static final double ARM_WINCH_MIN_POSITION = 0;
     public static final double ARM_WINCH_MID_POSITION = 2000;
-    public static final double ARM_WINCH_MAX_POSITION = 4000;
+    public static final double ARM_WINCH_MAX_POSITION = 190000;
 
     // Arm Controller Constants
     public static final double ARM_PROPORTIONAL_GAIN = 0.00004;
@@ -110,18 +109,19 @@ public final class Constants {
     public static final double ARM_MAX_POWER = 1;
 
     // Arm Winch Controller Constants
-    public static final double ARM_WINCH_PROPORTIONAL_GAIN = 0.00001;
-    public static final double ARM_WINCH_INTEGRAL_GAIN = 0.00000003;
+    public static final double ARM_WINCH_PROPORTIONAL_GAIN = 0.0001;
+    public static final double ARM_WINCH_INTEGRAL_GAIN = 0.0000003;
     public static final double ARM_WINCH_DERIVITIVE_GAIN = 0;
     public static final double MAX_ARM_WINCH_PROPORTIONAL = 1;
-    public static final double MAX_ARM_WINCH_INTEGRAL = 0.25;
+    public static final double MAX_ARM_WINCH_INTEGRAL = 0.15;
     public static final double MAX_ARM_WINCH_DERIVITIVE = 0;
-    public static final double ARM_WINCH_MAX_POWER = 1;
+    public static final double ARM_WINCH_MAX_POWER = 0.6;
 
     // Storage Constants
     public static final double FEED_POWER = 0.6;
     public static final double FEED_REVERSE_POWER = -0.15;
     public static final double STORAGE_POWER = 0.5;
+    public static final int STORAGE_LIMIT_SWITCH = 0;
 
     // Shooter Constants
     public static final int SLIDER_AXIS = 3;
@@ -166,12 +166,12 @@ public final class Constants {
     public static final double AZIMUTH_UPPER_LIMIT = 50;
     public static final double AZIMUTH_CURRENT_LIMIT = 40;
     public static final double AZIMUTH_POWER_RAMP_TIME = 0.5;
-    public static final double AZIMUTH_GEAR_RATIO = 0.140;
-    public static final double AZIMUTH_MAX_ERROR = 3;
+    public static final double AZIMUTH_GEAR_RATIO = 0.136;
+    public static final double AZIMUTH_MAX_ERROR = 2;
     public static final double AZIMUTH_BARF_ANGLE = 40;
 
     // Azimuth Controller Constants
-    public static final double AZIMUTH_PROPORTIONAL_GAIN = 0.009;
+    public static final double AZIMUTH_PROPORTIONAL_GAIN = 0.0125;
     public static final double AZIMUTH_INTEGRAL_GAIN = 0.0007;
     public static final double AZIMUTH_DERIVITIVE_GAIN = 0.03;
     public static final double AZIMUTH_MAX_PROPORTIONAL = 1;
@@ -187,20 +187,20 @@ public final class Constants {
 
     // LIMELIGHT CONSTANTS
     public static final double A1 = 30;
-    public static final double LIMELIGHT_HEIGHT = 43;
+    public static final double LIMELIGHT_HEIGHT = 44;
     public static final double GOAL_HEIGHT = 100;
     public static final double RADIAN_CONVERSION = 3.14159 / 180.0; // Math.toDegrees(angrad) and Math.toRadians(angdeg) are cool too
     public static final double[][] SHOOTER_DATA = new double[][] {
             // Distance, Velocity, Angle
             { 1, 8100, 70},
             { 85, 8100, 70},
-            { 105, 8200, 67},
-            { 140, 9000, 65},
-            { 185, 9800, 65},
+            { 102, 8300, 67},
+            { 140, 8500, 62},
+            { 185, 9000, 60},
             { 198, 9950, 64.25},
             { 500, 10000, 64}
     };
-    public static final double LIMELIGHT_ELEVATION_ANGLE = 40;
+    public static final double LIMELIGHT_ELEVATION_ANGLE = 45;
     public static final double LIMELIGHT_YAW_OFFSET = 0;
     public static final double[] WAYPOINT_BALL_1 = {150.79, 25.91};
     public static final double[] WAYPOINT_BALL_2 = {88.3, 124.95};

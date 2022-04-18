@@ -168,8 +168,8 @@ public class DrivetrainSub extends SubsystemBase
     this.robotX = this.robotX + (Math.cos(this.currentHeading) * this.distanceTraveled);
     this.robotY = this.robotY + (Math.sin(this.currentHeading) * this.distanceTraveled);
 
-    //SmartDashboard.putNumber("Robot X:", this.robotX);
-    //SmartDashboard.putNumber("Robot Y:", this.robotY);
+    SmartDashboard.putNumber("Robot X:", this.robotX);
+    SmartDashboard.putNumber("Robot Y:", this.robotY);
 
   }
 
@@ -201,8 +201,8 @@ public class DrivetrainSub extends SubsystemBase
     } else {
       this.drivePower = 0;
     }
-    //SmartDashboard.putNumber("Target X", this.targetX);
-    //SmartDashboard.putNumber("Target Y", this.targetY);
+    SmartDashboard.putNumber("Target X", this.targetX);
+    SmartDashboard.putNumber("Target Y", this.targetY);
     //SmartDashboard.putNumber("Auto Throttle:", this.drivePower);
     //SmartDashboard.putNumber("Auto Steering:", this.steeringPower);
     if(hasReachedWaypoint()) {

@@ -19,6 +19,7 @@ import frc.robot.Constants;
 import frc.robot.Utilities.ConfigurablePID;
 import limelightvision.limelight.frc.LimeLight;
 import limelightvision.limelight.frc.ControlMode.LedMode;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SPI;
 public class ShootingSub extends SubsystemBase {
@@ -69,6 +70,8 @@ public class ShootingSub extends SubsystemBase {
   private int shooterReadyCapacitor = 0;
   private int colorTimer = 0;
   private int lastDetected = 0;
+
+  private DigitalInput storageSwitch;
   
 
   public ShootingSub() {
@@ -84,6 +87,8 @@ public class ShootingSub extends SubsystemBase {
     feedMotor = new WPI_VictorSPX(Constants.FEED_MOTOR);
     feedMotor.configFactoryDefault();
     feedMotor.setInverted(false);
+    feedMotor.enableVoltageCompensation(true);
+    feedMotor.configVoltageCompSaturation(11);
 
     azimuthCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.AZIMUTH_CURRENT_LIMIT, 0, 0.1);
 
@@ -177,6 +182,8 @@ public class ShootingSub extends SubsystemBase {
 
     leftShooterMotor.configVoltageCompSaturation(11);
     rightShooterMotor.configVoltageCompSaturation(11);
+
+    storageSwitch = new DigitalInput(Constants.STORAGE_LIMIT_SWITCH);
   }
   /** Gets the color sensors detected color, and puts it on dashboard
    * 
@@ -302,6 +309,11 @@ public class ShootingSub extends SubsystemBase {
     return limeLight;
   }
   
+  public boolean getSwitch()
+  {
+    return storageSwitch.get();
+  }
+
   public double getLimeLightYaw()
   {
     return limeLight.getdegRotationToTarget();
@@ -360,8 +372,8 @@ public class ShootingSub extends SubsystemBase {
 
     //SmartDashboard.putNumber("Elevation Angle Motor Power:", elevationMotorPower);
     //SmartDashboard.putNumber("Raw Encoder Angle Degrees",(elevationAngleMotor.getSelectedSensorPosition())/4096 * 360 + Constants.SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT);
-    //SmartDashboard.putNumber("Current Elevation Angle:", elevationEncoderPosition);
-    //SmartDashboard.putNumber("Target Elevation Angle:", targetElevationAngle);
+    SmartDashboard.putNumber("Current Elevation Angle:", elevationEncoderPosition);
+    SmartDashboard.putNumber("Target Elevation Angle:", targetElevationAngle);
 
     if(elevationReady) {
       stopElevationMotor();
@@ -412,8 +424,8 @@ public class ShootingSub extends SubsystemBase {
     // Displays useful values in Smart Dashboard
     // SmartDashboard.putNumber("Shooter Power:", shooterPower);
     // SmartDashboard.putString("Shooter Status:", "Shooting");
-    //SmartDashboard.putNumber("Shooter Target Speed", targetShooterVelocity);
-    //SmartDashboard.putNumber("Shooter Speed", shooterVelocity);
+    SmartDashboard.putNumber("Shooter Target Speed", targetShooterVelocity);
+    SmartDashboard.putNumber("Shooter Speed", shooterVelocity);
     //SmartDashboard.putNumber("Shooter Ready", shooterReadyCapacitor);
   }
 
@@ -557,10 +569,18 @@ public class ShootingSub extends SubsystemBase {
     SmartDashboard.putString("Feeder:", "Stopped");
   }
 
+  public void intakeFeedOn()
+  {
+    feedMotor.set(ControlMode.PercentOutput, 0.2);
+    SmartDashboard.putString("Feeder:", "Feeding");
+  }
+
   public void feedReverse()
   {
     feedMotor.set(ControlMode.PercentOutput, Constants.FEED_REVERSE_POWER);
     SmartDashboard.putString("Feeder:", "Reverse");
   }
+
+
 
 }
