@@ -74,7 +74,7 @@ public class ClimbingCommand extends CommandBase {
           System.out.println("CASE 3");
           SmartDashboard.putString("Climb Target:", "Almost Minimum Arm Position, Arms out");
           m_climbingSub.SwingArms();
-          m_climbingSub.setCurrentTarget(Constants.ALMOST_MIN_POSITION);
+          m_climbingSub.setCurrentTarget(Constants.MAX_ARM_POSITION - 40000);
           m_climbingSub.setCurrentSpeed(Constants.ARM_SLOW_SPEED);
           m_climbingSub.setCurrentWinchTarget(Constants.ARM_WINCH_MIN_POSITION);
           break;
@@ -99,6 +99,7 @@ public class ClimbingCommand extends CommandBase {
           m_climbingSub.setCurrentTarget(Constants.MIN_ARM_POSITION);
           m_climbingSub.setCurrentSpeed(Constants.ARM_SLOW_SPEED);
           m_climbingSub.setCurrentWinchTarget(Constants.ARM_WINCH_MAX_POSITION);
+          System.out.println("AAAAAAAAAAAA");
           break;
 
         case 7:
