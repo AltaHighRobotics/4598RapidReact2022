@@ -3,7 +3,7 @@
  * @author Cracker
  * @author Icarus Innovated
  */
-package frc.robot.commands;
+package frc.robot.climb;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
