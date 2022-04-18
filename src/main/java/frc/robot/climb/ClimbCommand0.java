@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.subsystems.ClimbingSub;
 
-public class ClimbCommand1 extends CommandBase {
+public class ClimbCommand0 extends CommandBase {
   
   private final ClimbingSub m_climbingSub;
   private double currentTarget;
@@ -22,7 +22,7 @@ public class ClimbCommand1 extends CommandBase {
   private int currentStage;
     //Current stage of climbing the robot is on
 
-  public ClimbCommand1(ClimbingSub climbingSub) {
+  public ClimbCommand0(ClimbingSub climbingSub) {
     m_climbingSub = climbingSub;
     addRequirements(climbingSub);
   }
@@ -52,9 +52,9 @@ public class ClimbCommand1 extends CommandBase {
 
           System.out.println("SETTING ARMS TO MIN POSITION");
           SmartDashboard.putString("Climb Target:", "Minimum Arm Position, Arms up");
-          m_climbingSub.setCurrentTarget(Constants.MIN_ARM_POSITION);
-          m_climbingSub.setCurrentSpeed(Constants.ARM_SLOW_SPEED);
-          m_climbingSub.setCurrentWinchTarget(Constants.ARM_WINCH_MAX_POSITION);
+          m_climbingSub.setCurrentTarget(Constants.FIRST_HOOK_POSITION);
+          m_climbingSub.setCurrentSpeed(Constants.ARM_FAST_SPEED);
+          m_climbingSub.setCurrentWinchTarget(0);
     }
   // }
 

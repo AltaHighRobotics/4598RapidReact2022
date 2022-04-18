@@ -48,9 +48,9 @@ public class ClimbingCommand extends CommandBase {
     m_climbingSub.moveArmWinchToPosition(currentWinchTarget);
       //Makes winch go to current target
 
-    if (m_climbingSub.hasReachedPosition(currentTarget))
-      //Checks if the climbing arms are at the current target
-    {
+    // if (m_climbingSub.hasReachedPosition(currentTarget))
+    //   //Checks if the climbing arms are at the current target
+    // {
       switch (currentStage)
         //Checks what stage the robot is on
       {
@@ -112,7 +112,7 @@ public class ClimbingCommand extends CommandBase {
         System.out.println("Invalid Case");
       }
     }
-  }
+  // }
 
   @Override
   public void end(boolean interrupted) {
