@@ -208,6 +208,15 @@ public class ConfigurablePID {
   }
 
   /**
+   * Get the total integral of the controller.
+   *
+   * @return integral
+   */
+  public double getIntegral() {
+    return this.integral;
+  }
+
+  /**
    * Set the integral gain of the controller.
    *
    * @param newIntegralGain the integral gain

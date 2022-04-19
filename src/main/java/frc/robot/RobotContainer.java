@@ -9,6 +9,7 @@ import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.MjpegServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -29,7 +30,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final PS4Controller m_driverOne = new PS4Controller(Constants.DRIVER_ONE);
-  //private final PS4Controller m_driverTwo = new PS4Controller(1);
+  private final Joystick m_climbStick = new Joystick(1);
 
   private final ClimbingSub m_climbingSub = new ClimbingSub();
   private final IntakeSub m_intakeSub = new IntakeSub();
@@ -47,6 +48,14 @@ public class RobotContainer {
   private final FixedShootCommand m_fixedShootCommand = new FixedShootCommand(m_shootingSub, m_driverOne);
   private final WinchForwardCommand m_wForwardCommand = new WinchForwardCommand(m_climbingSub);
   private final WinchRevCommand m_wRevCommand = new WinchRevCommand(m_climbingSub);
+  
+  private final ClimbCommand0 m_climb0 = new ClimbCommand0(m_climbingSub);
+  private final ClimbCommand1 m_climb1 = new ClimbCommand1(m_climbingSub);
+  private final ClimbCommand2 m_climb2 = new ClimbCommand2(m_climbingSub);
+  private final ClimbCommand3 m_climb3 = new ClimbCommand3(m_climbingSub);
+  private final ClimbCommand4 m_climb4 = new ClimbCommand4(m_climbingSub);
+  private final ClimbCommand5 m_climb5 = new ClimbCommand5(m_climbingSub);
+  private final ClimbCommand6 m_climb6 = new ClimbCommand6(m_climbingSub);
 
   private final TestAutoCommand m_testAuto = new TestAutoCommand(m_drivetrainSub);
 
@@ -109,6 +118,22 @@ public class RobotContainer {
     final JoystickButton winchForwardButton;
     final JoystickButton winchBackwardButton;
 
+    final JoystickButton climb0Button;
+    final JoystickButton climb1Button;
+    final JoystickButton climb2Button;
+    final JoystickButton climb3Button;
+    final JoystickButton climb4Button;
+    final JoystickButton climb5Button;
+    final JoystickButton climb6Button;
+
+    climb0Button = new JoystickButton(m_climbStick, 2);
+    climb1Button = new JoystickButton(m_climbStick, 7);
+    climb2Button = new JoystickButton(m_climbStick, 8);
+    climb3Button = new JoystickButton(m_climbStick, 9);
+    climb4Button = new JoystickButton(m_climbStick, 10);
+    climb5Button = new JoystickButton(m_climbStick, 11);
+    climb6Button = new JoystickButton(m_climbStick, 12);
+
     climbButton = new JoystickButton(m_driverOne, 2); // X button
     frickButton = new JoystickButton(m_driverOne, 9); // Share button
     aimButton = new JoystickButton(m_driverOne, 6); // Right Bumper
@@ -128,6 +153,14 @@ public class RobotContainer {
     intakeReverseButton.toggleWhenPressed(m_IntakeReverseCommand);
     winchBackwardButton.whileHeld(m_wRevCommand);
     winchForwardButton.whileHeld(m_wForwardCommand);
+
+    climb0Button.whileHeld(m_climb0);
+    climb1Button.whileHeld(m_climb1);
+    climb2Button.whileHeld(m_climb2);
+    climb3Button.whileHeld(m_climb3);
+    climb4Button.whileHeld(m_climb4);
+    climb5Button.whileHeld(m_climb5);
+    climb6Button.whileHeld(m_climb6);
   }
 
   /**

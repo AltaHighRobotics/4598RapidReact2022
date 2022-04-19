@@ -28,12 +28,12 @@ public class IntakeCommand extends CommandBase {
   public void execute() {
     if(!m_shootSub.getSwitch())
     {
-      //m_shootSub.feedOff();
+      m_shootSub.feedOff();
       //System.out.println("off lol");
     }
     else
     {
-      //m_shootSub.intakeFeedOn();
+      m_shootSub.intakeFeedOn();
       //System.out.println("ON LOL");
     }
     m_intakeSub.IntakeExtend();

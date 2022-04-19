@@ -115,6 +115,7 @@ public class RapidReactAutoCommand extends CommandBase {
     if (c > 50)
     {
         cargoCount = 0;
+        c = 0;
     }
     
   }
