@@ -88,7 +88,7 @@ public class ShootingSub extends SubsystemBase {
     feedMotor.configFactoryDefault();
     feedMotor.setInverted(false);
     feedMotor.enableVoltageCompensation(true);
-    feedMotor.configVoltageCompSaturation(11);
+    feedMotor.configVoltageCompSaturation(11.5);
 
     azimuthCurrentLimit = new SupplyCurrentLimitConfiguration(true, Constants.AZIMUTH_CURRENT_LIMIT, 0, 0.1);
 
@@ -375,7 +375,7 @@ public class ShootingSub extends SubsystemBase {
     SmartDashboard.putNumber("Current Elevation Angle:", elevationEncoderPosition);
     SmartDashboard.putNumber("Target Elevation Angle:", targetElevationAngle);
 
-    if(elevationReady) {
+    if(false){//elevationReady) {
       stopElevationMotor();
     } else {
       elevationAngleMotor.set(ControlMode.PercentOutput, elevationMotorPower);
@@ -571,7 +571,7 @@ public class ShootingSub extends SubsystemBase {
 
   public void intakeFeedOn()
   {
-    feedMotor.set(ControlMode.PercentOutput, 0.2);
+    feedMotor.set(ControlMode.PercentOutput, 0.25);
     SmartDashboard.putString("Feeder:", "Feeding");
   }
 

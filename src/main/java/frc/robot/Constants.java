@@ -45,8 +45,8 @@ public final class Constants {
     public static final double LIFT_ARM_SPEED = 0;
     public static final double INTAKE_SPEED = 0.4;
     public static final double DRIVE_MAX_SPEED = 1;
-    public static final double ARM_WINCH_SPEED = 0.5;
     public static final double WINCH_SPEED = 0.3;
+    public static final double FALCON_ENCODER_UNITS = 2048;
 
     // DRIVER CONTROLS
     public static final int DRIVER_ONE = 0;
@@ -59,7 +59,7 @@ public final class Constants {
     public static final double ENCODER_ROTATION_UNITS = 341.333333333;
     public static final double DRIVETRAIN_GEAR_RATIO = 0.1647058823;
     public static final double DRIVETRAIN_ROTATION_DISTANCE_RATIO = Math.PI * 0.666666666;
-    public static final double MAX_WAYPOINT_ERROR = 0.125;
+    public static final double MAX_WAYPOINT_ERROR = 5;
     public static final double MAX_DRIVE_HEADING_ERROR = 10;
     public static final double DRIVETRAIN_CURRENT_LIMIT = 40;
     public static final double DRIVETRAIN_POWER_RAMP_TIME = 0.1;
@@ -83,42 +83,45 @@ public final class Constants {
     public static final double DRIVETRAIN_SPEED_SPEED = 0.4;
     
     // ARM CONSTANTS
-    public static final double MAX_ARM_ERROR = 40000;
-    public static final double ARM_SLOW_SPEED = 0.3;
+    public static final double MAX_ARM_ERROR = 2;
+    public static final double ARM_SLOW_SPEED = 0.5;
     public static final double ARM_FAST_SPEED = 1;
-    public static final double FIRST_HOOK_POSITION = 105000;
+    public static final double FIRST_HOOK_POSITION = 16;
     public static final double MIN_ARM_POSITION = 0;
-    public static final double ALMOST_MIN_POSITION = 50000;
-    public static final double HALF_ARM_POSITION = 100000;
-    public static final double MAX_ARM_POSITION = 145000;
-    public static final double ALMOST_MAX_ARM_POSITION = 110000;
-    public static final double ACCEPTABLE_ERROR = 8000;
+    public static final double ALMOST_MIN_POSITION = 6;
+    public static final double HALF_ARM_POSITION = 12;
+    public static final double MAX_ARM_POSITION = 24;
+    public static final double ALMOST_MAX_ARM_POSITION = 20;
+    public static final double ACCEPTABLE_ERROR = 1;
     public static final double ARM_CURRENT_LIMIT = 40;
     public static final double ARM_POWER_RAMP_TIME = 0.5;
     public static final double ARM_WINCH_MIN_POSITION = 0;
     public static final double ARM_WINCH_MID_POSITION = 2000;
-    public static final double ARM_WINCH_MAX_POSITION = 190000;
+    public static final double ARM_WINCH_MAX_POSITION = 280000;
+    public static final double ARM_GEAR_RATIO = 25;
+    public static final double ARM_PULLEY_RATIO = 8.26772;
 
     // Arm Controller Constants
-    public static final double ARM_PROPORTIONAL_GAIN = 0.00004;
-    public static final double ARM_INTEGRAL_GAIN = 0.00000005;
-    public static final double ARM_DERIVITIVE_GAIN = 0.01;
+    public static final double ARM_PROPORTIONAL_GAIN = 0.35;
+    public static final double ARM_INTEGRAL_GAIN = 0.001;
+    public static final double ARM_DERIVITIVE_GAIN = 0.3;
     public static final double MAX_ARM_PROPORTIONAL = 1;
     public static final double MAX_ARM_INTEGRAL = 0.25;
     public static final double MAX_ARM_DERIVITIVE = 0;
     public static final double ARM_MAX_POWER = 1;
 
     // Arm Winch Controller Constants
-    public static final double ARM_WINCH_PROPORTIONAL_GAIN = 0.0001;
-    public static final double ARM_WINCH_INTEGRAL_GAIN = 0.0000003;
+    public static final double ARM_WINCH_PROPORTIONAL_GAIN = 0.0002;
+    public static final double ARM_WINCH_INTEGRAL_GAIN = 0.0000006;
     public static final double ARM_WINCH_DERIVITIVE_GAIN = 0;
     public static final double MAX_ARM_WINCH_PROPORTIONAL = 1;
     public static final double MAX_ARM_WINCH_INTEGRAL = 0.15;
     public static final double MAX_ARM_WINCH_DERIVITIVE = 0;
-    public static final double ARM_WINCH_MAX_POWER = 0.6;
+    public static final double ARM_WINCH_MAX_POWER = 0.75;
+    public static final double ARM_WINCH_SPEED = 0.6;
 
     // Storage Constants
-    public static final double FEED_POWER = 0.6;
+    public static final double FEED_POWER = 0.65;
     public static final double FEED_REVERSE_POWER = -0.15;
     public static final double STORAGE_POWER = 0.5;
     public static final int STORAGE_LIMIT_SWITCH = 0;
@@ -139,14 +142,14 @@ public final class Constants {
     public static final double SHOOTER_INTERGRAL_GAIN = 0.000004;
     public static final double SHOOTER_DERIVITIVE_GAIN = 0;
     public static final double SHOOTER_MAX_PROPORTIONAL = 1;
-    public static final double SHOOTER_MAX_INTEGRAL = 1;
+    public static final double SHOOTER_MAX_INTEGRAL = 0.75;
     public static final double SHOOTER_MAX_DERIVITIVE = 0;
 
     // Elevation Angle Constants
     public static final double ELEVATION_ANGLE_GEAR_RATIO = 0.001;
     public static final double SHOOTER_ELEVATION_ANGLE_UPPER_LIMIT = 85; //Actually 86
     public static final double SHOOTER_ELEVATION_ANGLE_LOWER_LIMIT = 30;
-    public static final double ELEVATION_SPEED = 0.75;
+    public static final double ELEVATION_SPEED = 0.85;
     public static final double ELEVATION_MAX_ERROR = 1;
     public static final double ELEVATION_BARF_ANGLE = 30;
     public static final double ELEVATION_ANGLE_CURRENT_LIMIT = 5;
@@ -192,13 +195,13 @@ public final class Constants {
     public static final double RADIAN_CONVERSION = 3.14159 / 180.0; // Math.toDegrees(angrad) and Math.toRadians(angdeg) are cool too
     public static final double[][] SHOOTER_DATA = new double[][] {
             // Distance, Velocity, Angle
-            { 1, 8100, 70},
-            { 85, 8100, 70},
-            { 102, 8300, 67},
-            { 140, 8500, 62},
-            { 185, 9000, 60},
-            { 198, 9950, 64.25},
-            { 500, 10000, 64}
+            { 1, 8300, 70},
+            { 95, 8500, 66.5}, //good at 0.65
+            { 110, 8700, 64.25}, //good at 0.65
+            { 125, 8900, 61.5}, //Good at 0.65 feed
+            { 150, 9900, 61.5},
+            //{ 198, 9950, 64.25},
+            { 500, 9000, 60}
     };
     public static final double LIMELIGHT_ELEVATION_ANGLE = 45;
     public static final double LIMELIGHT_YAW_OFFSET = 0;

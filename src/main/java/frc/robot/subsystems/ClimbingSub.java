@@ -195,16 +195,17 @@ public class ClimbingSub extends SubsystemBase {
   public void SetArmsWithClamp(double targetPosition, double targetVelocity)
   {
     // Gets the position and velocity of both arm motors
-    rightArmMotorPosition = rightArmMotor.getSelectedSensorPosition();
-    leftArmMotorPosition = leftArmMotor.getSelectedSensorPosition();
-    rightArmMotorVelocity = rightArmMotor.getSelectedSensorVelocity();
-    leftArmMotorVelocity = leftArmMotor.getSelectedSensorVelocity();
+    rightArmMotorPosition = rightArmMotor.getSelectedSensorPosition()/Constants.FALCON_ENCODER_UNITS / Constants.ARM_GEAR_RATIO * Constants.ARM_PULLEY_RATIO;
+    leftArmMotorPosition = leftArmMotor.getSelectedSensorPosition()/Constants.FALCON_ENCODER_UNITS / Constants.ARM_GEAR_RATIO * Constants.ARM_PULLEY_RATIO;
+    rightArmMotorVelocity = rightArmMotor.getSelectedSensorVelocity()/Constants.FALCON_ENCODER_UNITS / Constants.ARM_GEAR_RATIO * Constants.ARM_PULLEY_RATIO;
+    leftArmMotorVelocity = leftArmMotor.getSelectedSensorVelocity()/Constants.FALCON_ENCODER_UNITS / Constants.ARM_GEAR_RATIO * Constants.ARM_PULLEY_RATIO;
     
     /** Gets the average position between the two arms, and then clamps the target for each arm to be within an acceptable range of it. 
      * This ensures the arms do not get out of sync, as that would tip the robot
      */
     double averageArmPosition = (leftArmMotorPosition + rightArmMotorPosition)/2;
     double actualTarget = MathUtil.clamp(targetPosition, averageArmPosition - Constants.MAX_ARM_ERROR, averageArmPosition + Constants.MAX_ARM_ERROR);
+    actualTarget = MathUtil.clamp(actualTarget, Constants.MIN_ARM_POSITION, Constants.MAX_ARM_POSITION);
 
     leftArmPID.setSpeed(targetVelocity);
     rightArmPID.setSpeed(targetVelocity);
@@ -212,8 +213,10 @@ public class ClimbingSub extends SubsystemBase {
     double leftArmPower = leftArmPID.runVelocityPID(actualTarget, leftArmMotorPosition, leftArmMotorVelocity);
     double rightArmPower = rightArmPID.runVelocityPID(actualTarget, rightArmMotorPosition, rightArmMotorVelocity);
 
-    //SmartDashboard.putNumber("Left Arm Power:", leftArmPower);
-    //SmartDashboard.putNumber("Right Arm Power:", rightArmPower);
+    SmartDashboard.putNumber("Left Arm Pos:", leftArmMotorPosition);
+    SmartDashboard.putNumber("Right Arm Pos:", rightArmMotorPosition);
+    SmartDashboard.putNumber("Left Arm Err:", leftArmPID.getIntegral());
+    SmartDashboard.putNumber("Right Arm Err:", rightArmPID.getIntegral());
 
     leftArmMotor.set(ControlMode.PercentOutput, leftArmPower);
     rightArmMotor.set(ControlMode.PercentOutput, rightArmPower);

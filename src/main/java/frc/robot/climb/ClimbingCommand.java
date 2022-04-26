@@ -3,7 +3,7 @@
  * @author Cracker
  * @author Icarus Innovated
  */
-package frc.robot.commands;
+package frc.robot.climb;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -48,9 +48,9 @@ public class ClimbingCommand extends CommandBase {
     m_climbingSub.moveArmWinchToPosition(currentWinchTarget);
       //Makes winch go to current target
 
-    if (m_climbingSub.hasReachedPosition(currentTarget))
-      //Checks if the climbing arms are at the current target
-    {
+    // if (m_climbingSub.hasReachedPosition(currentTarget))
+    //   //Checks if the climbing arms are at the current target
+    // {
       switch (currentStage)
         //Checks what stage the robot is on
       {
@@ -74,7 +74,7 @@ public class ClimbingCommand extends CommandBase {
           System.out.println("CASE 3");
           SmartDashboard.putString("Climb Target:", "Almost Minimum Arm Position, Arms out");
           m_climbingSub.SwingArms();
-          m_climbingSub.setCurrentTarget(Constants.ALMOST_MIN_POSITION);
+          m_climbingSub.setCurrentTarget(Constants.ALMOST_MAX_ARM_POSITION);
           m_climbingSub.setCurrentSpeed(Constants.ARM_SLOW_SPEED);
           m_climbingSub.setCurrentWinchTarget(Constants.ARM_WINCH_MIN_POSITION);
           break;
@@ -99,6 +99,7 @@ public class ClimbingCommand extends CommandBase {
           m_climbingSub.setCurrentTarget(Constants.MIN_ARM_POSITION);
           m_climbingSub.setCurrentSpeed(Constants.ARM_SLOW_SPEED);
           m_climbingSub.setCurrentWinchTarget(Constants.ARM_WINCH_MAX_POSITION);
+          System.out.println("AAAAAAAAAAAA");
           break;
 
         case 7:
@@ -111,7 +112,7 @@ public class ClimbingCommand extends CommandBase {
         System.out.println("Invalid Case");
       }
     }
-  }
+  // }
 
   @Override
   public void end(boolean interrupted) {

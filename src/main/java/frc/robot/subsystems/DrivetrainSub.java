@@ -34,6 +34,8 @@ public class DrivetrainSub extends SubsystemBase
   //private double rightMotorVelocity;
   //private double leftMotorVelocity;
 
+  private double [] pos = {-9999, -9999};
+
   private double currentRightMotorPosition;
   private double currentLeftMotorPosition;
 
@@ -168,18 +170,34 @@ public class DrivetrainSub extends SubsystemBase
     this.robotX = this.robotX + (Math.cos(this.currentHeading) * this.distanceTraveled);
     this.robotY = this.robotY + (Math.sin(this.currentHeading) * this.distanceTraveled);
 
-    SmartDashboard.putNumber("Robot X:", this.robotX);
-    SmartDashboard.putNumber("Robot Y:", this.robotY);
+    //SmartDashboard.putNumber("Robot X:", this.robotX);
+    //SmartDashboard.putNumber("Robot Y:", this.robotY);
 
   }
 
+  public void driveForwardTo(final double waypointX, final double waypointY)
+  {
+
+  }
+
+  public void driveBackwardsTo(final double waypointX, final double waypointY)
+  {
+    
+  }
+
+  public double [] getPos()
+  {
+    pos[0] = robotX;
+    pos[1] = robotY;
+    return pos;
+  }
   public boolean setDriveToWaypoint(final double waypointX, final double waypointY, final boolean driveBackwards) {
     this.targetX = waypointX;
     this.targetY = waypointY;
     if(!driveBackwards) {
       this.targetHeading = Math.toDegrees(Math.atan2(this.targetY - this.robotY, this.targetX - this.robotX));
     } else {
-      this.targetHeading = Math.toDegrees(Math.atan2(-this.targetY - this.robotY, -this.targetX - this.robotX));
+      this.targetHeading = Math.toDegrees(Math.atan2(-(this.targetY - this.robotY), -(this.targetX - this.robotX)));
     }
     this.currentHeading = (double) this.navX.getYaw();
     //SmartDashboard.putNumber("Target Heading", this.targetHeading);
@@ -201,8 +219,8 @@ public class DrivetrainSub extends SubsystemBase
     } else {
       this.drivePower = 0;
     }
-    SmartDashboard.putNumber("Target X", this.targetX);
-    SmartDashboard.putNumber("Target Y", this.targetY);
+    //SmartDashboard.putNumber("Target X", this.targetX);
+    //SmartDashboard.putNumber("Target Y", this.targetY);
     //SmartDashboard.putNumber("Auto Throttle:", this.drivePower);
     //SmartDashboard.putNumber("Auto Steering:", this.steeringPower);
     if(hasReachedWaypoint()) {
