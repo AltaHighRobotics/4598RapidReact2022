@@ -7,6 +7,7 @@ package frc.robot;
 import java.lang.Math;
 
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.utilities.vector;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -205,10 +206,14 @@ public final class Constants {
     };
     public static final double LIMELIGHT_ELEVATION_ANGLE = 45;
     public static final double LIMELIGHT_YAW_OFFSET = 0;
-    public static final double[] WAYPOINT_BALL_1 = {150.79, 25.91};
-    public static final double[] WAYPOINT_BALL_2 = {88.3, 124.95};
-    public static final double[] WAYPOINT_BALL_3 = {-81.84, 129.4};
-    public static final double[] WAYPOINT_BALL_4 = {-149.23, 33.77};
-    public static final double[] SHOOT_DISTANCE_WAYPOINT_BUT_NOT = {0, 75};
-    public static final double[] SHOOT_DISTANCE_WAYPOINT = {0,50};
+    public static final vector WAYPOINT_BALL_1 = new vector(150.79, 25.91);
+    public static final vector WAYPOINT_BALL_2 = new vector(88.3, 124.95);
+    public static final vector WAYPOINT_BALL_3 = new vector(-81.84, 129.4);
+    public static final vector WAYPOINT_BALL_4 = new vector(-149.23, 33.77);
+    public static final vector SHOOT_DISTANCE_WAYPOINT_BUT_NOT = new vector(0, 75);
+    public static final vector SHOOT_DISTANCE_WAYPOINT = new vector(0,50);
+    public static final vector START_ONE_OFFSET = new vector(0,100);
+    public static final vector START_TWO_OFFSET = new vector(-57,40);
+    public static final vector START_THREE_OFFSET = new vector(85.5,67);
+    public static final vector GOAL_VECTOR = new vector(0,0,100);
 }

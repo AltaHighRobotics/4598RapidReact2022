@@ -2,6 +2,10 @@ package frc.robot.utilities;
 
 import edu.wpi.first.math.MathUtil;
 
+/** A highly customizable PID controller
+ *  @author Ian
+ *  @author Icarus Innovated
+ */
 public class ConfigurablePID {
   private double proportionalGain = 0;
   private double integralGain = 0;
@@ -26,6 +30,18 @@ public class ConfigurablePID {
 
   private double speed = 1;
 
+  /** A configurable PID controller. which MUST be applied to something that directly affects the processVariable, otherwise very bad things may happen.
+   * 
+   * @param proportionalGain A double that is multipled by the error when running the controller. The result is the proportional component of the output.
+   * @param integralGain A double that is multipled by the error and then added to an accumulator when running the controller. The result is the integral component of the output.
+   * @param derivitiveGain A double that is multipled by the rate of change of the error when running the controller. The result is the derivitive component of the output.
+   * @param maxProportional A double that controls the maximum allowed value (+-) for the proportional component of the controller.
+   * @param maxIntegral A double that controls the maximum allowed value (+-) for the integral component of the controller.
+   * @param maxDerivitive A double that controls the maximum allowed value (+-) for the derivitive component of the controller.
+   * @param minOutput A double that controls the minimum allowed value for the output of the controller.
+   * @param maxOutput A double that controls the maximum allowed value for the output of the controller.
+   * @param speed A double representing the ratio between the error and the target velocity of the controller when being run in velocity mode.
+   */
   public ConfigurablePID(double proportionalGain, double integralGain, double derivitiveGain, double maxProportional, double maxIntegral, double maxDerivitive, double minOutput, double maxOutput, double speed) {
     this.proportionalGain = proportionalGain;
     this.integralGain = integralGain;
@@ -41,6 +57,12 @@ public class ConfigurablePID {
     this.speed = speed;
   }
 
+  /** Runs the PID controller in the standard way, where it targets the setpoint.
+   * 
+   * @param setpoint The desired value the controller should attempt to reach.
+   * @param processVariable The current measured position of what the controller is controlling, usually an encoder or gyro.
+   * @return The computed output of the controller, targeting the setpoint.
+   */
   public double runPID(double setpoint, double processVariable) {
 
     this.currentError = setpoint - processVariable;
@@ -56,6 +78,13 @@ public class ConfigurablePID {
     return this.output;
   }
 
+  /** Runs the PID controller in velocity mode. This causes the controller to target a speed that is based on the error. Typically this is significantly easier and safer than the standard mode.
+   * 
+   * @param setpoint The desired value the controller should attempt to reach.
+   * @param processVariable The current measured position of what the controller is controlling, usually an encoder or gyro.
+   * @param processVariableVelocity The current measued speed of what the controller is controlling.
+   * @return The computed output of the controller, targeting a velocity based on the difference between the setpoint and the process variable.
+   */
   public double runVelocityPID(double setpoint, double processVariable, double processVariableVelocity) {
     
     this.currentError = (setpoint - processVariable) * this.speed;
@@ -73,18 +102,18 @@ public class ConfigurablePID {
   }
 
   /**
-   * Get the speed used in runVelocityPID().
+   * Get the speed used by the controller when being run in velocity mode.
    *
-   * @return speed
+   * @return A double representing the ratio between the error and the target velocity of the controller when being run in velocity mode.
    */
   public double getSpeed() {
     return this.speed;
   }
 
   /**
-   * Set the speed used in runVelocityPID().
+   * Set the speed used by the controller when being run in velocity mode.
    *
-   * @param newSpeed the speed to use in runVelocityPID()
+   * @param newSpeed A double representing the ratio between the error and the target velocity of the controller when being run in velocity mode.
    */
   public void setSpeed(double newSpeed) {
     this.speed = newSpeed;

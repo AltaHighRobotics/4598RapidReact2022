@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.DrivetrainSub;
+import frc.robot.utilities.vector;
 
 public class DriveCommand extends CommandBase 
 {
@@ -34,18 +35,18 @@ public class DriveCommand extends CommandBase
   @Override
   public void initialize() 
   {
-    m_drivetrain.setPos(0, 0);
+    m_drivetrain.setPos(new vector(0, 0));
     m_drivetrain.resetYaw();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() 
+  public void execute()
   {
+    m_drivetrain.drivetrainPositionIntegration();
     double speed = -m_controller.getRawAxis(Constants.PS4_RIGHT_STICK_Y_AXIS);
     double turn = m_controller.getRawAxis(Constants.PS4_RIGHT_STICK_X_AXIS);
     m_drivetrain.setArcadeDrive(speed, turn);
-    m_drivetrain.drivetrainPositionIntegration();
     //System.out.println("Moving");
   }
 

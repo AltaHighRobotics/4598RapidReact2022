@@ -13,6 +13,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.ShootingSub;
+import frc.robot.utilities.vector;
 
 public class RapidReactAutoCommand extends CommandBase {
   private final DrivetrainSub m_drivetrain;
@@ -30,7 +31,7 @@ public class RapidReactAutoCommand extends CommandBase {
   private int cButlikeAgain;
   private int cargoCount;
   private Integer origPos;
-  private double [] currentPos;
+  private vector currentPos;
 
   public RapidReactAutoCommand(DrivetrainSub drivetrainSub, ShootingSub shootingSub, IntakeSub intakeSub, Integer InitialPosition, Boolean ball1, Boolean ball2, Boolean ball3, Boolean ball4) {
     m_drivetrain = drivetrainSub;
@@ -47,7 +48,7 @@ public class RapidReactAutoCommand extends CommandBase {
     cargoCount = 1;
     c = 0;
     cButlikeAgain = 0;
-    currentPos = new double[2];
+    currentPos = new vector(0, 0);
     stage = 0;
     
     addRequirements(shootingSub, intakeSub, drivetrainSub);
@@ -60,14 +61,14 @@ public class RapidReactAutoCommand extends CommandBase {
     switch (origPos)
     {
       case 1:
-        m_drivetrain.setPos(0, 100);
+        m_drivetrain.setPos(Constants.START_ONE_OFFSET);
         break;
 
       case 2:
-        m_drivetrain.setPos(-57, 40);
+        m_drivetrain.setPos(Constants.START_TWO_OFFSET);
       
       case 3:
-        m_drivetrain.setPos(85.5, 67);
+        m_drivetrain.setPos(Constants.START_THREE_OFFSET);
     }
     // m_drivetrain.setPos(0, 0);
     currentPos = m_drivetrain.getPos();
@@ -78,7 +79,7 @@ public class RapidReactAutoCommand extends CommandBase {
   @Override
   public void execute() {
     m_intakeSub.IntakeOn();
-    m_intakeSub.IntakeExtend(); 
+    m_intakeSub.IntakeExtend();
     m_drivetrain.drivetrainPositionIntegration();
     currentPos = m_drivetrain.getPos();
     
@@ -110,6 +111,7 @@ public class RapidReactAutoCommand extends CommandBase {
 
   public void robotShootCargo()
   {
+    m_drivetrain.aimRobot(Constants.GOAL_VECTOR);
     m_shooterSub.autoShoot();
     c++;
     if (c > 50)
@@ -125,26 +127,13 @@ public class RapidReactAutoCommand extends CommandBase {
     switch (stage)
     {
         case 0:
-        m_drivetrain.driveForwardTo(Constants.WAYPOINT_BALL_1[0], Constants.WAYPOINT_BALL_1[1]);
+        m_drivetrain.driveForwardTo(Constants.WAYPOINT_BALL_1);
 
-        if(checkCurrentPos(Constants.WAYPOINT_BALL_1[0], Constants.WAYPOINT_BALL_1[1]))
+        if(m_drivetrain.isAtPoint(Constants.WAYPOINT_BALL_1))
         {
             cargoCount++;
             stage++;
         }
     }
   }
-
-  public boolean checkCurrentPos(double botX, double botY)
-  {
-    if(currentPos[0] >= botX && currentPos[0] <= botX + 5)
-    {
-      if(currentPos[1] >= botY && currentPos[1] <= botY + 5)
-      {
-        return true;
-      }
-    }
-    return false;
-  }
-
 }

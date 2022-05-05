@@ -15,6 +15,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utilities.ConfigurablePID;
+import frc.robot.utilities.vector;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -31,14 +32,6 @@ public class DrivetrainSub extends SubsystemBase
 
   private final AHRS navX;
 
-  //private double rightMotorVelocity;
-  //private double leftMotorVelocity;
-
-  private double [] pos = {-9999, -9999};
-
-  private double currentRightMotorPosition;
-  private double currentLeftMotorPosition;
-
   private double drivePower;
   private double steeringPower;
 
@@ -47,26 +40,30 @@ public class DrivetrainSub extends SubsystemBase
   private double headingError;
   private double headingRate;
 
-  private double previousRightMotorPosition;
-  private double previousLeftMotorPosition;
-  private double distanceTraveledLeft;
-  private double distanceTraveledRight;
-  private double distanceTraveled;
-  private double distanceError;
-  private double robotX;
-  private double robotY;
+  private vector currentMotorPositions;
+  private vector previousMotorPositions;
+  private vector motorVelocities;
+  private vector velocity;
+  private vector position;
+  private vector positionError;
 
-  private double targetX;
-  private double targetY;
+  private vector target;
   private double targetHeading;
+  private double targetSpeed;
   
   /** Creates a new DriveTrainSub. */
   public DrivetrainSub() {
-    this.robotY = 0;
-    this.robotX = 0;
-    this.targetX = 0;
-    this.targetY = 0;
+    this.drivePower = 0;
+    this.steeringPower = 0;
     this.targetHeading = 0;
+    this.position = new vector(0, 0);
+    this.velocity = new vector(0, 0);
+    this.target = new vector(0, 0);
+    this.positionError = new vector(0, 0);
+    this.currentMotorPositions = new vector(0, 0);
+    this.previousMotorPositions = new vector(0, 0);
+    this.motorVelocities = new vector(0, 0);
+    this.targetSpeed = 0;
 
     this.drivetrainHeadingPID = new ConfigurablePID(
       Constants.DRIVETRAIN_HEADING_PROPORTIONAL_GAIN,
@@ -145,129 +142,127 @@ public class DrivetrainSub extends SubsystemBase
     // This method will be called once per scheduler run
   }
 
-  public void setArcadeDrive(final double forward, final double turn) {
+  public void setArcadeDrive(final double forward, final double turn)
+  {
     this.rightMotorFront.set(ControlMode.PercentOutput, forward * Constants.DRIVE_MAX_SPEED, DemandType.ArbitraryFeedForward, -turn*(Constants.DRIVE_MAX_SPEED * 0.666));
     this.leftMotorFront.set(ControlMode.PercentOutput, forward * Constants.DRIVE_MAX_SPEED, DemandType.ArbitraryFeedForward, turn*(Constants.DRIVE_MAX_SPEED * 0.666));
   }
 
-  public void drivetrainPositionIntegration() {
-    this.currentLeftMotorPosition = this.leftMotorFront.getSelectedSensorPosition() / Constants.ENCODER_ROTATION_UNITS;
-    this.currentRightMotorPosition = this.rightMotorFront.getSelectedSensorPosition() / Constants.ENCODER_ROTATION_UNITS;
+  public void drivetrainPositionIntegration()
+  {
+    this.drivePower = 0;
+    this.steeringPower = 0;
+    this.currentMotorPositions.set(
+      this.leftMotorFront.getSelectedSensorPosition() / Constants.ENCODER_ROTATION_UNITS,
+      this.rightMotorFront.getSelectedSensorPosition() / Constants.ENCODER_ROTATION_UNITS
+    );
+    this.motorVelocities = this.currentMotorPositions.getSubtraction(this.previousMotorPositions);
+    this.previousMotorPositions.copy(this.currentMotorPositions);
+    this.motorVelocities.multiply(Constants.DRIVETRAIN_ROTATION_DISTANCE_RATIO * Constants.DRIVETRAIN_GEAR_RATIO);
+    this.motorVelocities.average();
 
     this.currentHeading = (double) this.navX.getYaw();
-
-    //SmartDashboard.putNumber("Robot Heading:", this.currentHeading);
 
     this.currentHeading = Math.toRadians(this.currentHeading);
 
-    this.distanceTraveledLeft = Constants.DRIVETRAIN_ROTATION_DISTANCE_RATIO * Constants.DRIVETRAIN_GEAR_RATIO * (this.currentLeftMotorPosition - this.previousLeftMotorPosition);
-    this.distanceTraveledRight = Constants.DRIVETRAIN_ROTATION_DISTANCE_RATIO * Constants.DRIVETRAIN_GEAR_RATIO * (this.currentRightMotorPosition - this.previousRightMotorPosition);
-    this.distanceTraveled = (this.distanceTraveledLeft + this.distanceTraveledRight)/2;
+    this.velocity.set((Math.cos(this.currentHeading) * this.motorVelocities.average), (Math.sin(this.currentHeading) * this.motorVelocities.average));
+    this.position.add(this.velocity);
 
-    this.previousLeftMotorPosition = this.currentLeftMotorPosition;
-    this.previousRightMotorPosition = this.currentRightMotorPosition;
-
-    this.robotX = this.robotX + (Math.cos(this.currentHeading) * this.distanceTraveled);
-    this.robotY = this.robotY + (Math.sin(this.currentHeading) * this.distanceTraveled);
-
-    //SmartDashboard.putNumber("Robot X:", this.robotX);
-    //SmartDashboard.putNumber("Robot Y:", this.robotY);
+    SmartDashboard.putNumber("Robot X:", this.position.x);
+    SmartDashboard.putNumber("Robot Y:", this.position.y);
 
   }
 
-  public void driveForwardTo(final double waypointX, final double waypointY)
+  public void driveForwardTo(final vector waypoint)
   {
-
-  }
-
-  public void driveBackwardsTo(final double waypointX, final double waypointY)
-  {
-    
-  }
-
-  public double [] getPos()
-  {
-    pos[0] = robotX;
-    pos[1] = robotY;
-    return pos;
-  }
-  public boolean setDriveToWaypoint(final double waypointX, final double waypointY, final boolean driveBackwards) {
-    this.targetX = waypointX;
-    this.targetY = waypointY;
-    if(!driveBackwards) {
-      this.targetHeading = Math.toDegrees(Math.atan2(this.targetY - this.robotY, this.targetX - this.robotX));
-    } else {
-      this.targetHeading = Math.toDegrees(Math.atan2(-(this.targetY - this.robotY), -(this.targetX - this.robotX)));
-    }
-    this.currentHeading = (double) this.navX.getYaw();
-    //SmartDashboard.putNumber("Target Heading", this.targetHeading);
-    this.headingRate = this.currentHeading - this.previousHeading;
-    this.headingError = this.targetHeading - this.currentHeading;
-    this.previousHeading = this.currentHeading;
-    //SmartDashboard.putNumber("Heading Error:", this.headingError);
-
-    this.distanceError = Math.sqrt(Math.pow(this.targetY - this.robotY, 2) + Math.pow(this.targetX - this.robotX, 2));
-    //SmartDashboard.putNumber("Distance to Waypoint:", this.distanceError);
-
-    this.steeringPower = this.drivetrainHeadingPID.runVelocityPID(this.targetHeading, this.currentHeading, this.headingRate);
-
-    if(Math.abs(this.headingError) < Constants.MAX_DRIVE_HEADING_ERROR) {
-      this.drivePower = this.drivetrainSpeedPID.runPID(0, -this.distanceError);
-      if(driveBackwards) {
-        this.drivePower = -this.drivePower;
-      }
-    } else {
-      this.drivePower = 0;
-    }
-    //SmartDashboard.putNumber("Target X", this.targetX);
-    //SmartDashboard.putNumber("Target Y", this.targetY);
-    //SmartDashboard.putNumber("Auto Throttle:", this.drivePower);
-    //SmartDashboard.putNumber("Auto Steering:", this.steeringPower);
-    if(hasReachedWaypoint()) {
-      stopMotors();
+    this.setWaypoint(waypoint);
+    this.setTargetHeadingToWaypoint();
+    this.setSteeringPowerToTargetHeading(false);
+    this.setDriveToWaypoint();
+    if(this.hasReachedWaypoint()) {
+      this.stopMotors();
     } else {
       this.setArcadeDrive(this.drivePower, this.steeringPower);
     }
-    return hasReachedWaypoint();
   }
 
-  public boolean pointAtWaypoint(final double waypointX, final double waypointY) {
-    this.targetX = waypointX;
-    this.targetY = waypointY;
-    this.targetHeading = Math.toDegrees(Math.atan2(this.targetY - this.robotY, this.targetX - this.robotX));
+  public void driveBackwardTo(final vector waypoint)
+  {
+    this.setWaypoint(waypoint);
+    this.setTargetHeadingToWaypoint();
+    this.setSteeringPowerToTargetHeading(true);
+    this.setDriveToWaypoint();
+    if(this.hasReachedWaypoint()) {
+      this.stopMotors();
+    } else {
+      this.setArcadeDrive(this.drivePower, this.steeringPower);
+    }
+  }
 
+  public vector getPos()
+  {
+    return this.position.clone();
+  }
+
+  public void setWaypoint(final vector waypoint)
+  {
+    this.target.copy(waypoint);
+  }
+
+  private void setTargetHeadingToWaypoint()
+  {
+    this.positionError = this.target.getSubtraction(this.position);
+    this.targetHeading = Math.toDegrees(Math.atan2(this.positionError.y, this.positionError.x));
+  }
+
+  private void setSteeringPowerToTargetHeading(boolean backwards)
+  {
     this.currentHeading = (double) this.navX.getYaw();
-    //SmartDashboard.putNumber("Target Heading", this.targetHeading);
     this.headingRate = this.currentHeading - this.previousHeading;
     this.headingError = this.targetHeading - this.currentHeading;
     this.previousHeading = this.currentHeading;
-    //SmartDashboard.putNumber("Heading Error:", this.headingError);
+    if (backwards) {
+      this.steeringPower = this.drivetrainHeadingPID.runVelocityPID(this.targetHeading, this.currentHeading, this.headingRate);
+    } else {
+      this.steeringPower = this.drivetrainHeadingPID.runVelocityPID(this.targetHeading+180, this.currentHeading, this.headingRate);
+    }
+  }
 
-    this.steeringPower = this.drivetrainHeadingPID.runVelocityPID(this.targetHeading, this.currentHeading, this.headingRate);
-    this.setArcadeDrive(0, this.steeringPower);
+  private void setDriveToWaypoint()
+  {
+    this.targetSpeed = Math.cos(Math.toRadians(this.headingError)) * this.positionError.magnitude();
+    this.drivePower = this.drivetrainSpeedPID.runPID(targetSpeed, this.motorVelocities.average);
+  }
+
+  public boolean aimRobot(final vector waypoint)
+  {
+    this.setWaypoint(waypoint);
+    this.setTargetHeadingToWaypoint();
+    this.setSteeringPowerToTargetHeading(false);
+    this.setArcadeDrive(this.drivePower, this.steeringPower);
     return Math.abs(this.currentHeading - this.targetHeading) < Constants.MAX_DRIVE_HEADING_ERROR;
   }
 
-  public void pointAtAngle(double targetAngle) {
+  public boolean aimRobot(final double targetAngle)
+  {
     this.targetHeading = targetAngle;
-
-    this.currentHeading = (double) this.navX.getYaw();
-    //SmartDashboard.putNumber("Target Heading", this.targetHeading);
-    this.headingRate = this.currentHeading - this.previousHeading;
-    this.headingError = this.targetHeading - this.currentHeading;
-    this.previousHeading = this.currentHeading;
-    //SmartDashboard.putNumber("Heading Error:", this.headingError);
-
-    this.steeringPower = this.drivetrainHeadingPID.runVelocityPID(this.targetHeading, this.currentHeading, this.headingRate);
-    this.setArcadeDrive(0, this.steeringPower);
+    this.setSteeringPowerToTargetHeading(false);
+    this.setArcadeDrive(this.drivePower, this.steeringPower);
+    return Math.abs(this.currentHeading - this.targetHeading) < Constants.MAX_DRIVE_HEADING_ERROR;
   }
 
-  public boolean hasReachedWaypoint() {
-    //SmartDashboard.putNumber("DISTANCE ERROR", distanceError);
-    return Math.abs(this.distanceError) < Constants.MAX_WAYPOINT_ERROR;
+  public boolean hasReachedWaypoint()
+  {
+    return Math.abs(this.positionError.magnitude()) < Constants.MAX_WAYPOINT_ERROR;
   }
 
-  public void stopMotors() {
+  public boolean isAtPoint(vector point)
+  {
+    return Math.abs(this.position.getSubtraction(point).magnitude()) < Constants.MAX_WAYPOINT_ERROR;
+  }
+
+  public void stopMotors()
+  {
     this.leftMotorFront.neutralOutput();
     this.rightMotorFront.neutralOutput();
   }
@@ -278,20 +273,13 @@ public class DrivetrainSub extends SubsystemBase
     rightMotorFront.set(ControlMode.PercentOutput, -0.3);  
   }
 
-  // public void stopMotorAuto()
-  // {
-  //   leftMotorFront.set(ControlMode.PercentOutput, 0);  
-  //   leftMotorBack.set(ControlMode.PercentOutput, 0);  
-  //   rightMotorFront.set(ControlMode.PercentOutput, 0);  
-  //   rightMotorBack.set(ControlMode.PercentOutput, 0);  
-  //}
-
-  public void setPos(double x, double y) {
-    this.robotX = x; 
-    this.robotY = y;
+  public void setPos(vector newPosition)
+  {
+    this.position.copy(newPosition);
   }
 
-  public void resetYaw() {
+  public void resetYaw()
+  {
     this.navX.zeroYaw();
   }
 }
