@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -15,7 +16,7 @@ public class ShootCommand extends CommandBase {
   
   private final ShootingSub m_shootingSub;
   private final IntakeSub m_intakeSub;
-  private final PS4Controller m_Ps4Controller;
+  private final XboxController m_controller;
   private double leftXAxis;
   private double leftYAxis;
   private double manualTargetAzimuth;
@@ -23,10 +24,10 @@ public class ShootCommand extends CommandBase {
   
   
   /** Creates a new ElveationAngleCommand. */
-  public ShootCommand(ShootingSub shootingSub, PS4Controller ps4Controller, IntakeSub intakeSub) {
+  public ShootCommand(ShootingSub shootingSub, XboxController controller, IntakeSub intakeSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shootingSub = shootingSub;
-    m_Ps4Controller = ps4Controller;
+    m_controller = controller;
     m_intakeSub = intakeSub;
     addRequirements(shootingSub, intakeSub);
   }

@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final PS4Controller m_driverOne = new PS4Controller(Constants.DRIVER_ONE);
+  private final XboxController m_xboxcontroller = new XboxController(Constants.DRIVER_ONE);
   private final Joystick m_climbStick = new Joystick(1);
 
   private final ClimbingSub m_climbingSub = new ClimbingSub();
@@ -40,12 +40,12 @@ public class RobotContainer {
   private final JackFrickedUpCommand m_jackFrickedUpCommand = new JackFrickedUpCommand(m_climbingSub);
   private final ClimbingCommand m_climbingCommand = new ClimbingCommand(m_climbingSub);
   private final MultiballAutoCommand m_multiballAutoCommand = new MultiballAutoCommand(m_drivetrainSub, m_shootingSub);
-  private final DriveCommand m_driveCommand =  new DriveCommand(m_drivetrainSub, m_driverOne);
-  private final ShootCommand m_shootCommand = new ShootCommand(m_shootingSub, m_driverOne, m_intakeSub);
+  private final DriveCommand m_driveCommand =  new DriveCommand(m_drivetrainSub, m_xboxcontroller);
+  private final ShootCommand m_shootCommand = new ShootCommand(m_shootingSub, m_xboxcontroller, m_intakeSub);
   private final ZeroShooterCommand m_zeroShooterCommand = new ZeroShooterCommand(m_shootingSub);
   private final IntakeCommand m_IntakeCommand = new IntakeCommand(m_intakeSub, m_shootingSub);
   private final IntakeReverseCommand m_IntakeReverseCommand = new IntakeReverseCommand(m_intakeSub);
-  private final FixedShootCommand m_fixedShootCommand = new FixedShootCommand(m_shootingSub, m_driverOne);
+  private final FixedShootCommand m_fixedShootCommand = new FixedShootCommand(m_shootingSub, m_xboxcontroller);
   private final WinchForwardCommand m_wForwardCommand = new WinchForwardCommand(m_climbingSub);
   private final WinchRevCommand m_wRevCommand = new WinchRevCommand(m_climbingSub);
   
@@ -134,15 +134,15 @@ public class RobotContainer {
     climb5Button = new JoystickButton(m_climbStick, 11);
     climb6Button = new JoystickButton(m_climbStick, 12);
 
-    climbButton = new JoystickButton(m_driverOne, 2); // X button
-    frickButton = new JoystickButton(m_driverOne, 9); // Share button
-    aimButton = new JoystickButton(m_driverOne, 6); // Right Bumper
-    zeroButton = new JoystickButton(m_driverOne, 3); // Circle
-    intakeButton = new JoystickButton(m_driverOne, 4); // Square Button
-    intakeReverseButton = new JoystickButton(m_driverOne, 5); // Left Bumper
-    fixedShootButton = new JoystickButton(m_driverOne, 8);
-    winchForwardButton = new JoystickButton(m_driverOne, 1);
-    winchBackwardButton = new JoystickButton(m_driverOne, 7);
+    climbButton = new JoystickButton(m_xboxcontroller, 2); // X button
+    frickButton = new JoystickButton(m_xboxcontroller, 9); // Share button
+    aimButton = new JoystickButton(m_xboxcontroller, 6); // Right Bumper
+    zeroButton = new JoystickButton(m_xboxcontroller, 3); // Circle
+    intakeButton = new JoystickButton(m_xboxcontroller, 4); // Square Button
+    intakeReverseButton = new JoystickButton(m_xboxcontroller, 5); // Left Bumper
+    fixedShootButton = new JoystickButton(m_xboxcontroller, 8);
+    winchForwardButton = new JoystickButton(m_xboxcontroller, 1);
+    winchBackwardButton = new JoystickButton(m_xboxcontroller, 7);
 
     climbButton.toggleWhenPressed(m_climbingCommand);
     frickButton.whileHeld(m_jackFrickedUpCommand);
@@ -210,5 +210,4 @@ public class RobotContainer {
     SmartDashboard.putString("Auto Steering:", "NA");
     
   }
-
 }

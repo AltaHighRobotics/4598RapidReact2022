@@ -13,17 +13,19 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.DrivetrainSub;
+import edu.wpi.first.wpilibj.XboxController;
 
 public class DriveCommand extends CommandBase 
 {
   /** Creates a new DriveCommand. */
   private final DrivetrainSub m_drivetrain;
-  private final PS4Controller m_controller;
-  public DriveCommand(DrivetrainSub drivetrainSub, PS4Controller ps4Controller) 
+  private final XboxController m_controller;
+
+  public DriveCommand(DrivetrainSub drivetrainSub, XboxController controller) 
   {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrainSub;
-    m_controller = ps4Controller;
+    m_controller = controller;
     // CvSource outStream = new CvSource("Blur", PixelFormat.kMJPEG, 640, 480, 30);
     // MjpegServer mjpegServer2 = new MjpegServer("serve_blur", 1182);
     // mjpegServer2.setSource(outStream);
@@ -42,8 +44,8 @@ public class DriveCommand extends CommandBase
   @Override
   public void execute() 
   {
-    double speed = -m_controller.getRawAxis(Constants.PS4_RIGHT_STICK_Y_AXIS);
-    double turn = m_controller.getRawAxis(Constants.PS4_RIGHT_STICK_X_AXIS);
+    double speed = -m_controller.getRawAxis(Constants.XBOX_LEFT_STICK_Y_AXIS);
+    double turn = m_controller.getRawAxis(Constants.XBOX_LEFT_STICK_X_AXIS);
     m_drivetrain.setArcadeDrive(speed, turn);
     m_drivetrain.drivetrainPositionIntegration();
     //System.out.println("Moving");
